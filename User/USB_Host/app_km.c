@@ -1831,7 +1831,7 @@ void USBH_MainDeal( void )
                                        }
                                        DUG_PRINTF( "\r\n" );
 #endif
-                                        Add_To_RingBuffer(Com_Buf, len);
+                                        Add_To_RingBuffer(Com_Buf, 8);
                                        if( HostCtl[ index ].Interface[ intf_num ].Type == DEC_KEY )
                                        {
                                            KB_AnalyzeKeyValue( index, intf_num, Com_Buf, len );

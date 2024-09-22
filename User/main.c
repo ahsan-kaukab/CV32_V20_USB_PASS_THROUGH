@@ -73,6 +73,8 @@ void Process_RingBuffer_To_USB2()
         // Add activity flag (1 byte) before sending
         forward_data[0] = 1; // Activity flag set to 1
 
+        DUG_PRINTF( "Hello-1 \r\n");
+
         // Copy data from ring buffer
         memcpy(&forward_data[1], &Data_Buffer[(RingBuffer_Comm.DealPtr) * DEF_USBD_FS_PACK_SIZE], RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr]);
 
@@ -81,6 +83,7 @@ void Process_RingBuffer_To_USB2()
         
         if (ret == 0) // Transmission successful
         {
+            DUG_PRINTF( "Hello-2 \r\n");
             NVIC_DisableIRQ(USBHD_IRQn);
             RingBuffer_Comm.RemainPack--;
             RingBuffer_Comm.DealPtr++;
@@ -105,21 +108,23 @@ int main(void)
     TIM3_Init( 9, SystemCoreClock / 10000 - 1 );
     DUG_PRINTF( "TIM3 Init OK!\r\n" );
 
+    Var_Init();
+
     /* Initialize USBFS host */
 #if DEF_USBFS_PORT_EN
     DUG_PRINTF( "USBFS Host Init\r\n" );
     USBFS_RCC_Init( );
     USBFS_Host_Init( ENABLE );
+    //USBFS_Device_Init(ENABLE);
+    NVIC_EnableIRQ(USBHD_IRQn);
     memset( &RootHubDev.bStatus, 0, sizeof( ROOT_HUB_DEVICE ) );
     memset( &HostCtl[ DEF_USBFS_PORT_INDEX * DEF_ONE_USB_SUP_DEV_TOTAL ].InterfaceNum, 0, sizeof( HOST_CTL ) );
 #endif    /* Initialize system configuration */
 
-    // Initialize USB device (USB-2)
-    USBFS_Device_Init(ENABLE);
-    NVIC_EnableIRQ(USBHD_IRQn);
-
     /* Initialize RingBuffer */
-    Var_Init();
+    // Initialize USB device (USB-2)
+    //USBFS_Device_Init(ENABLE);
+    //NVIC_EnableIRQ(USBHD_IRQn);
 
     while (1)
     {
