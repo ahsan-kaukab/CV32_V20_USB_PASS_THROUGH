@@ -12,6 +12,7 @@
 /********************************************************************************/
 /* Header File */
 #include "usb_host_config.h"
+#include "ch32v20x_usbfs_device.h"
 
 /*******************************************************************************/
 /* Variable Definition */
@@ -23,6 +24,26 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 /*******************************************************************************/
 /* Interrupt Function Declaration */
 void TIM3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+
+/* Function to add data to the ring buffer */
+void Add_To_RingBuffer(uint8_t *data, uint16_t len)
+{
+    if (RingBuffer_Comm.RemainPack < DEF_Ring_Buffer_Max_Blks)
+    {
+        memcpy(&Data_Buffer[(RingBuffer_Comm.DealPtr) * DEF_USBD_FS_PACK_SIZE], data, len);
+        RingBuffer_Comm.PackLen[RingBuffer_Comm.LoadPtr] = len;
+        RingBuffer_Comm.LoadPtr++;
+        if (RingBuffer_Comm.LoadPtr == DEF_Ring_Buffer_Max_Blks)
+        {
+            RingBuffer_Comm.LoadPtr = 0;
+        }
+        RingBuffer_Comm.RemainPack++;
+    }
+    else
+    {
+        DUG_PRINTF("Ring Buffer Full, data lost\r\n");
+    }
+}
 
 /*********************************************************************
  * @fn      TIM3_Init
@@ -1803,14 +1824,14 @@ void USBH_MainDeal( void )
                                    if( s == ERR_SUCCESS )
                                    {
 #if DEF_DEBUG_PRINTF
-                                        DUG_PRINTF("Working Test\r\n"); 
+                                        DUG_PRINTF("Working Test len is %d \r\n",len); 
                                        for( i = 0; i < len; i++ )
                                        {
                                            DUG_PRINTF( "%02x ", Com_Buf[ i ] );
                                        }
                                        DUG_PRINTF( "\r\n" );
 #endif
-
+                                        Add_To_RingBuffer(Com_Buf, len);
                                        if( HostCtl[ index ].Interface[ intf_num ].Type == DEC_KEY )
                                        {
                                            KB_AnalyzeKeyValue( index, intf_num, Com_Buf, len );
