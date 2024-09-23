@@ -34,7 +34,8 @@
 #define ACTIVITY_FLAG_SIZE 1  // Size of the activity flag (1 byte)
 #define BUFFER_SIZE       128 // Define buffer size for your application
 
-uint8_t forward_data[HID_REPORT_SIZE + ACTIVITY_FLAG_SIZE]; // Data to send on USB-2
+//uint8_t forward_data[HID_REPORT_SIZE + ACTIVITY_FLAG_SIZE]; // Data to send on USB-2
+uint8_t forward_data[HID_REPORT_SIZE]; // Data to send on USB-2
 
 /*********************************************************************
  * @fn      main
@@ -71,19 +72,21 @@ void Process_RingBuffer_To_USB2()
     if (RingBuffer_Comm.RemainPack > 0)
     {
         // Add activity flag (1 byte) before sending
-        forward_data[0] = 1; // Activity flag set to 1
+        //forward_data[0] = 1; // Activity flag set to 1
 
-        DUG_PRINTF( "Hello-1 \r\n");
+        //DUG_PRINTF( "Hello-1 \r\n");
 
         // Copy data from ring buffer
-        memcpy(&forward_data[1], &Data_Buffer[(RingBuffer_Comm.DealPtr) * DEF_USBD_FS_PACK_SIZE], RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr]);
+        //memcpy(&forward_data[1], &Data_Buffer[(RingBuffer_Comm.DealPtr) * DEF_USBD_FS_PACK_SIZE], RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr]);
+        memcpy(forward_data, &Data_Buffer[(RingBuffer_Comm.DealPtr) * DEF_USBD_FS_PACK_SIZE], RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr]);
 
         // Send data over USB-2
-        ret = USBFS_Endp_DataUp(DEF_UEP2, forward_data, RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr] + 1, DEF_UEP_DMA_LOAD);
+        //ret = USBFS_Endp_DataUp(DEF_UEP2, forward_data, RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr] + 1, DEF_UEP_DMA_LOAD);          
+        ret = USBFS_Endp_DataUp(DEF_UEP2, forward_data, RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr], DEF_UEP_DMA_LOAD);
         
         if (ret == 0) // Transmission successful
         {
-            DUG_PRINTF( "Hello-2 \r\n");
+            //DUG_PRINTF( "Hello-2 \r\n");
             NVIC_DisableIRQ(USBHD_IRQn);
             RingBuffer_Comm.RemainPack--;
             RingBuffer_Comm.DealPtr++;
