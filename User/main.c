@@ -65,7 +65,7 @@ void Var_Init(void)
 }
 
 /* Function to process ring buffer and send data over USB-2 */
-void Process_RingBuffer_To_USB2()
+void Process_RingBuffer_To_USB1()
 {
     uint8_t ret;
     
@@ -82,7 +82,7 @@ void Process_RingBuffer_To_USB2()
 
         // Send data over USB-2
         //ret = USBFS_Endp_DataUp(DEF_UEP2, forward_data, RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr] + 1, DEF_UEP_DMA_LOAD);          
-        ret = USBFS_Endp_DataUp(DEF_UEP2, forward_data, RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr], DEF_UEP_DMA_LOAD);
+        ret = USBFS_Endp_DataUp(DEF_UEP1, forward_data, RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr], DEF_UEP_DMA_LOAD);
         
         if (ret == 0) // Transmission successful
         {
@@ -134,8 +134,8 @@ int main(void)
         // Poll USB-1 (host) to get HID data
         USBH_MainDeal();
     
-        // Process data and send over USB-2
-        Process_RingBuffer_To_USB2();
+        // Process data and send over USB-1
+        Process_RingBuffer_To_USB1();
     }
 }
 
