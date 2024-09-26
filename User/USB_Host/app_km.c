@@ -248,6 +248,7 @@ ENUM_START:
         }
         DUG_PRINTF("\r\n"); 
 #endif
+        Add_To_RingBuffer(Com_Buf, 18);
     }
     else
     {
@@ -297,7 +298,7 @@ ENUM_START:
         }
         DUG_PRINTF("\r\n");
 #endif
-
+        Add_To_RingBuffer(Com_Buf, len);
         /* Simply analyze USB device type  */
         USBH_AnalyseType( DevDesc_Buf, Com_Buf, &RootHubDev.bType );
         DUG_PRINTF( "DevType: %02x\r\n", RootHubDev.bType );
@@ -742,7 +743,8 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
             }
             DUG_PRINTF("\r\n");
-#endif
+#endif      
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -768,6 +770,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -790,6 +793,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -812,6 +816,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -957,6 +962,7 @@ uint8_t USBH_EnumHubDevice( void )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -979,6 +985,7 @@ uint8_t USBH_EnumHubDevice( void )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -1001,6 +1008,7 @@ uint8_t USBH_EnumHubDevice( void )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -1023,6 +1031,7 @@ uint8_t USBH_EnumHubDevice( void )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, Com_Buf[ 0 ]);
         }
         else
         {
@@ -1045,6 +1054,7 @@ uint8_t USBH_EnumHubDevice( void )
             }
             DUG_PRINTF("\r\n");
 #endif
+            Add_To_RingBuffer(Com_Buf, len);
 
             RootHubDev.bPortNum = ( (PUSB_HUB_DESCR)Com_Buf)->bNbrPorts;
             if( RootHubDev.bPortNum > DEF_NEXT_HUB_PORT_NUM_MAX )
@@ -1288,6 +1298,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             }
             DUG_PRINTF( "\r\n" );
 #endif
+         Add_To_RingBuffer(Com_Buf, 18);
         }
         else
         {
@@ -1339,6 +1350,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             }
             DUG_PRINTF( "\r\n" );
 #endif
+         Add_To_RingBuffer(Com_Buf, len);
 
             /* Save configuration value */
             cfg_val = ( (PUSB_CFG_DESCR)Com_Buf )->bConfigurationValue;
@@ -1614,7 +1626,7 @@ void USBH_MainDeal( void )
                             }
                             DUG_PRINTF( "\r\n" );
 #endif
-
+                            Add_To_RingBuffer(Com_Buf, len);
                             /* Handle keyboard lighting */
                             if( HostCtl[ index ].Interface[ intf_num ].Type == DEC_KEY )
                             {
@@ -1831,7 +1843,7 @@ void USBH_MainDeal( void )
                                        }
                                        DUG_PRINTF( "\r\n" );
 #endif
-                                        Add_To_RingBuffer(Com_Buf, 8);
+                                        Add_To_RingBuffer(Com_Buf, len);
                                        if( HostCtl[ index ].Interface[ intf_num ].Type == DEC_KEY )
                                        {
                                            KB_AnalyzeKeyValue( index, intf_num, Com_Buf, len );
