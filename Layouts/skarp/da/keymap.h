@@ -1,0 +1,39 @@
+﻿#include "stdint.h"
+#include "usb_hid_keys.h"
+
+uint8_t  KITE_KEYMAP[ 60 ] = {
+	KEY_A, KEY_S,
+	KEY_B, KEY_C,
+	KEY_C, KEY_V,
+	KEY_D, KEY_T,
+	KEY_E, KEY_M,
+	KEY_G, KEY_D,
+	KEY_H, KEY_I,
+	KEY_I, KEY_O,
+	KEY_K, KEY_E,
+	KEY_L, KEY_R,
+	KEY_M, KEY_SEMICOLON,
+	KEY_N, KEY_Y,
+	KEY_O, KEY_H,
+	KEY_P, KEY_W,
+	KEY_Q, KEY_Z,
+	KEY_R, KEY_G,
+	KEY_S, KEY_N,
+	KEY_T, KEY_K,
+	KEY_U, KEY_A,
+	KEY_V, KEY_B,
+	KEY_W, KEY_P,
+	KEY_X, KEY_COMMA,
+	KEY_Y, KEY_U,
+	KEY_Z, KEY_DOT,
+	KEY_APOSTROPHE, KEY_LEFTBRACE,
+	KEY_COMMA, KEY_APOSTROPHE,
+	KEY_DOT, KEY_X,
+	KEY_LEFTBRACE, KEY_SLASH,
+	KEY_SEMICOLON, KEY_L,
+	KEY_SLASH, KEY_Q
+};
+
+/*
+ * Skarp layout (da)
+ */

@@ -1,0 +1,38 @@
+﻿#include "stdint.h"
+#include "usb_hid_keys.h"
+
+uint8_t  KITE_KEYMAP[ 58 ] = {
+	KEY_A, KEY_L,
+	KEY_B, KEY_APOSTROPHE,
+	KEY_C, KEY_SEMICOLON,
+	KEY_D, KEY_E,
+	KEY_E, KEY_U,
+	KEY_F, KEY_A,
+	KEY_G, KEY_I,
+	KEY_H, KEY_K,
+	KEY_I, KEY_G,
+	KEY_J, KEY_N,
+	KEY_K, KEY_T,
+	KEY_L, KEY_S,
+	KEY_M, KEY_F,
+	KEY_N, KEY_B,
+	KEY_O, KEY_H,
+	KEY_P, KEY_C,
+	KEY_Q, KEY_W,
+	KEY_R, KEY_O,
+	KEY_S, KEY_R,
+	KEY_T, KEY_LEFTBRACE,
+	KEY_U, KEY_M,
+	KEY_V, KEY_Y,
+	KEY_W, KEY_J,
+	KEY_X, KEY_Z,
+	KEY_Y, KEY_P,
+	KEY_Z, KEY_X,
+	KEY_APOSTROPHE, KEY_V,
+	KEY_LEFTBRACE, KEY_Q,
+	KEY_SEMICOLON, KEY_D
+};
+
+/*
+ * Kvikk layout (nn)
+ */

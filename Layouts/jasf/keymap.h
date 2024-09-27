@@ -1,0 +1,39 @@
+﻿#include "stdint.h"
+#include "usb_hid_keys.h"
+
+uint8_t  KITE_KEYMAP[ 60 ] = {
+	KEY_A, KEY_L,
+	KEY_B, KEY_SEMICOLON,
+	KEY_C, KEY_APOSTROPHE,
+	KEY_D, KEY_E,
+	KEY_E, KEY_O,
+	KEY_F, KEY_J,
+	KEY_G, KEY_A,
+	KEY_H, KEY_S,
+	KEY_I, KEY_G,
+	KEY_J, KEY_F,
+	KEY_K, KEY_T,
+	KEY_L, KEY_N,
+	KEY_M, KEY_H,
+	KEY_N, KEY_P,
+	KEY_O, KEY_M,
+	KEY_P, KEY_X,
+	KEY_Q, KEY_Z,
+	KEY_R, KEY_I,
+	KEY_S, KEY_R,
+	KEY_T, KEY_U,
+	KEY_U, KEY_D,
+	KEY_V, KEY_LEFTBRACE,
+	KEY_W, KEY_Y,
+	KEY_X, KEY_C,
+	KEY_Y, KEY_B,
+	KEY_Z, KEY_Q,
+	KEY_APOSTROPHE, KEY_V,
+	KEY_LEFTBRACE, KEY_SLASH,
+	KEY_SEMICOLON, KEY_K,
+	KEY_SLASH, KEY_W
+};
+
+/*
+ * JASF layout
+ */

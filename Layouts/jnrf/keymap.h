@@ -1,0 +1,39 @@
+﻿#include "stdint.h"
+#include "usb_hid_keys.h"
+
+uint8_t  KITE_KEYMAP[ 60 ] = {
+	KEY_A, KEY_O,
+	KEY_B, KEY_V,
+	KEY_C, KEY_U,
+	KEY_D, KEY_E,
+	KEY_E, KEY_BACKSPACE,
+	KEY_F, KEY_J,
+	KEY_G, KEY_N,
+	KEY_H, KEY_R,
+	KEY_I, KEY_C,
+	KEY_J, KEY_F,
+	KEY_K, KEY_T,
+	KEY_L, KEY_I,
+	KEY_M, KEY_G,
+	KEY_N, KEY_M,
+	KEY_O, KEY_Y,
+	KEY_P, KEY_K,
+	KEY_Q, KEY_DOT,
+	KEY_R, KEY_L,
+	KEY_S, KEY_A,
+	KEY_T, KEY_H,
+	KEY_U, KEY_S,
+	KEY_V, KEY_B,
+	KEY_W, KEY_COMMA,
+	KEY_Y, KEY_W,
+	KEY_Z, KEY_SLASH,
+	KEY_COMMA, KEY_P,
+	KEY_DOT, KEY_Q,
+	KEY_SEMICOLON, KEY_D,
+	KEY_SLASH, KEY_Z,
+	KEY_102ND, KEY_SEMICOLON
+};
+
+/*
+ * JNRF layout
+ */

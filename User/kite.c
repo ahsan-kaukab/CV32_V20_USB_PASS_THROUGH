@@ -1,5 +1,5 @@
 ﻿#include "kite.h"
-//#include "keymap.h"
+#include "keymap.h"
 
 #ifdef KEYMAP_SUSPEND_MASK
 int suspend_keymap = 0;
@@ -53,19 +53,19 @@ uint8_t kite( uint8_t code )
 
 #endif
 
-//	if( code == 0)
-//	{
-//		return code;
-//	}
-//
-//	int i;
-//	int l = sizeof(KITE_KEYMAP)/sizeof(uint8_t);
-//
-//	for( i = 0; i < l/2; i++ ) {
-//		if (KITE_KEYMAP[ 2*i ] == code) {
-//			return KITE_KEYMAP[ 2*i + 1 ];
-//		}
-//	}
+	if( code == 0)
+	{
+		return code;
+	}
+
+	int i;
+	int l = sizeof(KITE_KEYMAP)/sizeof(uint8_t);
+
+	for( i = 0; i < l/2; i++ ) {
+		if (KITE_KEYMAP[ 2*i ] == code) {
+			return KITE_KEYMAP[ 2*i + 1 ];
+		}
+	}
 
 	return code;
 }

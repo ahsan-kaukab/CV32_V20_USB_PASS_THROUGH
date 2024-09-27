@@ -40,6 +40,11 @@
 			<location>/home/flinux/Desktop/nanoCH32V203-master_cp/doc/EVT/EXAM/USB/USBFS/my_code_HOST_KM/Device</location>
 		</link>
 		<link>
+			<name>Layouts</name>
+			<type>2</type>
+			<location>/home/flinux/Desktop/nanoCH32V203-master_cp/doc/EVT/EXAM/USB/USBFS/my_code_HOST_KM/Layouts</location>
+		</link>
+		<link>
 			<name>Ld</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/SRC/Ld</locationURI>
