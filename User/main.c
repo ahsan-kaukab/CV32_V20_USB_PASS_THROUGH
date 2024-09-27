@@ -116,7 +116,7 @@ int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     Delay_Init();
-    USART_Printf_Init( 115200 );
+    USART_Printf_Init( 9600 );
     printf("SystemClk:%d\r\n",SystemCoreClock);
 
     /* Initialize timer for Keyboard and mouse scan timing */
