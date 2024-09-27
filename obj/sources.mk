@@ -20,8 +20,11 @@ C_DEPS :=
 SUBDIRS := \
 Core \
 Debug \
+Device/USBLIB/CONFIG \
+Device/USBLIB/USB-Driver/src \
+Device \
 Peripheral/src \
 Startup \
-User/USB_Host \
+USB_Host \
 User \
 

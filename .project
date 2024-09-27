@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>HOST_KM</name>
-	<comment/>
+	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -35,6 +35,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/SRC/Debug</locationURI>
 		</link>
 		<link>
+			<name>Device</name>
+			<type>2</type>
+			<location>/home/flinux/Desktop/nanoCH32V203-master_cp/doc/EVT/EXAM/USB/USBFS/my_code_HOST_KM/Device</location>
+		</link>
+		<link>
 			<name>Ld</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/SRC/Ld</locationURI>
@@ -49,11 +54,16 @@
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/SRC/Startup</locationURI>
 		</link>
+		<link>
+			<name>USB_Host</name>
+			<type>2</type>
+			<location>/home/flinux/Desktop/nanoCH32V203-master_cp/doc/EVT/EXAM/USB/USBFS/my_code_HOST_KM/USB_Host</location>
+		</link>
 	</linkedResources>
 	<filteredResources>
 		<filter>
-			<id>1595986042669</id>
-			<name/>
+			<id>1727455717653</id>
+			<name></name>
 			<type>22</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>

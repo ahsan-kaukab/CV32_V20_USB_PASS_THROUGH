@@ -27,6 +27,13 @@
 /* Header Files */
 #include "usb_host_config.h"
 #include "ch32v20x_usbfs_device.h"
+#include "debug.h"
+#include "usb_lib.h"
+#include "usb_desc.h"
+#include "usb_pwr.h"
+#include "usb_prop.h"
+#include "usbd_composite_km.h"
+#include "usb_host_config.h"
 // #include "debug.h"
 // #include "usbd_compatibility_hid.h"
 
@@ -107,41 +114,37 @@ void Process_RingBuffer_To_USB1()
 
 int main(void)
 {
-    /* Initialize system configuration */
-    Delay_Init( );
-    USART_Printf_Init( 9600 );
-    DUG_PRINTF( "SystemClk:%d\r\n", SystemCoreClock );
-    DUG_PRINTF( "USBFS HOST KM Test\r\n" );
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    Delay_Init();
+    USART_Printf_Init( 115200 );
+    printf("SystemClk:%d\r\n",SystemCoreClock);
 
-    /* Initialize TIM3 */
-    TIM3_Init( 9, SystemCoreClock / 10000 - 1 );
-    DUG_PRINTF( "TIM3 Init OK!\r\n" );
+    /* Initialize timer for Keyboard and mouse scan timing */
+    TIM3_Init( 1, SystemCoreClock / 10000 - 1 );
+    printf( "Timer Init\r\n" );
 
-    Var_Init();
+    Set_USBConfig();
+    USB_Init();
+    USB_Interrupts_Config();
+    printf( "USBD Init\r\n" );
 
-    /* Initialize USBFS host */
-#if DEF_USBFS_PORT_EN
-    DUG_PRINTF( "USBFS Host Init\r\n" );
+    while( bDeviceState != CONFIGURED )
+    {
+    }
+    printf( "USBD Ready\r\n" );
+
     USBFS_RCC_Init( );
     USBFS_Host_Init( ENABLE );
-    //USBFS_Device_Init(ENABLE);
-    NVIC_EnableIRQ(USBHD_IRQn);
     memset( &RootHubDev.bStatus, 0, sizeof( ROOT_HUB_DEVICE ) );
-    memset( &HostCtl[ DEF_USBFS_PORT_INDEX * DEF_ONE_USB_SUP_DEV_TOTAL ].InterfaceNum, 0, sizeof( HOST_CTL ) );
-#endif    /* Initialize system configuration */
+    memset( &HostCtl[ DEF_USBFS_PORT_INDEX * DEF_ONE_USB_SUP_DEV_TOTAL ].InterfaceNum, 0, DEF_ONE_USB_SUP_DEV_TOTAL * sizeof( HOST_CTL ) );
+    printf( "Host init\r\n" );
 
-    /* Initialize RingBuffer */
-    // Initialize USB device (USB-2)
-    //USBFS_Device_Init(ENABLE);
-    //NVIC_EnableIRQ(USBHD_IRQn);
-
-    while (1)
+    while(1)
     {
-        // Poll USB-1 (host) to get HID data
-        USBH_MainDeal();
-    
-        // Process data and send over USB-1
-        Process_RingBuffer_To_USB1();
+        if( bDeviceState == CONFIGURED )
+        {
+            USBH_MainDeal( );
+        }
     }
 }
 
