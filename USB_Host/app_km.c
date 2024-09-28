@@ -11,7 +11,7 @@
 
 /********************************************************************************/
 /* Header File */
-#include "kite.h"
+//#include "kite.h"
 #include "usb_host_config.h"
 #include "usbd_composite_km.h"
 
@@ -1654,12 +1654,12 @@ void USBH_MainDeal( void )
 #endif
                                     if(KB_Data_State)
                                     {
-                                        KB_Data_Buffer[ i ] = ( i > 1 ) ? kite( Com_Buf[ i ] ) : Com_Buf[ i ];
+                                        KB_Data_Buffer[ i ] = Com_Buf[ i ];
                                         KB_Data_Buffer_Full = 1;
                                     }
                                     else
                                     {
-                                        KB_Data_Pack[ i ] = ( i > 1 ) ? kite( Com_Buf[ i ] ) : Com_Buf[ i ];
+                                        KB_Data_Pack[ i ] = Com_Buf[ i ];
                                         KB_Data_Pack_Full = 1;
                                     }
                                 }
@@ -1915,12 +1915,12 @@ void USBH_MainDeal( void )
 #endif
                                                 if(KB_Data_State)
                                                 {
-                                                    KB_Data_Buffer[ i ] = ( i > 1 ) ? kite( Com_Buf[ i ] ) : Com_Buf[ i ];
+                                                    KB_Data_Buffer[ i ] = Com_Buf[ i ];
                                                     KB_Data_Buffer_Full = 1;
                                                 }
                                                 else
                                                 {
-                                                    KB_Data_Pack[ i ] = ( i > 1 ) ? kite( Com_Buf[ i ] ) : Com_Buf[ i ];
+                                                    KB_Data_Pack[ i ] = Com_Buf[ i ];
                                                     KB_Data_Pack_Full = 1;
                                                 }
                                             }

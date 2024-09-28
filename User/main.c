@@ -51,66 +51,6 @@ uint8_t forward_data[HID_REPORT_SIZE]; // Data to send on USB-2
  *
  * @return  none
  */
-/*********************************************************************
- * @fn      Var_Init
- *
- * @brief   Software parameter initialisation
- *
- * @return  none
- */
-void Var_Init(void)
-{
-    uint16_t i;
-    RingBuffer_Comm.LoadPtr = 0;
-    RingBuffer_Comm.StopFlag = 0;
-    RingBuffer_Comm.DealPtr = 0;
-    RingBuffer_Comm.RemainPack = 0;
-    for(i=0; i<DEF_Ring_Buffer_Max_Blks; i++)
-    {
-        RingBuffer_Comm.PackLen[i] = 0;
-    }
-}
-// DUG_PRINTF( "Hello-1 \r\n");
-/* Function to process ring buffer and send data over USB-2 */
-void Process_RingBuffer_To_USB1()
-{
-    uint8_t ret;
-    
-    /* Determine if enumeration is complete, perform data transfer if completed */
-    if(USBFS_DevEnumStatus)
-    {
-        /* Data Transfer */
-        if(RingBuffer_Comm.RemainPack)
-        {
-            DUG_PRINTF( "Hello-1 \r\n");
-            ret = USBFS_Endp_DataUp(DEF_UEP1, &Data_Buffer[(RingBuffer_Comm.DealPtr) * DEF_USBD_FS_PACK_SIZE], RingBuffer_Comm.PackLen[RingBuffer_Comm.DealPtr], DEF_UEP_DMA_LOAD);
-            if( ret == 0 )
-            {
-                DUG_PRINTF( "Hello-2 \r\n");
-                NVIC_DisableIRQ(USBHD_IRQn);
-                RingBuffer_Comm.RemainPack--;
-                RingBuffer_Comm.DealPtr++;
-                if(RingBuffer_Comm.DealPtr == DEF_Ring_Buffer_Max_Blks)
-                {
-                    RingBuffer_Comm.DealPtr = 0;
-                }
-                NVIC_EnableIRQ(USBHD_IRQn);
-            }
-        }
-
-        /* Monitor whether the remaining space is available for further downloads */
-        if(RingBuffer_Comm.RemainPack < (DEF_Ring_Buffer_Max_Blks - DEF_RING_BUFFER_RESTART))
-        {
-            if(RingBuffer_Comm.StopFlag)
-            {
-                NVIC_DisableIRQ(USBHD_IRQn);
-                RingBuffer_Comm.StopFlag = 0;
-                NVIC_EnableIRQ(USBHD_IRQn);
-                USBOTG_FS->UEP1_RX_CTRL = (USBOTG_FS->UEP1_RX_CTRL & ~USBFS_UEP_R_RES_MASK) | USBFS_UEP_R_RES_ACK;
-            }
-        }
-    }
-}
 
 int main(void)
 {
@@ -147,7 +87,3 @@ int main(void)
         }
     }
 }
-
-
-
-

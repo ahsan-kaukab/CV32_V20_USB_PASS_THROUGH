@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "usb_prop.h": "c",
+        "usb_host_config.h": "c",
+        "usbd_composite_km.h": "c"
+    }
+}
