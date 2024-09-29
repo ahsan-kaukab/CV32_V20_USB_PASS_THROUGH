@@ -52,6 +52,17 @@ uint8_t forward_data[HID_REPORT_SIZE]; // Data to send on USB-2
  * @return  none
  */
 
+void GPIO_INIT(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+}
+
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -67,6 +78,10 @@ int main(void)
     USB_Init();
     USB_Interrupts_Config();
     printf( "USBD Init\r\n" );
+
+    GPIO_INIT();
+    //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
+    GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
 
     while( bDeviceState != CONFIGURED )
     {

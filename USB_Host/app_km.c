@@ -24,7 +24,7 @@ uint8_t  KB_Data_Buffer[ 8 ] = { 0x00 };                                        
 uint8_t  KB_Data_Pack_Full = 0;                                                 // Primary HID buffer state
 uint8_t  KB_Data_Buffer_Full = 0;                                               // Secondary HID buffer state
 uint8_t  KB_Data_State = 0;                                                     // Current HID buffer
-volatile uint8_t  KB_LED_Last_Status = 0x00;                                    // Keyboard LED Last Result
+
 uint8_t  scroll_lock_led = 0;                                                   // Scroll lock LED state
 
 struct   _ROOT_HUB_DEVICE RootHubDev;
@@ -33,6 +33,13 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 /*******************************************************************************/
 /* Interrupt Function Declaration */
 void TIM3_IRQHandler(void) __attribute__((naked));
+
+void SetLEDHighForDuration(int ms) 
+{
+    GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
+    Delay_Ms(ms);               // Delay for the specified time
+    GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_RESET);
+}
 
 /*********************************************************************
  * @fn      TIM3_Init
@@ -1446,24 +1453,13 @@ void KB_LED_Handle( uint8_t index, uint8_t intf_num )
 {
     if( HostCtl[ index ].Interface[ intf_num ].SetReport_Swi)
     {
-#ifdef SCROLL_LOCK_OVERRIDE
-        KB_LED_Cur_Status &= 0xFB;
-        if( KB_LED_Cur_Status != KB_LED_Last_Status || disable_keymap != scroll_lock_led )
-        {
-            scroll_lock_led = disable_keymap;
-#else
-        if( KB_LED_Cur_Status != KB_LED_Last_Status )
-        {
-#endif
 #if DEF_DEBUG_PRINTF
             DUG_PRINTF( "LED status %d\r\n", KB_LED_Cur_Status );
 #endif
-            HostCtl[ index ].Interface[ intf_num ].SetReport_Value = scroll_lock_led ? ( KB_LED_Cur_Status | 0x04) : KB_LED_Cur_Status;
-            HostCtl[ index ].Interface[ intf_num ].SetReport_Flag = 1;
-            KB_SetReport( index, RootHubDev.bEp0MaxPks, intf_num );
-            HostCtl[ index ].Interface[ intf_num ].SetReport_Flag = 0;
-            KB_LED_Last_Status = KB_LED_Cur_Status;
-        }
+        HostCtl[ index ].Interface[ intf_num ].SetReport_Value = scroll_lock_led ? ( KB_LED_Cur_Status | 0x04) : KB_LED_Cur_Status;
+        HostCtl[ index ].Interface[ intf_num ].SetReport_Flag = 1;
+        KB_SetReport( index, RootHubDev.bEp0MaxPks, intf_num );
+        HostCtl[ index ].Interface[ intf_num ].SetReport_Flag = 0;
     }
 }
 
@@ -1625,8 +1621,6 @@ void USBH_MainDeal( void )
         {
             for( intf_num = 0; intf_num < HostCtl[ index ].InterfaceNum; intf_num++ )
             {
-                /* Handle keyboard lighting */
-                KB_LED_Handle( index, intf_num );
                 for( in_num = 0; in_num < HostCtl[ index ].Interface[ intf_num ].InEndpNum; in_num++ )
                 {
                     /* Get endpoint data based on the interval time of the device */
@@ -1878,8 +1872,6 @@ void USBH_MainDeal( void )
                    {
                        for( intf_num = 0; intf_num < HostCtl[ index ].InterfaceNum; intf_num++ )
                        {
-                           /* Handle keyboard lighting */
-                           KB_LED_Handle( index, intf_num );
                            for( in_num = 0; in_num < HostCtl[ index ].Interface[ intf_num ].InEndpNum; in_num++ )
                            {
                                /* Get endpoint data based on the interval time of the device */
@@ -1900,19 +1892,43 @@ void USBH_MainDeal( void )
                                                            &HostCtl[ index ].Interface[ intf_num ].InEndpTog[ in_num ], Com_Buf, &len );
                                    if( s == ERR_SUCCESS )
                                    {
+                                        DUG_PRINTF("Working Test len is %d \r\n",len); 
                                         for( i = 0; i < len; i++ )
                                         {
 #if DEF_DEBUG_PRINTF
                                             DUG_PRINTF( "%02x ", Com_Buf[ i ] );
 #endif
+                                            if (HostCtl[index].Interface[intf_num].Type == DEC_MOUSE && len >= 3) 
+                                            {
+                                                int8_t x_movement = (int8_t)Com_Buf[1];  // X movement (signed byte)
+                                                int8_t y_movement = (int8_t)Com_Buf[2];  // Y movement (signed byte)
+
+                                                // Determine the greater movement, x or y
+                                                int movement = abs(x_movement) > abs(y_movement) ? abs(x_movement) : abs(y_movement);
+
+                                                // Control LED based on movement
+                                                if (movement <= 5) 
+                                                {
+                                                    SetLEDHighForDuration(1);  // LED high for 1 ms
+                                                } 
+                                                else if (movement < 15) 
+                                                {
+                                                    SetLEDHighForDuration(2);  // LED high for 2 ms
+                                                } 
+                                                else 
+                                                {
+                                                    SetLEDHighForDuration(3);  // LED high for 3 ms
+                                                }
+                                            }
+
                                             if( len >= 8 )
                                             {
-#if KEYMAP_SUSPEND_MASK
-                                                if( i == 0 )
-                                                {
-                                                    mask(Com_Buf[ i ]);
-                                                }
-#endif
+// #if KEYMAP_SUSPEND_MASK
+//                                                 if( i == 0 )
+//                                                 {
+//                                                     mask(Com_Buf[ i ]);
+//                                                 }
+// #endif
                                                 if(KB_Data_State)
                                                 {
                                                     KB_Data_Buffer[ i ] = Com_Buf[ i ];
