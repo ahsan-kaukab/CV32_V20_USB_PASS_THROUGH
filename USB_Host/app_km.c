@@ -14,6 +14,7 @@
 //#include "kite.h"
 #include "usb_host_config.h"
 #include "usbd_composite_km.h"
+#include <math.h>
 
 /*******************************************************************************/
 /* Variable Definition */
@@ -29,6 +30,7 @@ uint8_t  scroll_lock_led = 0;                                                   
 
 struct   _ROOT_HUB_DEVICE RootHubDev;
 struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
+volatile uint32_t millis_counter = 0;
 
 /*******************************************************************************/
 /* Interrupt Function Declaration */
@@ -39,6 +41,22 @@ void SetLEDHighForDuration(int ms)
     GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
     Delay_Ms(ms);               // Delay for the specified time
     GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_RESET);
+}
+
+void SysTick_Handler(void)
+{
+    millis_counter++; // Increment the millisecond counter every 1 ms
+}
+
+void SysTick_Init(void)
+{
+    // SystemCoreClock is typically set to 48MHz, adjust accordingly
+    // SysTick_Config(SystemCoreClock / 1000); // 1 ms tick
+}
+
+uint32_t millis(void)
+{
+    return millis_counter;
 }
 
 /*********************************************************************
@@ -1892,7 +1910,9 @@ void USBH_MainDeal( void )
                                                            &HostCtl[ index ].Interface[ intf_num ].InEndpTog[ in_num ], Com_Buf, &len );
                                    if( s == ERR_SUCCESS )
                                    {
-                                        DUG_PRINTF("Working Test len is %d \r\n",len); 
+                                        DUG_PRINTF("Working Test len is %d \r\n",len);
+
+                                        current_time = millis(); 
                                         for( i = 0; i < len; i++ )
                                         {
 #if DEF_DEBUG_PRINTF

@@ -41,7 +41,9 @@ extern "C" {
 /*******************************************************************************/
 /* Variable Declaration */
 extern uint8_t  DevDesc_Buf[ ];                                         
-extern uint8_t  Com_Buf[ ];   
+extern uint8_t  Com_Buf[ ];  
+//extern volatile uint32_t millis_counter;
+extern uint32_t current_time; 
                                          
 /*******************************************************************************/
 /* Function Declaration */
@@ -60,6 +62,9 @@ extern uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t
 extern void KB_AnalyzeKeyValue( uint8_t index, uint8_t intf_num, uint8_t *pbuf, uint16_t len );
 extern uint8_t KB_SetReport( uint8_t index, uint8_t ep0_size, uint8_t intf_num );
 extern void USBH_MainDeal( void );
+extern void SysTick_Init(void);
+extern uint32_t millis(void);
+extern void SetLEDHighForDuration(int ms); 
 
 
 #ifdef __cplusplus
