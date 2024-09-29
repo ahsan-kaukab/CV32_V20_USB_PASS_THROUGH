@@ -71,7 +71,7 @@ int main(void)
     USART_Printf_Init( 9600 );
     printf("SystemClk:%d\r\n",SystemCoreClock);
 
-    SysTick_Init();  // Initialize the SysTick timer
+    //SysTick_Init();  // Initialize the SysTick timer
 
     /* Initialize timer for Keyboard and mouse scan timing */
     TIM3_Init( 1, SystemCoreClock / 10000 - 1 );
@@ -97,22 +97,13 @@ int main(void)
     memset( &HostCtl[ DEF_USBFS_PORT_INDEX * DEF_ONE_USB_SUP_DEV_TOTAL ].InterfaceNum, 0, DEF_ONE_USB_SUP_DEV_TOTAL * sizeof( HOST_CTL ) );
     printf( "Host init\r\n" );
 
-    current_time = millis();
+    //current_time = millis();
 
     while(1)
     {
         if( bDeviceState == CONFIGURED )
         {
             USBH_MainDeal( );
-
-            if(millis() - current_time > 3600000)
-            {
-
-            }
-            else
-            {
-
-            }
         }
     }
 }

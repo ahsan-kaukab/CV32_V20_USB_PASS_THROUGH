@@ -43,21 +43,21 @@ void SetLEDHighForDuration(int ms)
     GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_RESET);
 }
 
-void SysTick_Handler(void)
-{
-    millis_counter++; // Increment the millisecond counter every 1 ms
-}
+// void SysTick_Handler(void)
+// {
+//     millis_counter++; // Increment the millisecond counter every 1 ms
+// }
 
-void SysTick_Init(void)
-{
-    // SystemCoreClock is typically set to 48MHz, adjust accordingly
-    // SysTick_Config(SystemCoreClock / 1000); // 1 ms tick
-}
+// void SysTick_Init(void)
+// {
+//     // SystemCoreClock is typically set to 48MHz, adjust accordingly
+//     // SysTick_Config(SystemCoreClock / 1000); // 1 ms tick
+// }
 
-uint32_t millis(void)
-{
-    return millis_counter;
-}
+// uint32_t millis(void)
+// {
+//     return millis_counter;
+// }
 
 /*********************************************************************
  * @fn      TIM3_Init
@@ -110,6 +110,7 @@ void TIM3_Init( uint16_t arr, uint16_t psc )
  */
 void TIM3_IRQHandler( void )
 {
+
     __asm volatile ("call TIM3_IRQHandler_Real; mret");
 }
 
@@ -1912,7 +1913,7 @@ void USBH_MainDeal( void )
                                    {
                                         DUG_PRINTF("Working Test len is %d \r\n",len);
 
-                                        current_time = millis(); 
+                                        //current_time = millis(); 
                                         for( i = 0; i < len; i++ )
                                         {
 #if DEF_DEBUG_PRINTF
@@ -2002,6 +2003,17 @@ void USBH_MainDeal( void )
                                             }
                                         }
                                     }
+                               }
+                               // Inactivity logic added
+                               if (HostCtl[index].Interface[intf_num].InEndpTimeCount[in_num] >= 3600000) 
+                               {
+                                    // TurnOffLED
+                                    GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_RESET);
+                               }
+                               else
+                               {
+                                    // TurnOnLED
+                                    GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
                                }
                            }
 
