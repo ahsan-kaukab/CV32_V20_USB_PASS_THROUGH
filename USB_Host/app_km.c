@@ -16,6 +16,8 @@
 #include "usbd_composite_km.h"
 #include <math.h>
 
+#define ABS(x) ((x) < 0 ? -(x) : (x))
+
 /*******************************************************************************/
 /* Variable Definition */
 uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
@@ -1925,7 +1927,7 @@ void USBH_MainDeal( void )
                                                 int8_t y_movement = (int8_t)Com_Buf[2];  // Y movement (signed byte)
 
                                                 // Determine the greater movement, x or y
-                                                int movement = abs(x_movement) > abs(y_movement) ? abs(x_movement) : abs(y_movement);
+                                                int movement = ABS(x_movement) > ABS(y_movement) ? ABS(x_movement) : ABS(y_movement);
 
                                                 // Control LED based on movement
                                                 if (movement <= 5) 
@@ -1942,6 +1944,7 @@ void USBH_MainDeal( void )
                                                 }
                                             }
 
+                                            // lets see if its needed or not
                                             if( len >= 8 )
                                             {
 // #if KEYMAP_SUSPEND_MASK

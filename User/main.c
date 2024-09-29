@@ -84,7 +84,7 @@ int main(void)
 
     GPIO_INIT();
     //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
-    GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
+    //GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
 
     while( bDeviceState != CONFIGURED )
     {
