@@ -30,15 +30,15 @@ const uint8_t  USBD_DeviceDescriptor[] = {
 
 /* USB Configration Descriptors */
 const uint8_t  USBD_ConfigDescriptor[] = { 
-    /* Configuration Descriptor */
+     /* Configuration Descriptor */
     0x09,                           // bLength
     0x02,                           // bDescriptorType
     USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
     0x01,                           // bNumInterfaces
     0x01,                           // bConfigurationValue
-    0x03,                           // iConfiguration (String Index)
-    0x80,                           // bmAttributes Remote Wakeup
-    0x23,                           // bMaxPower 70mA
+    0x00,                           // iConfiguration
+    0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
+    0x32,                           // MaxPower: 100mA
 
     /* Interface Descriptor */
     0x09,                           // bLength
@@ -51,7 +51,7 @@ const uint8_t  USBD_ConfigDescriptor[] = {
     0x00,                           // bInterfaceProtocol
     0x00,                           // iInterface (String Index)
 
-    /* HID Descriptor */
+    /* HID Descriptor */ // no change except size
     0x09,                           // bLength
     0x21,                           // bDescriptorType
     0x11, 0x01,                     // bcdHID
@@ -60,21 +60,13 @@ const uint8_t  USBD_ConfigDescriptor[] = {
     0x22,                           // bDescriptorType
     USBD_SIZE_REPORT_DESC & 0xFF, USBD_SIZE_REPORT_DESC >> 8, // wDescriptorLength
 
-    /* Endpoint Descriptor */
+    /* Endpoint Descriptor (Keyboard) */
     0x07,                           // bLength
     0x05,                           // bDescriptorType
-    0x01,                           // bEndpointAddress: OUT Endpoint 1
+    0x81,                           // bEndpointAddress: IN Endpoint 1
     0x03,                           // bmAttributes
-    0x40, 0x00,                     // wMaxPacketSize
-    0x01,                           // bInterval: 1mS
-    
-    /* Endpoint Descriptor */
-    0x07,                           // bLength
-    0x05,                           // bDescriptorType
-    0x82,                           // bEndpointAddress: IN Endpoint 2
-    0x03,                           // bmAttributes
-    0x40, 0x00,                     // wMaxPacketSize
-    0x01,                           // bInterval: 1mS
+    DEF_ENDP_SIZE_KB & 0xFF, DEF_ENDP_SIZE_KB >> 8, // wMaxPacketSize
+    0x05                            // bInterval: 5mS
 };
 
 /* USB String Descriptors */
@@ -109,20 +101,31 @@ uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
 /* HID Report Descriptor */
 const uint8_t USBD_HidRepDesc[USBD_SIZE_REPORT_DESC] =
 {
-    0x06, 0x00, 0xFF,               // Usage Page (Vendor Defined 0xFF00)
-    0x09, 0x01,                     // Usage (0x01)
+    0x05, 0x01,                     // Usage Page (Generic Desktop)
+    0x09, 0x02,                     // Usage (Mouse)
     0xA1, 0x01,                     // Collection (Application)
-    0x09, 0x02,                     //   Usage (0x02)
-    0x26, 0xFF, 0x00,               //   Logical Maximum (255)
-    0x75, 0x08,                     //   Report Size (8)
-    0x15, 0x00,                     //   Logical Minimum (0)
-    0x95, 0x40,                     //   Report Count (64)
-    0x81, 0x06,                     //   Input (Data,Var,Rel,No Wrap,Linear,Preferred State,No Null Position)
-    0x09, 0x02,                     //   Usage (0x02)
-    0x15, 0x00,                     //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,               //   Logical Maximum (255)
-    0x75, 0x08,                     //   Report Size (8)
-    0x95, 0x40,                     //   Report Count (64)
-    0x91, 0x06,                     //   Output (Data,Var,Rel,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+    0x09, 0x01,                     // Usage (Pointer)
+    0xA1, 0x00,                     // Collection (Physical)
+    0x05, 0x09,                     // Usage Page (Button)
+    0x19, 0x01,                     // Usage Minimum (Button 1)
+    0x29, 0x03,                     // Usage Maximum (Button 3)
+    0x15, 0x00,                     // Logical Minimum (0)
+    0x25, 0x01,                     // Logical Maximum (1)
+    0x75, 0x01,                     // Report Size (1)
+    0x95, 0x03,                     // Report Count (3)
+    0x81, 0x02,                     // Input (Data,Variable,Absolute)
+    0x75, 0x05,                     // Report Size (5)
+    0x95, 0x01,                     // Report Count (1)
+    0x81, 0x01,                     // Input (Constant,Array,Absolute)
+    0x05, 0x01,                     // Usage Page (Generic Desktop)
+    0x09, 0x30,                     // Usage (X)
+    0x09, 0x31,                     // Usage (Y)
+    0x09, 0x38,                     // Usage (Wheel)
+    0x15, 0x81,                     // Logical Minimum (-127)
+    0x25, 0x7F,                     // Logical Maximum (127)
+    0x75, 0x08,                     // Report Size (8)
+    0x95, 0x03,                     // Report Count (3)
+    0x81, 0x06,                     // Input (Data,Variable,Relative)
     0xC0,                           // End Collection
+    0xC0                            // End Collection
 };

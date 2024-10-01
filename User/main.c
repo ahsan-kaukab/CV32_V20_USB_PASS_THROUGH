@@ -85,6 +85,7 @@ int main(void)
     GPIO_INIT();
     //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
     //GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
+    //Delay_Ms(2000);
 
     while( bDeviceState != CONFIGURED )
     {
@@ -101,6 +102,10 @@ int main(void)
 
     while(1)
     {
+        // GPIO_WriteBit(GPIOA, GPIO_Pin_12, Bit_SET);
+        // Delay_Ms(2000);
+        // GPIO_WriteBit(GPIOA, GPIO_Pin_12, Bit_RESET);
+        // Delay_Ms(2000);
         if( bDeviceState == CONFIGURED )
         {
             USBH_MainDeal( );
