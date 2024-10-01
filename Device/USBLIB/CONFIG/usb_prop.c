@@ -79,16 +79,14 @@ ONE_DESCRIPTOR String_Descriptor[4] =
 	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
 };
 
-ONE_DESCRIPTOR Report_Descriptor[2] =
+ONE_DESCRIPTOR Report_Descriptor[1] =
 {
-	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
-	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
+	{(uint8_t*)USBD_HidRepDesc, USBD_SIZE_REPORT_DESC},
 };
 
-ONE_DESCRIPTOR Hid_Descriptor[2] =
+ONE_DESCRIPTOR Hid_Descriptor[1] =
 {
 	{(uint8_t*)&USBD_ConfigDescriptor[18], 0x09},
-	{(uint8_t*)&USBD_ConfigDescriptor[43], 0x09},
 };
 
 
