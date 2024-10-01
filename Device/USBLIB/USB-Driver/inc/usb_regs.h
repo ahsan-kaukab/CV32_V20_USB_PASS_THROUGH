@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : usb_regs.h
  * Author             : WCH
- * Version            : V1.0.1
- * Date               : 2022/12/28
+ * Version            : V1.0.0
+ * Date               : 2021/08/08
  * Description        : This file contains all the functions prototypes for the  
  *                      USB cell registers firmware library.
 *********************************************************************************
@@ -31,8 +31,6 @@ enum EP_BUF_NUM
   EP_BUF0,
   EP_BUF1
 };
-
-extern uint16_t Ep0RxBlks;
 
 #define RegBase  (0x40005C00L)  
 #define PMAAddr  (0x40006000L)  
@@ -474,18 +472,7 @@ extern uint16_t Ep0RxBlks;
     else {_BlocksOf2(dwReg,wCount,wNBlocks);}\
   }/* _SetEPCountRxReg */
 
-#define _GetNumBlock(wCount,wValue)  {\
-    uint16_t wNBlocks;\
-    if(wCount > 62){\
-      wNBlocks = wCount >> 5;\
-      if((wCount & 0x1f) == 0) wNBlocks--;\
-      wValue = (uint32_t)((wNBlocks << 10) | 0x8000);\
-    }\
-    else {wNBlocks = wCount >> 1;\
-      if((wCount & 0x1) != 0) wNBlocks++;\
-      wValue = (uint32_t)(wNBlocks << 10);\
-    }\
-}
+
 
 #define _SetEPRxDblBuf0Count(bEpNum,wCount) {\
     uint32_t *pdwReg = _pEPTxCount(bEpNum); \
@@ -503,8 +490,6 @@ extern uint16_t Ep0RxBlks;
 #define _SetEPRxCount(bEpNum,wCount) {\
     uint32_t *pdwReg = _pEPRxCount(bEpNum); \
     _SetEPCountRxReg(pdwReg, wCount);\
-    if (bEpNum == ENDP0) \
-      _GetNumBlock(Device_Property.MaxPacketSize,Ep0RxBlks);\
   }
 
 /*******************************************************************************
@@ -661,13 +646,3 @@ uint16_t ByteSwap(uint16_t);
 #endif
 
 #endif /* __USB_REGS_H */
-
-
-
-
-
-
-
-
-
-
