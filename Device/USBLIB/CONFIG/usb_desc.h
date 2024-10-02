@@ -25,12 +25,12 @@
 #define USB_ENDPOINT_DESCRIPTOR_TYPE            0x05
 
 #define DEF_USBD_UEP0_SIZE          64
-#define DEF_ENDP_SIZE_KB            8      
+#define DEF_ENDP_SIZE_KB            8  // 8  
 #define DEF_USBD_MAX_PACK_SIZE      64
        
 #define USBD_SIZE_DEVICE_DESC        18
-#define USBD_SIZE_CONFIG_DESC        41
-#define USBD_SIZE_REPORT_DESC        62
+#define USBD_SIZE_CONFIG_DESC        34
+#define USBD_SIZE_REPORT_DESC        54 // 62
 #define USBD_SIZE_STRING_LANGID      4
 #define USBD_SIZE_STRING_VENDOR      14
 #define USBD_SIZE_STRING_PRODUCT     18

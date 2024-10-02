@@ -22,8 +22,8 @@
 /* Variable Definition */
 uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
 uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            // General Buffer
-uint8_t  KB_Data_Pack[ 8 ] = { 0x00 };                                          // Primary HID buffer
-uint8_t  KB_Data_Buffer[ 8 ] = { 0x00 };                                        // Secondary HID buffer
+uint8_t  KB_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
+uint8_t  KB_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
 uint8_t  KB_Data_Pack_Full = 0;                                                 // Primary HID buffer state
 uint8_t  KB_Data_Buffer_Full = 0;                                               // Secondary HID buffer state
 uint8_t  KB_Data_State = 0;                                                     // Current HID buffer
@@ -1730,13 +1730,20 @@ void USBH_MainDeal( void )
                         }
                         if( KB_Data_Pack_Full + KB_Data_Buffer_Full )
                         {
+                            // uint8_t report[4]; // 1 byte for buttons, 1 byte for constant, 3 bytes for axes
+                            // report[0] = 1; // Buttons (3 bits)
+                            // report[1] = 0; // Constant data
+                            // report[2] = 12; // X movement
+                            // report[3] = 13; // Y movement
+                            // report[4] = 10; // Wheel movement
+
                             if(KB_Data_State)
                             {
                                 s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
                             }
                             else
                             {
-                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Pack, sizeof( KB_Data_Pack ));
+                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
                             }
 
                             if(s == NoREADY)
@@ -1975,13 +1982,20 @@ void USBH_MainDeal( void )
                                    }
                                    if( KB_Data_Pack_Full + KB_Data_Buffer_Full )
                                     {
+                                        // uint8_t report[4]; // 1 byte for buttons, 1 byte for constant, 3 bytes for axes
+                                        // report[0] = 1; // Buttons (3 bits)
+                                        // report[1] = 0; // Constant data
+                                        // report[2] = 12; // X movement
+                                        // report[3] = 13; // Y movement
+                                        // report[4] = 10; // Wheel movement
+
                                         if(KB_Data_State)
                                         {
                                             s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
                                         }
                                         else
                                         {
-                                            s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Pack, sizeof( KB_Data_Pack ));
+                                            s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
                                         }
 
                                         if(s == NoREADY)
