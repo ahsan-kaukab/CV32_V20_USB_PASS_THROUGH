@@ -1659,14 +1659,14 @@ void USBH_MainDeal( void )
 #if DEF_DEBUG_PRINTF
                                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
 #endif
-                                if( len >= 8 )
+                                //if( len >= 8 )
                                 {
-#if KEYMAP_SUSPEND_MASK
-                                    if( i == 0 )
-                                    {
-                                        mask(Com_Buf[ i ]);
-                                    }
-#endif
+// #if KEYMAP_SUSPEND_MASK
+//                                     if( i == 0 )
+//                                     {
+//                                         mask(Com_Buf[ i ]);
+//                                     }
+// #endif
                                     if(KB_Data_State)
                                     {
                                         KB_Data_Buffer[ i ] = Com_Buf[ i ];
@@ -1945,7 +1945,7 @@ void USBH_MainDeal( void )
                                             }
 
                                             // lets see if its needed or not
-                                            if( len >= 8 )
+                                            //if( len >= 8 )
                                             {
 // #if KEYMAP_SUSPEND_MASK
 //                                                 if( i == 0 )
