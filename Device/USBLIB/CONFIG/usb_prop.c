@@ -79,9 +79,11 @@ ONE_DESCRIPTOR String_Descriptor[4] =
 	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
 };
 
-ONE_DESCRIPTOR Report_Descriptor[1] =
+ONE_DESCRIPTOR Report_Descriptor[2] =
 {
-	{(uint8_t*)USBD_HidRepDesc, USBD_SIZE_REPORT_DESC},
+  //{(uint8_t*)USBD_HidRepDesc, 64},
+	{(uint8_t*)USBD_KeyRepDesc, 62},
+	{(uint8_t*)USBD_MouseRepDesc, 54},
 };
 
 ONE_DESCRIPTOR Hid_Descriptor[1] =
@@ -301,7 +303,8 @@ uint8_t *USBD_GetStringDescriptor(uint16_t Length)
  */
 uint8_t *USBD_GetReportDescriptor(uint16_t Length)
 {
-  uint8_t wIndex0 = pInformation->USBwIndexs.bw.bb0;
+  //uint8_t wIndex0 = pInformation->USBwIndexs.bw.bb0;
+  uint8_t wIndex0 = new_descripter;
   if (wIndex0 > 2)
   {
     return NULL;

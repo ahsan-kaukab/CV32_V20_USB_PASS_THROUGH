@@ -15,15 +15,19 @@
 #include "usb_host_config.h"
 #include "usbd_composite_km.h"
 #include <math.h>
+#include <stdlib.h> // For malloc and free
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
+uint8_t new_descripter;
 /*******************************************************************************/
 /* Variable Definition */
 uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
 uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            // General Buffer
-uint8_t  KB_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
-uint8_t  KB_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
+// uint8_t  KB_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
+// uint8_t  KB_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
+uint8_t  *KB_Data_Pack;
+uint8_t  *KB_Data_Buffer;
 uint8_t  KB_Data_Pack_Full = 0;                                                 // Primary HID buffer state
 uint8_t  KB_Data_Buffer_Full = 0;                                               // Secondary HID buffer state
 uint8_t  KB_Data_State = 0;                                                     // Current HID buffer
@@ -409,11 +413,43 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                     if( ( (PUSB_ITF_DESCR)( &Com_Buf[ i ] ) )->bInterfaceProtocol == 0x01 ) // Keyboard
                     {
                         HostCtl[ index ].Interface[ num ].Type = DEC_KEY;
+
+                        //USBD_HidRepDesc = USBD_KeyRepDesc;
+
+                        //pInformation->USBwIndexs.bw.bb0 = 0;
+                        KB_Data_Pack = (uint8_t *)malloc(8 * sizeof(uint8_t));
+                        KB_Data_Buffer = (uint8_t *)malloc(8 * sizeof(uint8_t));
+
+                        new_descripter = 0;
+                        Set_USBConfig();
+                        USB_Init();
+                        USB_Interrupts_Config();
+                        //printf( "USBD Init\r\n" );
+                        
+                        while( bDeviceState != CONFIGURED )
+                        {
+                        }
+                        
                         HID_SetIdle( ep0_size, num, 0, 0 );
                     }
                     else if( ( (PUSB_ITF_DESCR)( &Com_Buf[ i ] ) )->bInterfaceProtocol == 0x02 ) // Mouse
                     {
                         HostCtl[ index ].Interface[ num ].Type = DEC_MOUSE;
+                        new_descripter = 1;
+                        
+                        //USBD_HidRepDesc = USBD_MouseRepDesc;
+                        KB_Data_Pack = (uint8_t *)malloc(4 * sizeof(uint8_t));
+                        KB_Data_Buffer = (uint8_t *)malloc(4 * sizeof(uint8_t));
+                        Set_USBConfig();
+                        USB_Init();
+                        USB_Interrupts_Config();
+                        //printf( "USBD Init\r\n" );
+                        
+                        while( bDeviceState != CONFIGURED )
+                        {
+                        }
+                        //printf( "USBD Ready\r\n" );
+
                         HID_SetIdle( ep0_size, num, 0, 0 );
                     }
                     s = ERR_SUCCESS;

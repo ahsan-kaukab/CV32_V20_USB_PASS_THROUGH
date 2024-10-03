@@ -76,21 +76,22 @@ int main(void)
     /* Initialize timer for Keyboard and mouse scan timing */
     TIM3_Init( 1, SystemCoreClock / 10000 - 1 );
     printf( "Timer Init\r\n" );
-
-    Set_USBConfig();
-    USB_Init();
-    USB_Interrupts_Config();
-    printf( "USBD Init\r\n" );
-
+    
     GPIO_INIT();
-    //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
-    //GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
-    //Delay_Ms(2000);
 
-    while( bDeviceState != CONFIGURED )
-    {
-    }
-    printf( "USBD Ready\r\n" );
+    // Set_USBConfig();
+    // USB_Init();
+    // USB_Interrupts_Config();
+    // printf( "USBD Init\r\n" );
+
+    // //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
+    // //GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
+    // //Delay_Ms(2000);
+
+    // while( bDeviceState != CONFIGURED )
+    // {
+    // }
+    // printf( "USBD Ready\r\n" );
 
     USBFS_RCC_Init( );
     USBFS_Host_Init( ENABLE );
@@ -106,7 +107,7 @@ int main(void)
         // Delay_Ms(2000);
         // GPIO_WriteBit(GPIOA, GPIO_Pin_12, Bit_RESET);
         // Delay_Ms(2000);
-        if( bDeviceState == CONFIGURED )
+        //if( bDeviceState == CONFIGURED )
         {
             USBH_MainDeal( );
         }
