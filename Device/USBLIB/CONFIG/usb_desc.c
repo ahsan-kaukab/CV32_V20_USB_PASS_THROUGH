@@ -99,7 +99,7 @@ uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
 };
 
 /* HID Report Descriptor */
-const uint8_t USBD_MouseRepDesc[54] =
+const uint8_t USBD_MouseRepDesc[] =
 {
     0x05, 0x01,                     // Usage Page (Generic Desktop)
     0x09, 0x02,                     // Usage (Mouse)
@@ -132,7 +132,7 @@ const uint8_t USBD_MouseRepDesc[54] =
 };
 
 
-const uint8_t USBD_KeyRepDesc[62] =
+const uint8_t USBD_KeyRepDesc[] =
 {
    0x05, 0x01,                     // Usage Page (Generic Desktop)
     0x09, 0x06,                     // Usage (Keyboard)
