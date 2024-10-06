@@ -84,14 +84,14 @@ int main(void)
     
     GPIO_INIT();
 
+    // //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
+    // //GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
+    // //Delay_Ms(2000);
+
     // Set_USBConfig();
     // USB_Init();
     // USB_Interrupts_Config();
     // printf( "USBD Init\r\n" );
-
-    // //GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
-    // //GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
-    // //Delay_Ms(2000);
 
     // while( bDeviceState != CONFIGURED )
     // {

@@ -25,10 +25,12 @@ uint8_t kb_ms;
 /* Variable Definition */
 uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
 uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            // General Buffer
-// uint8_t  KB_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
-// uint8_t  KB_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
-uint8_t  *KB_Data_Pack;
-uint8_t  *KB_Data_Buffer;
+uint8_t  KB_Data_Pack[ 8 ] = { 0x00 };                                          // Primary HID buffer
+uint8_t  KB_Data_Buffer[ 8 ] = { 0x00 };                                        // Secondary HID buffer
+//uint8_t  MS_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
+//uint8_t  MS_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
+//uint8_t  *KB_Data_Pack;
+//uint8_t  *KB_Data_Buffer;
 uint8_t  KB_Data_Pack_Full = 0;                                                 // Primary HID buffer state
 uint8_t  KB_Data_Buffer_Full = 0;                                               // Secondary HID buffer state
 uint8_t  KB_Data_State = 0;                                                     // Current HID buffer
@@ -418,11 +420,11 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                         //USBD_HidRepDesc = USBD_KeyRepDesc;
 
                         //pInformation->USBwIndexs.bw.bb0 = 0;
-                        KB_Data_Pack = (uint8_t *)malloc(8 * sizeof(uint8_t));
-                        KB_Data_Buffer = (uint8_t *)malloc(8 * sizeof(uint8_t));
+                        // KB_Data_Pack = (uint8_t *)malloc(8 * sizeof(uint8_t));
+                        // KB_Data_Buffer = (uint8_t *)malloc(8 * sizeof(uint8_t));
 
                         new_descripter = 0;
-                        kb_ms = 8;
+                        //kb_ms = 8;
                         Set_USBConfig();
                         USB_Init();
                         USB_Interrupts_Config();
@@ -438,11 +440,11 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                     {
                         HostCtl[ index ].Interface[ num ].Type = DEC_MOUSE;
                         new_descripter = 1;
-                        kb_ms = 4;
+                        // kb_ms = 4;
                         
-                        //USBD_HidRepDesc = USBD_MouseRepDesc;
-                        KB_Data_Pack = (uint8_t *)malloc(4 * sizeof(uint8_t));
-                        KB_Data_Buffer = (uint8_t *)malloc(4 * sizeof(uint8_t));
+                        // //USBD_HidRepDesc = USBD_MouseRepDesc;
+                        // KB_Data_Pack = (uint8_t *)malloc(4 * sizeof(uint8_t));
+                        // KB_Data_Buffer = (uint8_t *)malloc(4 * sizeof(uint8_t));
                         Set_USBConfig();
                         USB_Init();
                         USB_Interrupts_Config();
@@ -1699,7 +1701,7 @@ void USBH_MainDeal( void )
                                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
 #endif
                                 //if( len >= 8 )
-                                if( len >= kb_ms )
+                                //if( len >= kb_ms )
                                 {
 // #if KEYMAP_SUSPEND_MASK
 //                                     if( i == 0 )
@@ -1709,12 +1711,20 @@ void USBH_MainDeal( void )
 // #endif
                                     if(KB_Data_State)
                                     {
-                                        KB_Data_Buffer[ i ] = Com_Buf[ i ];
+                                        //if(new_descripter == 0)
+                                            KB_Data_Buffer[ i ] = Com_Buf[ i ];
+                                        //else
+                                        //    MS_Data_Buffer[ i ] = Com_Buf[ i ];
+
                                         KB_Data_Buffer_Full = 1;
                                     }
                                     else
                                     {
-                                        KB_Data_Pack[ i ] = Com_Buf[ i ];
+                                        //if(new_descripter == 0)
+                                            KB_Data_Pack[ i ] = Com_Buf[ i ];
+                                        //else
+                                        //    MS_Data_Pack[ i ] = Com_Buf[ i ];
+                                        
                                         KB_Data_Pack_Full = 1;
                                     }
                                 }
@@ -1779,11 +1789,17 @@ void USBH_MainDeal( void )
 
                             if(KB_Data_State)
                             {
-                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                if(new_descripter == 0)
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                else
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
                             }
                             else
                             {
-                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                if(new_descripter == 0)
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                else
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
                             }
 
                             if(s == NoREADY)
@@ -1796,15 +1812,23 @@ void USBH_MainDeal( void )
                             {
                                 if(KB_Data_State)
                                 {
-                                    memset( KB_Data_Buffer, 0x00, sizeof( KB_Data_Buffer ) );
+                                    //if(new_descripter == 0)
+                                        memset( KB_Data_Buffer, 0x00, sizeof( KB_Data_Buffer ) );
+                                    //else
+                                        //memset( MS_Data_Buffer, 0x00, sizeof( MS_Data_Buffer ) );
+
                                     KB_Data_State = 0;
                                     KB_Data_Buffer_Full = 0;
                                 }
                                 else
-                                {
-                                     memset( KB_Data_Pack, 0x00, sizeof( KB_Data_Pack ) );
-                                     KB_Data_State = 1;
-                                     KB_Data_Pack_Full = 0;
+                                {   
+                                    //if(new_descripter == 0) 
+                                        memset( KB_Data_Pack, 0x00, sizeof( KB_Data_Pack ) );
+                                    //else
+                                    //    memset( MS_Data_Pack, 0x00, sizeof( MS_Data_Pack ) );
+
+                                    KB_Data_State = 1;
+                                    KB_Data_Pack_Full = 0;
                                 }
                             }
                         }
@@ -1993,7 +2017,7 @@ void USBH_MainDeal( void )
 
                                             // lets see if its needed or not
                                             //if( len >= 8 )
-                                            if( len >= kb_ms )
+                                            //if( len >= kb_ms )
                                             {
 // #if KEYMAP_SUSPEND_MASK
 //                                                 if( i == 0 )
@@ -2003,12 +2027,20 @@ void USBH_MainDeal( void )
 // #endif
                                                 if(KB_Data_State)
                                                 {
-                                                    KB_Data_Buffer[ i ] = Com_Buf[ i ];
+                                                    if(new_descripter == 0 )
+                                                        KB_Data_Buffer[ i ] = Com_Buf[ i ];
+                                                    //else
+                                                    //    MS_Data_Buffer[ i ] = Com_Buf[ i ];
+
                                                     KB_Data_Buffer_Full = 1;
                                                 }
                                                 else
                                                 {
-                                                    KB_Data_Pack[ i ] = Com_Buf[ i ];
+                                                    if(new_descripter == 0 )
+                                                        KB_Data_Pack[ i ] = Com_Buf[ i ];
+                                                    //else
+                                                    //    MS_Data_Pack[ i ] = Com_Buf[ i ];
+
                                                     KB_Data_Pack_Full = 1;
                                                 }
                                             }
@@ -2032,11 +2064,17 @@ void USBH_MainDeal( void )
 
                                         if(KB_Data_State)
                                         {
-                                            s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                            if(new_descripter == 0)
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                            else
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
                                         }
                                         else
                                         {
-                                            s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                            if(new_descripter == 0)
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
+                                            else
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
                                         }
 
                                         if(s == NoREADY)
@@ -2049,13 +2087,20 @@ void USBH_MainDeal( void )
                                         {
                                             if(KB_Data_State)
                                             {
-                                                memset( KB_Data_Buffer, 0x00, sizeof( KB_Data_Buffer ) );
+                                                //if(new_descripter == 0)
+                                                    memset( KB_Data_Buffer, 0x00, sizeof( KB_Data_Buffer ) );
+                                                //else   
+                                                //    memset( MS_Data_Buffer, 0x00, sizeof( MS_Data_Buffer ) );
+
                                                 KB_Data_State = 0;
                                                 KB_Data_Buffer_Full = 0;
                                             }
                                             else
                                             {
-                                                memset( KB_Data_Pack, 0x00, sizeof( KB_Data_Pack ) );
+                                                //if(new_descripter == 0)
+                                                    memset( KB_Data_Pack, 0x00, sizeof( KB_Data_Pack ) );
+                                                //else
+                                                //    memset( MS_Data_Pack, 0x00, sizeof( MS_Data_Pack ) );
                                                 KB_Data_State = 1;
                                                 KB_Data_Pack_Full = 0;
                                             }
