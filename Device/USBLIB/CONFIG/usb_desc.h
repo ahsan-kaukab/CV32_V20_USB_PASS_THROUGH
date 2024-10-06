@@ -32,7 +32,7 @@
 #define USBD_SIZE_DEVICE_DESC        18
 #define USBD_SIZE_CONFIG_DESC        34
 //#define USBD_SIZE_REPORT_DESC        54 // 54
-#define USBD_SIZE_REPORT_DESC_KB     64 // 64
+#define USBD_SIZE_REPORT_DESC_KB     62 // 64
 #define USBD_SIZE_REPORT_DESC_MS     54 // 54
 #define USBD_SIZE_STRING_LANGID      4
 #define USBD_SIZE_STRING_VENDOR      14
@@ -55,8 +55,8 @@ extern uint8_t USBD_StringSerial [USBD_SIZE_STRING_SERIAL];
 // extern const uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 // extern const uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 //extern uint8_t USBD_HidRepDesc[USBD_SIZE_REPORT_DESC];
-extern const uint8_t USBD_MouseRepDesc[54];
-extern const uint8_t USBD_KeyRepDesc[62];
+extern const uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
+extern const uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 extern uint8_t new_descripter;
 
 #ifdef __cplusplus

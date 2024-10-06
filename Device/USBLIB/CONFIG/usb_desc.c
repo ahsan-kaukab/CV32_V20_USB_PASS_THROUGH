@@ -40,7 +40,7 @@ const uint8_t  USBD_ConfigDescriptor_KB[] = {
     0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
     0x32,                           // MaxPower: 100mA
 
-    /* Interface Descriptor (Keyboard) */
+    /* Interface Descriptor */
     0x09,                           // bLength
     0x04,                           // bDescriptorType
     0x00,                           // bInterfaceNumber
@@ -48,10 +48,10 @@ const uint8_t  USBD_ConfigDescriptor_KB[] = {
     0x01,                           // bNumEndpoints
     0x03,                           // bInterfaceClass
     0x01,                           // bInterfaceSubClass
-    0x02,                           // bInterfaceProtocol: Keyboard
+    0x01,                           // bInterfaceProtocol: Keyboard
     0x00,                           // iInterface
 
-    /* HID Descriptor (Keyboard) */
+    /* HID Descriptor*/
     0x09,                           // bLength
     0x21,                           // bDescriptorType
     0x11, 0x01,                     // bcdHID
@@ -60,7 +60,7 @@ const uint8_t  USBD_ConfigDescriptor_KB[] = {
     0x22,                           // bDescriptorType
     USBD_SIZE_REPORT_DESC_KB & 0xFF, USBD_SIZE_REPORT_DESC_KB >> 8, // wDescriptorLength
 
-    /* Endpoint Descriptor (Keyboard) */
+    /* Endpoint Descriptor*/
     0x07,                           // bLength
     0x05,                           // bDescriptorType
     0x81,                           // bEndpointAddress: IN Endpoint 1
@@ -141,7 +141,7 @@ uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
 
 const uint8_t USBD_KeyRepDesc[] =
 {
-   0x05, 0x01,                     // Usage Page (Generic Desktop)
+    0x05, 0x01,                     // Usage Page (Generic Desktop)
     0x09, 0x06,                     // Usage (Keyboard)
     0xA1, 0x01,                     // Collection (Application)
     0x05, 0x07,                     // Usage Page (Key Codes)
