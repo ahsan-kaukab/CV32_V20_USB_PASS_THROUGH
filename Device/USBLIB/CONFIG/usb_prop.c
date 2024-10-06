@@ -65,9 +65,21 @@ ONE_DESCRIPTOR Device_Descriptor =
 	USBD_SIZE_DEVICE_DESC
 };
 
-ONE_DESCRIPTOR Config_Descriptor =
+// ONE_DESCRIPTOR Config_Descriptor =
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor,
+// 	USBD_SIZE_CONFIG_DESC
+// };
+
+ONE_DESCRIPTOR Config_Descriptor_KB =
 {
-	(uint8_t*)USBD_ConfigDescriptor,
+	(uint8_t*)USBD_ConfigDescriptor_KB,
+	USBD_SIZE_CONFIG_DESC
+};
+
+ONE_DESCRIPTOR Config_Descriptor_MS =
+{
+	(uint8_t*)USBD_ConfigDescriptor_MS,
 	USBD_SIZE_CONFIG_DESC
 };
 
@@ -86,9 +98,11 @@ ONE_DESCRIPTOR Report_Descriptor[2] =
 	{(uint8_t*)USBD_MouseRepDesc, 54},
 };
 
-ONE_DESCRIPTOR Hid_Descriptor[1] =
+ONE_DESCRIPTOR Hid_Descriptor[2] =
 {
-	{(uint8_t*)&USBD_ConfigDescriptor[18], 0x09},
+	//{(uint8_t*)&USBD_ConfigDescriptor[18], 0x09},
+  {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
+  {(uint8_t*)&USBD_ConfigDescriptor_MS[18], 0x09},
 };
 
 
@@ -209,7 +223,10 @@ void USBD_init(void)
 void USBD_Reset(void)
 {
   pInformation->Current_Configuration = 0;
-  pInformation->Current_Feature = USBD_ConfigDescriptor[7];
+  if(new_descripter == 0)
+    pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
+  else
+    pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
   pInformation->Current_Interface = 0;
 
   SetBTABLE(BTABLE_ADDRESS);
@@ -266,7 +283,10 @@ uint8_t *USBD_GetDeviceDescriptor(uint16_t Length)
  */
 uint8_t *USBD_GetConfigDescriptor(uint16_t Length)
 {
-  return Standard_GetDescriptorData(Length, &Config_Descriptor);
+  if(new_descripter == 0)
+    return Standard_GetDescriptorData(Length, &Config_Descriptor_KB);
+  else 
+    return Standard_GetDescriptorData(Length, &Config_Descriptor_MS);
 }
 
 /*******************************************************************************

@@ -25,12 +25,15 @@
 #define USB_ENDPOINT_DESCRIPTOR_TYPE            0x05
 
 #define DEF_USBD_UEP0_SIZE          64
-#define DEF_ENDP_SIZE_KB            8  // 8  
+#define DEF_ENDP_SIZE_KB            8  // 8
+#define DEF_ENDP_SIZE_MS            4  // 4  
 #define DEF_USBD_MAX_PACK_SIZE      64
        
 #define USBD_SIZE_DEVICE_DESC        18
 #define USBD_SIZE_CONFIG_DESC        34
-#define USBD_SIZE_REPORT_DESC        54 // 54
+//#define USBD_SIZE_REPORT_DESC        54 // 54
+#define USBD_SIZE_REPORT_DESC_KB     64 // 64
+#define USBD_SIZE_REPORT_DESC_MS     54 // 54
 #define USBD_SIZE_STRING_LANGID      4
 #define USBD_SIZE_STRING_VENDOR      14
 #define USBD_SIZE_STRING_PRODUCT     18
@@ -41,7 +44,9 @@
 
 
 extern const uint8_t USBD_DeviceDescriptor[USBD_SIZE_DEVICE_DESC];
-extern const uint8_t USBD_ConfigDescriptor[USBD_SIZE_CONFIG_DESC];
+//extern const uint8_t USBD_ConfigDescriptor[USBD_SIZE_CONFIG_DESC];
+extern const uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
+extern const uint8_t USBD_ConfigDescriptor_MS[USBD_SIZE_CONFIG_DESC];
                     
 extern const uint8_t USBD_StringLangID [USBD_SIZE_STRING_LANGID];
 extern const uint8_t USBD_StringVendor [USBD_SIZE_STRING_VENDOR];
