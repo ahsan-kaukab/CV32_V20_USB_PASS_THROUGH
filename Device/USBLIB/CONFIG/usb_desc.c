@@ -89,7 +89,7 @@ const uint8_t  USBD_ConfigDescriptor_MS[] = {
     0x01,                           // bNumEndpoints
     0x03,                           // bInterfaceClass
     0x01,                           // bInterfaceSubClass
-    0x02,                           // bInterfaceProtocol: Keyboard
+    0x02,                           // bInterfaceProtocol: Mouse
     0x00,                           // iInterface
 
     /* HID Descriptor (Keyboard) */
@@ -139,7 +139,7 @@ uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
 };
 
-const uint8_t USBD_KeyRepDesc[] =
+const uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
 {
     0x05, 0x01,                     // Usage Page (Generic Desktop)
     0x09, 0x06,                     // Usage (Keyboard)

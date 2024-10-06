@@ -20,6 +20,7 @@
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
 uint8_t new_descripter;
+uint8_t kb_ms;
 /*******************************************************************************/
 /* Variable Definition */
 uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
@@ -421,6 +422,7 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                         KB_Data_Buffer = (uint8_t *)malloc(8 * sizeof(uint8_t));
 
                         new_descripter = 0;
+                        kb_ms = 8;
                         Set_USBConfig();
                         USB_Init();
                         USB_Interrupts_Config();
@@ -436,6 +438,7 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                     {
                         HostCtl[ index ].Interface[ num ].Type = DEC_MOUSE;
                         new_descripter = 1;
+                        kb_ms = 4;
                         
                         //USBD_HidRepDesc = USBD_MouseRepDesc;
                         KB_Data_Pack = (uint8_t *)malloc(4 * sizeof(uint8_t));
@@ -1696,6 +1699,7 @@ void USBH_MainDeal( void )
                                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
 #endif
                                 //if( len >= 8 )
+                                if( len >= kb_ms )
                                 {
 // #if KEYMAP_SUSPEND_MASK
 //                                     if( i == 0 )
@@ -1989,6 +1993,7 @@ void USBH_MainDeal( void )
 
                                             // lets see if its needed or not
                                             //if( len >= 8 )
+                                            if( len >= kb_ms )
                                             {
 // #if KEYMAP_SUSPEND_MASK
 //                                                 if( i == 0 )
