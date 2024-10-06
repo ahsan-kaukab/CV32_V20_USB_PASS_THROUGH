@@ -66,7 +66,12 @@ void GPIO_INIT(void)
 
 int main(void)
 {
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    #if (INTSYSCR_INEST == INTSYSCR_INEST_NoEN)
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0); // Use this when nesting is disabled
+    #else
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1); // Use this when nesting is enabled
+    #endif
+    //NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     Delay_Init();
     USART_Printf_Init( 9600 );
     printf("SystemClk:%d\r\n",SystemCoreClock);
