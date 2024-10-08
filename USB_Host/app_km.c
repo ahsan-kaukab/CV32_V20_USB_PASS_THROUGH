@@ -19,7 +19,7 @@
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
-uint8_t new_descripter;
+uint8_t new_descripter = 2;
 uint8_t kb_ms;
 /*******************************************************************************/
 /* Variable Definition */
@@ -1791,15 +1791,23 @@ void USBH_MainDeal( void )
                             {
                                 if(new_descripter == 0)
                                     s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
-                                else
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
+                                else if (new_descripter == 1)
+                                {
+                                    // = Com_Buf[1] / 2;  // X movement (signed byte)
+                                    //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 6 ));
+                                }
                             }
                             else
                             {
                                 if(new_descripter == 0)
                                     s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
-                                else
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
+                                else if (new_descripter == 1)
+                                {
+                                    //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
+                                    //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 6 ));
+                                }
                             }
 
                             if(s == NoREADY)
@@ -1994,25 +2002,25 @@ void USBH_MainDeal( void )
 #endif
                                             if (HostCtl[index].Interface[intf_num].Type == DEC_MOUSE && len >= 3) 
                                             {
-                                                int8_t x_movement = (int8_t)Com_Buf[1];  // X movement (signed byte)
-                                                int8_t y_movement = (int8_t)Com_Buf[2];  // Y movement (signed byte)
+                                                // int8_t x_movement = (int8_t)Com_Buf[1];  // X movement (signed byte)
+                                                // int8_t y_movement = (int8_t)Com_Buf[2];  // Y movement (signed byte)
 
-                                                // Determine the greater movement, x or y
-                                                int movement = ABS(x_movement) > ABS(y_movement) ? ABS(x_movement) : ABS(y_movement);
+                                                // // Determine the greater movement, x or y
+                                                // int movement = ABS(x_movement) > ABS(y_movement) ? ABS(x_movement) : ABS(y_movement);
 
-                                                // Control LED based on movement
-                                                if (movement <= 5) 
-                                                {
-                                                    SetLEDHighForDuration(1);  // LED high for 1 ms
-                                                } 
-                                                else if (movement < 15) 
-                                                {
-                                                    SetLEDHighForDuration(2);  // LED high for 2 ms
-                                                } 
-                                                else 
-                                                {
-                                                    SetLEDHighForDuration(3);  // LED high for 3 ms
-                                                }
+                                                // // Control LED based on movement
+                                                // if (movement <= 5) 
+                                                // {
+                                                //     SetLEDHighForDuration(1);  // LED high for 1 ms
+                                                // } 
+                                                // else if (movement < 15) 
+                                                // {
+                                                //     SetLEDHighForDuration(2);  // LED high for 2 ms
+                                                // } 
+                                                // else 
+                                                // {
+                                                //     SetLEDHighForDuration(3);  // LED high for 3 ms
+                                                // }
                                             }
 
                                             // lets see if its needed or not
@@ -2027,7 +2035,7 @@ void USBH_MainDeal( void )
 // #endif
                                                 if(KB_Data_State)
                                                 {
-                                                    if(new_descripter == 0 )
+                                                    //if(new_descripter == 0 )
                                                         KB_Data_Buffer[ i ] = Com_Buf[ i ];
                                                     //else
                                                     //    MS_Data_Buffer[ i ] = Com_Buf[ i ];
@@ -2036,7 +2044,7 @@ void USBH_MainDeal( void )
                                                 }
                                                 else
                                                 {
-                                                    if(new_descripter == 0 )
+                                                    //if(new_descripter == 0 )
                                                         KB_Data_Pack[ i ] = Com_Buf[ i ];
                                                     //else
                                                     //    MS_Data_Pack[ i ] = Com_Buf[ i ];
@@ -2066,15 +2074,23 @@ void USBH_MainDeal( void )
                                         {
                                             if(new_descripter == 0)
                                                 s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
-                                            else
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
+                                            else if (new_descripter == 1)
+                                            {
+                                                //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
+                                                //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 6 ));
+                                            }
                                         }
                                         else
                                         {
                                             if(new_descripter == 0)
                                                 s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( KB_Data_Buffer ));
-                                            else
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 4 ));
+                                            else if (new_descripter == 1)
+                                            {
+                                                //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
+                                                //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, sizeof( 6 ));
+                                            }
                                         }
 
                                         if(s == NoREADY)
