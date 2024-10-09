@@ -485,16 +485,12 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
 
                         new_descripter = 0;
                         //kb_ms = 8;
-                        InitUSBDescriptors();
+                        // InitUSBDescriptors();
 
-                        Set_USBConfig();
-                        USB_Init();
-                        USB_Interrupts_Config();
+                        // Set_USBConfig();
+                        // USB_Init();
+                        // USB_Interrupts_Config();
                         //printf( "USBD Init\r\n" );
-                        
-                        while( bDeviceState != CONFIGURED )
-                        {
-                        }
                         
                         HID_SetIdle( ep0_size, num, 0, 0 );
                     }
@@ -507,14 +503,11 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                         // //USBD_HidRepDesc = USBD_MouseRepDesc;
                         // KB_Data_Pack = (uint8_t *)malloc(4 * sizeof(uint8_t));
                         // KB_Data_Buffer = (uint8_t *)malloc(4 * sizeof(uint8_t));
-                        Set_USBConfig();
-                        USB_Init();
-                        USB_Interrupts_Config();
+                        // Set_USBConfig();
+                        // USB_Init();
+                        // USB_Interrupts_Config();
                         //printf( "USBD Init\r\n" );
                         
-                        while( bDeviceState != CONFIGURED )
-                        {
-                        }
                         //printf( "USBD Ready\r\n" );
 
                         HID_SetIdle( ep0_size, num, 0, 0 );
@@ -968,6 +961,16 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         {
             HostCtl[ index ].Interface[ intf_num ].SetReport_Value = 0x00;
             KB_SetReport( index, ep0_size, intf_num );
+        }
+    }
+
+    if(new_descripter == 0 || new_descripter == 1) 
+    {
+        Set_USBConfig();
+        USB_Init();
+        USB_Interrupts_Config();
+        while( bDeviceState != CONFIGURED )
+        {
         }
     }
 
