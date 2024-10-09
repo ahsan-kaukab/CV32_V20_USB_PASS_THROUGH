@@ -43,20 +43,20 @@
 #define STANDARD_ENDPOINT_DESC_SIZE             0x09
 
 
-extern const uint8_t USBD_DeviceDescriptor[USBD_SIZE_DEVICE_DESC];
+extern uint8_t USBD_DeviceDescriptor[USBD_SIZE_DEVICE_DESC];
 //extern const uint8_t USBD_ConfigDescriptor[USBD_SIZE_CONFIG_DESC];
-extern const uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
+extern uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
 extern const uint8_t USBD_ConfigDescriptor_MS[USBD_SIZE_CONFIG_DESC];
                     
-extern const uint8_t USBD_StringLangID [USBD_SIZE_STRING_LANGID];
-extern const uint8_t USBD_StringVendor [USBD_SIZE_STRING_VENDOR];
-extern const uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
+extern uint8_t USBD_StringLangID [USBD_SIZE_STRING_LANGID];
+extern uint8_t USBD_StringVendor [USBD_SIZE_STRING_VENDOR];
+extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
 extern uint8_t USBD_StringSerial [USBD_SIZE_STRING_SERIAL];
 // extern const uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 // extern const uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 //extern uint8_t USBD_HidRepDesc[USBD_SIZE_REPORT_DESC];
 extern const uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
-extern const uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
+extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 extern uint8_t new_descripter;
 
 #ifdef __cplusplus

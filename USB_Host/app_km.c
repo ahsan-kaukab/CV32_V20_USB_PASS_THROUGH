@@ -14,6 +14,7 @@
 //#include "kite.h"
 #include "usb_host_config.h"
 #include "usbd_composite_km.h"
+#include "usb_desc.h"
 #include <math.h>
 #include <stdlib.h> // For malloc and free
 
@@ -40,6 +41,17 @@ uint8_t  scroll_lock_led = 0;                                                   
 struct   _ROOT_HUB_DEVICE RootHubDev;
 struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
+// ONE_DESCRIPTOR Device_Descriptor;
+// ONE_DESCRIPTOR Config_Descriptor_KB;
+uint8_t USBD_DeviceDescriptor[USBD_SIZE_DEVICE_DESC];
+uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
+
+uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
+uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR];
+uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT]; 
+uint8_t USBD_StringSerial [USBD_SIZE_STRING_SERIAL];
+
+uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 
 /*******************************************************************************/
 /* Interrupt Function Declaration */
@@ -121,6 +133,50 @@ void TIM3_IRQHandler( void )
 {
 
     __asm volatile ("call TIM3_IRQHandler_Real; mret");
+}
+
+void InitUSBDescriptors()
+{
+    
+    // Allocate and copy device descriptor
+    //USBD_DeviceDescriptor = (uint8_t*)malloc(USBD_SIZE_CONFIG_DESC);
+
+    // Allocate and copy configuration descriptor
+    // USBFSH_GetConfigDescr(ep0_size, USBD_ConfigDescriptor_KB, 1024, &len);
+
+
+    // // Allocate and copy string descriptors
+    // String_Descriptor[0].ptr = (uint8_t*)malloc(USBD_SIZE_STRING_LANGID);
+    // memcpy(String_Descriptor[0].ptr, USBD_StringLangID, USBD_SIZE_STRING_LANGID);
+    // String_Descriptor[0].length = USBD_SIZE_STRING_LANGID;
+
+    // String_Descriptor[1].ptr = (uint8_t*)malloc(USBD_SIZE_STRING_VENDOR);
+    // memcpy(String_Descriptor[1].ptr, USBD_StringVendor, USBD_SIZE_STRING_VENDOR);
+    // String_Descriptor[1].length = USBD_SIZE_STRING_VENDOR;
+
+    // String_Descriptor[2].ptr = (uint8_t*)malloc(USBD_SIZE_STRING_PRODUCT);
+    // memcpy(String_Descriptor[2].ptr, USBD_StringProduct, USBD_SIZE_STRING_PRODUCT);
+    // String_Descriptor[2].length = USBD_SIZE_STRING_PRODUCT;
+
+    // String_Descriptor[3].ptr = (uint8_t*)malloc(USBD_SIZE_STRING_SERIAL);
+    // memcpy(String_Descriptor[3].ptr, USBD_StringSerial, USBD_SIZE_STRING_SERIAL);
+    // String_Descriptor[3].length = USBD_SIZE_STRING_SERIAL;
+
+    // // Allocate and copy report descriptors
+    // Report_Descriptor[0].ptr = (uint8_t*)malloc(USBD_SIZE_REPORT_DESC_KB);
+    // memcpy(Report_Descriptor[0].ptr, USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB);
+    // Report_Descriptor[0].length = USBD_SIZE_REPORT_DESC_KB;
+
+    // Report_Descriptor[1].ptr = (uint8_t*)malloc(USBD_SIZE_REPORT_DESC_MS);
+    // memcpy(Report_Descriptor[1].ptr, USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS);
+    // Report_Descriptor[1].length = USBD_SIZE_REPORT_DESC_MS;
+
+    // // Allocate HID descriptors (assumes sizes are known)
+    // Hid_Descriptor[0].ptr = (uint8_t*)&Config_Descriptor.ptr[18]; // Adjust as per your structure
+    // Hid_Descriptor[0].length = 0x09;
+
+    // Hid_Descriptor[1].ptr = (uint8_t*)&Config_Descriptor.ptr[43]; // Adjust as per your structure
+    // Hid_Descriptor[1].length = 0x09;
 }
 
 /*********************************************************************
@@ -274,6 +330,8 @@ ENUM_START:
     /* Get USB device device descriptor */
     DUG_PRINTF("Get DevDesc: ");
     s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
+    memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+
     if( s == ERR_SUCCESS )
     {
         /* Print USB device device descriptor */
@@ -321,6 +379,8 @@ ENUM_START:
     /* Get the USB device configuration descriptor */
     DUG_PRINTF("Get CfgDesc: ");
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
+    memcpy(USBD_ConfigDescriptor_KB, Com_Buf , USBD_SIZE_CONFIG_DESC);
+
     if( s == ERR_SUCCESS )
     {
         cfg_val = ( (PUSB_CFG_DESCR)Com_Buf )->bConfigurationValue;
@@ -425,6 +485,8 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
 
                         new_descripter = 0;
                         //kb_ms = 8;
+                        InitUSBDescriptors();
+
                         Set_USBConfig();
                         USB_Init();
                         USB_Interrupts_Config();
@@ -729,6 +791,8 @@ GETREP_START:
             /* Get HID report descriptor */
             DUG_PRINTF("Get Interface%x RepDesc: ", num );
             s = HID_GetHidDesr( ep0_size, num, Com_Buf, &HostCtl[ index ].Interface[ num ].HidDescLen );
+            memcpy(USBD_KeyRepDesc, Com_Buf , HostCtl[ index ].Interface[ num ].HidDescLen);
+            
             if( s == ERR_SUCCESS )
             {
                 /* Print HID report descriptor */
@@ -803,6 +867,8 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( ep0_size, Com_Buf[ 6 ], Com_Buf );
+        memcpy(USBD_StringLangID, Com_Buf, USBD_SIZE_STRING_LANGID);
+
         if( s == ERR_SUCCESS )
         {
             /* Print the string descriptor contained in the configuration descriptor */
@@ -828,6 +894,8 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc1: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 14 ], Com_Buf );
+        memcpy(USBD_StringVendor, Com_Buf , USBD_SIZE_STRING_VENDOR);
+
         if( s == ERR_SUCCESS )
         {
             /* Print USB vendor string descriptor */
@@ -850,6 +918,8 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc2: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 15 ], Com_Buf );
+        memcpy(USBD_StringProduct, Com_Buf , USBD_SIZE_STRING_PRODUCT);
+
         if( s == ERR_SUCCESS )
         {
             /* Print USB product string descriptor */
@@ -872,6 +942,8 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc3: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 16 ], Com_Buf );
+        memcpy(USBD_StringSerial, Com_Buf , USBD_SIZE_STRING_SERIAL);
+
         if( s == ERR_SUCCESS )
         {
             /* Print USB serial number string descriptor */
@@ -1017,6 +1089,8 @@ uint8_t USBH_EnumHubDevice( void )
     {
         DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, Com_Buf[ 6 ], Com_Buf );
+        memcpy(USBD_StringLangID, Com_Buf, USBD_SIZE_STRING_LANGID);
+
         if( s == ERR_SUCCESS )
         {
             /* Print the string descriptor contained in the configuration descriptor */
@@ -1349,6 +1423,8 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     {
         enum_cnt++;
         s = USBFSH_GetDeviceDescr( &RootHubDev.Device[ hub_port ].bEp0MaxPks, DevDesc_Buf );
+        memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+
         if( s == ERR_SUCCESS )
         {
 #if DEF_DEBUG_PRINTF
@@ -1400,6 +1476,8 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     {
         enum_cnt++;
         s = USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
+        memcpy(USBD_ConfigDescriptor_KB, Com_Buf , USBD_SIZE_CONFIG_DESC);
+
         if( s == ERR_SUCCESS )
         {
 #if DEF_DEBUG_PRINTF
