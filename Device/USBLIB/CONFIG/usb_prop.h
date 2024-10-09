@@ -16,6 +16,7 @@
 
 #include "ch32v20x.h"
 
+extern ONE_DESCRIPTOR Report_Descriptor[2];
 #define USBD_GetConfiguration          NOP_Process
 //#define USBD_SetConfiguration          NOP_Process
 #define USBD_GetInterface              NOP_Process

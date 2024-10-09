@@ -51,8 +51,9 @@ volatile uint32_t millis_counter = 0;
 // uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT]; 
 // uint8_t USBD_StringSerial [USBD_SIZE_STRING_SERIAL];
 
-//uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
+uint8_t *USBD_KeyRepDesc;
 uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
+ONE_DESCRIPTOR Report_Descriptor[2];
 
 /*******************************************************************************/
 /* Interrupt Function Declaration */
@@ -493,7 +494,7 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                         // USB_Interrupts_Config();
                         //printf( "USBD Init\r\n" );
                         
-                        HID_SetIdle( ep0_size, num, 0, 0 );
+                        //HID_SetIdle( ep0_size, num, 0, 0 );
                     }
                     else if( ( (PUSB_ITF_DESCR)( &Com_Buf[ i ] ) )->bInterfaceProtocol == 0x02 ) // Mouse
                     {
@@ -793,11 +794,20 @@ GETREP_START:
 //#if DEF_DEBUG_PRINTF
                 if(new_descripter == 0) // keyboard
                 {
+                    USBD_KeyRepDesc = malloc(sizeof(uint8_t) * HostCtl[ index ].Interface[ num ].HidDescLen);
+                    
                     for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
+                    //for( i = 0; i < 62; i++ )
                     {
                         //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
-                        //USBD_KeyRepDesc[i] = Com_Buf[i];
+                        USBD_KeyRepDesc[i] = Com_Buf[i];
                     }
+                    Report_Descriptor[0].Descriptor = USBD_MouseRepDesc;
+                    Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
+                    // if ( HostCtl[ index ].Interface[ num ].HidDescLen > 1000) 
+                    // {
+                    //     new_descripter = 2;
+                    // }
                 }
                 else if (new_descripter == 1) // mouse
                 {
@@ -806,7 +816,10 @@ GETREP_START:
                         //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
                         USBD_MouseRepDesc[i] = Com_Buf[i];
                     }
+                    Report_Descriptor[0].Descriptor = USBD_MouseRepDesc;
+                    Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
                 }
+
                 //DUG_PRINTF("\r\n");
 //#endif
 

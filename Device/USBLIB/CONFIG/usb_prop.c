@@ -91,12 +91,12 @@ ONE_DESCRIPTOR String_Descriptor[4] =
 	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
 };
 
-ONE_DESCRIPTOR Report_Descriptor[2] =
-{
-  //{(uint8_t*)USBD_HidRepDesc, 64},
-	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
-	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
-};
+//ONE_DESCRIPTOR Report_Descriptor[2] =
+// {
+//   //{(uint8_t*)USBD_HidRepDesc, 64},
+// 	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
+// 	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
+// };
 
 ONE_DESCRIPTOR Hid_Descriptor[2] =
 {
