@@ -43,15 +43,16 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
 // ONE_DESCRIPTOR Device_Descriptor;
 // ONE_DESCRIPTOR Config_Descriptor_KB;
-uint8_t USBD_DeviceDescriptor[USBD_SIZE_DEVICE_DESC];
-uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
+//uint8_t USBD_DeviceDescriptor[USBD_SIZE_DEVICE_DESC];
+//uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
 
-uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
-uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR];
-uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT]; 
-uint8_t USBD_StringSerial [USBD_SIZE_STRING_SERIAL];
+// uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
+// uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR];
+// uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT]; 
+// uint8_t USBD_StringSerial [USBD_SIZE_STRING_SERIAL];
 
-uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
+//uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
+uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
 /*******************************************************************************/
 /* Interrupt Function Declaration */
@@ -330,7 +331,7 @@ ENUM_START:
     /* Get USB device device descriptor */
     DUG_PRINTF("Get DevDesc: ");
     s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
-    memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+    //memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
 
     if( s == ERR_SUCCESS )
     {
@@ -379,7 +380,7 @@ ENUM_START:
     /* Get the USB device configuration descriptor */
     DUG_PRINTF("Get CfgDesc: ");
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
-    memcpy(USBD_ConfigDescriptor_KB, Com_Buf , USBD_SIZE_CONFIG_DESC);
+    //memcpy(USBD_ConfigDescriptor_KB, Com_Buf , USBD_SIZE_CONFIG_DESC);
 
     if( s == ERR_SUCCESS )
     {
@@ -767,9 +768,9 @@ uint8_t KM_DealHidReportDesc( uint8_t index, uint8_t ep0_size )
     uint8_t  s;
     uint8_t  num, num_tmp;
     uint8_t  getrep_cnt;
-#if DEF_DEBUG_PRINTF
+//#if DEF_DEBUG_PRINTF
     uint16_t i;
-#endif
+//#endif
 
     getrep_cnt = 0;
     num_tmp = HostCtl[ index ].InterfaceNum;
@@ -784,18 +785,30 @@ GETREP_START:
             /* Get HID report descriptor */
             DUG_PRINTF("Get Interface%x RepDesc: ", num );
             s = HID_GetHidDesr( ep0_size, num, Com_Buf, &HostCtl[ index ].Interface[ num ].HidDescLen );
-            memcpy(USBD_KeyRepDesc, Com_Buf , HostCtl[ index ].Interface[ num ].HidDescLen);
+            //memcpy(USBD_KeyRepDesc, Com_Buf , HostCtl[ index ].Interface[ num ].HidDescLen);
             
             if( s == ERR_SUCCESS )
             {
                 /* Print HID report descriptor */
-#if DEF_DEBUG_PRINTF
-                for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
+//#if DEF_DEBUG_PRINTF
+                if(new_descripter == 0) // keyboard
                 {
-                    DUG_PRINTF( "%02x " , Com_Buf[ i ]);
+                    for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
+                    {
+                        //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
+                        //USBD_KeyRepDesc[i] = Com_Buf[i];
+                    }
                 }
-                DUG_PRINTF("\r\n");
-#endif
+                else if (new_descripter == 1) // mouse
+                {
+                    for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
+                    {
+                        //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
+                        USBD_MouseRepDesc[i] = Com_Buf[i];
+                    }
+                }
+                //DUG_PRINTF("\r\n");
+//#endif
 
                 /* Analyze Report Descriptor */
                 KM_AnalyzeHidReportDesc( index, num );
@@ -860,7 +873,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( ep0_size, Com_Buf[ 6 ], Com_Buf );
-        memcpy(USBD_StringLangID, Com_Buf, USBD_SIZE_STRING_LANGID);
+        //memcpy(USBD_StringLangID, Com_Buf, USBD_SIZE_STRING_LANGID);
 
         if( s == ERR_SUCCESS )
         {
@@ -887,7 +900,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc1: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 14 ], Com_Buf );
-        memcpy(USBD_StringVendor, Com_Buf , USBD_SIZE_STRING_VENDOR);
+        //memcpy(USBD_StringVendor, Com_Buf , USBD_SIZE_STRING_VENDOR);
 
         if( s == ERR_SUCCESS )
         {
@@ -911,7 +924,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc2: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 15 ], Com_Buf );
-        memcpy(USBD_StringProduct, Com_Buf , USBD_SIZE_STRING_PRODUCT);
+        //memcpy(USBD_StringProduct, Com_Buf , USBD_SIZE_STRING_PRODUCT);
 
         if( s == ERR_SUCCESS )
         {
@@ -935,7 +948,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc3: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 16 ], Com_Buf );
-        memcpy(USBD_StringSerial, Com_Buf , USBD_SIZE_STRING_SERIAL);
+        //memcpy(USBD_StringSerial, Com_Buf , USBD_SIZE_STRING_SERIAL);
 
         if( s == ERR_SUCCESS )
         {
@@ -1426,7 +1439,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     {
         enum_cnt++;
         s = USBFSH_GetDeviceDescr( &RootHubDev.Device[ hub_port ].bEp0MaxPks, DevDesc_Buf );
-        memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+        //memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
 
         if( s == ERR_SUCCESS )
         {
@@ -1479,7 +1492,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     {
         enum_cnt++;
         s = USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
-        memcpy(USBD_ConfigDescriptor_KB, Com_Buf , USBD_SIZE_CONFIG_DESC);
+        //memcpy(USBD_ConfigDescriptor_KB, Com_Buf , USBD_SIZE_CONFIG_DESC);
 
         if( s == ERR_SUCCESS )
         {
