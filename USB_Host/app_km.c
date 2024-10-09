@@ -769,9 +769,9 @@ uint8_t KM_DealHidReportDesc( uint8_t index, uint8_t ep0_size )
     uint8_t  s;
     uint8_t  num, num_tmp;
     uint8_t  getrep_cnt;
-//#if DEF_DEBUG_PRINTF
+#if DEF_DEBUG_PRINTF
     uint16_t i;
-//#endif
+#endif
 
     getrep_cnt = 0;
     num_tmp = HostCtl[ index ].InterfaceNum;
@@ -792,33 +792,35 @@ GETREP_START:
             {
                 /* Print HID report descriptor */
 //#if DEF_DEBUG_PRINTF
-                if(new_descripter == 0) // keyboard
+                //if(new_descripter == 0) // keyboard
                 {
-                    USBD_KeyRepDesc = malloc(sizeof(uint8_t) * HostCtl[ index ].Interface[ num ].HidDescLen);
-                    
-                    for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
-                    //for( i = 0; i < 62; i++ )
-                    {
-                        //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
-                        USBD_KeyRepDesc[i] = Com_Buf[i];
-                    }
-                    Report_Descriptor[0].Descriptor = USBD_MouseRepDesc;
+                    //USBD_KeyRepDesc = malloc(sizeof(uint8_t) * HostCtl[ index ].Interface[ num ].HidDescLen);
+
+                    // for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
+                    // //for( i = 0; i < 62; i++ )
+                    // {
+                    //     //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
+                    //     USBD_KeyRepDesc[i] = Com_Buf[i];
+                    // }
+                    Report_Descriptor[0].Descriptor = Com_Buf;
                     Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
+                    Report_Descriptor[1].Descriptor = Com_Buf;
+                    Report_Descriptor[1].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
                     // if ( HostCtl[ index ].Interface[ num ].HidDescLen > 1000) 
                     // {
                     //     new_descripter = 2;
                     // }
                 }
-                else if (new_descripter == 1) // mouse
-                {
-                    for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
-                    {
-                        //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
-                        USBD_MouseRepDesc[i] = Com_Buf[i];
-                    }
-                    Report_Descriptor[0].Descriptor = USBD_MouseRepDesc;
-                    Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
-                }
+                // else if (new_descripter == 1) // mouse
+                // {
+                //     for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
+                //     {
+                //         //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
+                //         USBD_MouseRepDesc[i] = Com_Buf[i];
+                //     }
+                //     Report_Descriptor[0].Descriptor = USBD_MouseRepDesc;
+                //     Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
+                // }
 
                 //DUG_PRINTF("\r\n");
 //#endif
