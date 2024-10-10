@@ -297,8 +297,8 @@ ENUM_START:
     Device_Descriptor.Descriptor = malloc(USBD_SIZE_DEVICE_DESC*sizeof(uint8_t));
 
     if (Device_Descriptor.Descriptor != NULL) {
-        memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, USBD_SIZE_DEVICE_DESC);
-        //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+        //memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, USBD_SIZE_DEVICE_DESC);
+        memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
         Device_Descriptor.Descriptor_Size = USBD_SIZE_DEVICE_DESC;
     } else {
         // Handle memory allocation failure
