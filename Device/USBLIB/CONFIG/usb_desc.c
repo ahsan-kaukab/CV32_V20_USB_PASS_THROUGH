@@ -12,63 +12,63 @@
 
 /* USB Device Descriptors */
 
-uint8_t USBD_DeviceDescriptor[] = { 
-    USBD_SIZE_DEVICE_DESC,           // bLength
-    0x01,                            // bDescriptorType (Device)
-    0x10, 0x01,                      // bcdUSB 1.10
-    0x00,                            // bDeviceClass (Use class information in the Interface Descriptors)
-    0x00,                            // bDeviceSubClass 
-    0x00,                            // bDeviceProtocol 
-    DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 8
-    0x34, 0x12,                      // idVendor 0x1A86
-    0x78, 0x56,                      // idProduct 0xFE07
-    0x00, 0x01,                      // bcdDevice 2.00
-    0x01,                            // iManufacturer (String Index)
-    0x02,                            // iProduct (String Index)
-    0x00,                            // iSerialNumber (String Index)
-    0x01,                            // bNumConfigurations 1
-};
+// uint8_t USBD_DeviceDescriptor[] = { 
+//     USBD_SIZE_DEVICE_DESC,           // bLength
+//     0x01,                            // bDescriptorType (Device)
+//     0x10, 0x01,                      // bcdUSB 1.10
+//     0x00,                            // bDeviceClass (Use class information in the Interface Descriptors)
+//     0x00,                            // bDeviceSubClass 
+//     0x00,                            // bDeviceProtocol 
+//     DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 8
+//     0x34, 0x12,                      // idVendor 0x1A86
+//     0x78, 0x56,                      // idProduct 0xFE07
+//     0x00, 0x01,                      // bcdDevice 2.00
+//     0x01,                            // iManufacturer (String Index)
+//     0x02,                            // iProduct (String Index)
+//     0x00,                            // iSerialNumber (String Index)
+//     0x01,                            // bNumConfigurations 1
+// };
 
 /* USB Configration Descriptors */
-uint8_t  USBD_ConfigDescriptor_KB[] = { 
-     /* Configuration Descriptor */
-    0x09,                           // bLength
-    0x02,                           // bDescriptorType
-    USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
-    0x01,                           // bNumInterfaces
-    0x01,                           // bConfigurationValue
-    0x00,                           // iConfiguration
-    0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
-    0x32,                           // MaxPower: 100mA
+// uint8_t  USBD_ConfigDescriptor_KB[] = { 
+//      /* Configuration Descriptor */
+//     0x09,                           // bLength
+//     0x02,                           // bDescriptorType
+//     USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
+//     0x01,                           // bNumInterfaces
+//     0x01,                           // bConfigurationValue
+//     0x00,                           // iConfiguration
+//     0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
+//     0x32,                           // MaxPower: 100mA
 
-    /* Interface Descriptor */
-    0x09,                           // bLength
-    0x04,                           // bDescriptorType
-    0x00,                           // bInterfaceNumber
-    0x00,                           // bAlternateSetting
-    0x01,                           // bNumEndpoints
-    0x03,                           // bInterfaceClass
-    0x01,                           // bInterfaceSubClass
-    0x01,                           // bInterfaceProtocol: Keyboard
-    0x00,                           // iInterface
+//     /* Interface Descriptor */
+//     0x09,                           // bLength
+//     0x04,                           // bDescriptorType
+//     0x00,                           // bInterfaceNumber
+//     0x00,                           // bAlternateSetting
+//     0x01,                           // bNumEndpoints
+//     0x03,                           // bInterfaceClass
+//     0x01,                           // bInterfaceSubClass
+//     0x01,                           // bInterfaceProtocol: Keyboard
+//     0x00,                           // iInterface
 
-    /* HID Descriptor*/
-    0x09,                           // bLength
-    0x21,                           // bDescriptorType
-    0x11, 0x01,                     // bcdHID
-    0x00,                           // bCountryCode
-    0x01,                           // bNumDescriptors
-    0x22,                           // bDescriptorType
-    USBD_SIZE_REPORT_DESC_KB & 0xFF, USBD_SIZE_REPORT_DESC_KB >> 8, // wDescriptorLength
+//     /* HID Descriptor*/
+//     0x09,                           // bLength
+//     0x21,                           // bDescriptorType
+//     0x11, 0x01,                     // bcdHID
+//     0x00,                           // bCountryCode
+//     0x01,                           // bNumDescriptors
+//     0x22,                           // bDescriptorType
+//     USBD_SIZE_REPORT_DESC_KB & 0xFF, USBD_SIZE_REPORT_DESC_KB >> 8, // wDescriptorLength
 
-    /* Endpoint Descriptor*/
-    0x07,                           // bLength
-    0x05,                           // bDescriptorType
-    0x81,                           // bEndpointAddress: IN Endpoint 1
-    0x03,                           // bmAttributes
-    DEF_ENDP_SIZE_KB & 0xFF, DEF_ENDP_SIZE_KB >> 8, // wMaxPacketSize
-    0x05                            // bInterval: 5mS
-};
+//     /* Endpoint Descriptor*/
+//     0x07,                           // bLength
+//     0x05,                           // bDescriptorType
+//     0x81,                           // bEndpointAddress: IN Endpoint 1
+//     0x03,                           // bmAttributes
+//     DEF_ENDP_SIZE_KB & 0xFF, DEF_ENDP_SIZE_KB >> 8, // wMaxPacketSize
+//     0x05                            // bInterval: 5mS
+// };
 
 /* USB Configration Descriptors */
 uint8_t  USBD_ConfigDescriptor_MS[] = { 
@@ -112,33 +112,33 @@ uint8_t  USBD_ConfigDescriptor_MS[] = {
 };
 
 /* USB String Descriptors */
-uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
-	USBD_SIZE_STRING_LANGID,
-	USB_STRING_DESCRIPTOR_TYPE,
-	0x09,
-	0x04 
-};
+// uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
+// 	USBD_SIZE_STRING_LANGID,
+// 	USB_STRING_DESCRIPTOR_TYPE,
+// 	0x09,
+// 	0x04 
+// };
 
-/* USB Device String Vendor */
-uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR] = {
-	USBD_SIZE_STRING_VENDOR,    
-	USB_STRING_DESCRIPTOR_TYPE,           
-	'w',0,'c',0,'h',0,'.',0,'c',0,'n',0
-};
+// /* USB Device String Vendor */
+// uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR] = {
+// 	USBD_SIZE_STRING_VENDOR,    
+// 	USB_STRING_DESCRIPTOR_TYPE,           
+// 	'w',0,'c',0,'h',0,'.',0,'c',0,'n',0
+// };
 
-/* USB Device String Product */
-uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT] = {
-	USBD_SIZE_STRING_PRODUCT,         
-	USB_STRING_DESCRIPTOR_TYPE,        
-    'C', 0, 'H', 0, '3', 0, '2', 0, 'F', 0, '2', 0 , '0', 0, 'x', 0
-};
+// /* USB Device String Product */
+// uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT] = {
+// 	USBD_SIZE_STRING_PRODUCT,         
+// 	USB_STRING_DESCRIPTOR_TYPE,        
+//     'C', 0, 'H', 0, '3', 0, '2', 0, 'F', 0, '2', 0 , '0', 0, 'x', 0
+// };
 
-/* USB Device String Serial */
-uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
-	USBD_SIZE_STRING_SERIAL,          
-	USB_STRING_DESCRIPTOR_TYPE,                   
-	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
-};
+// /* USB Device String Serial */
+// uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
+// 	USBD_SIZE_STRING_SERIAL,          
+// 	USB_STRING_DESCRIPTOR_TYPE,                   
+// 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
+// };
 
 // uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
 // {

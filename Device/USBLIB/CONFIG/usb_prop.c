@@ -59,23 +59,17 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 	USBD_SetDeviceAddress
 };
 
-ONE_DESCRIPTOR Device_Descriptor =
-{
-	(uint8_t*)USBD_DeviceDescriptor,
-	USBD_SIZE_DEVICE_DESC
-};
-
-// ONE_DESCRIPTOR Config_Descriptor =
+// ONE_DESCRIPTOR Device_Descriptor =
 // {
-// 	(uint8_t*)USBD_ConfigDescriptor,
-// 	USBD_SIZE_CONFIG_DESC
+// 	(uint8_t*)USBD_DeviceDescriptor,
+// 	USBD_SIZE_DEVICE_DESC
 // };
 
-ONE_DESCRIPTOR Config_Descriptor_KB =
-{
-	(uint8_t*)USBD_ConfigDescriptor_KB,
-	USBD_SIZE_CONFIG_DESC
-};
+// ONE_DESCRIPTOR Config_Descriptor_KB =
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_KB,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
 ONE_DESCRIPTOR Config_Descriptor_MS =
 {
@@ -83,13 +77,13 @@ ONE_DESCRIPTOR Config_Descriptor_MS =
 	USBD_SIZE_CONFIG_DESC
 };
 
-ONE_DESCRIPTOR String_Descriptor[4] =
-{
-	{(uint8_t*)USBD_StringLangID, USBD_SIZE_STRING_LANGID},
-	{(uint8_t*)USBD_StringVendor, USBD_SIZE_STRING_VENDOR},
-	{(uint8_t*)USBD_StringProduct,USBD_SIZE_STRING_PRODUCT},
-	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
-};
+// ONE_DESCRIPTOR String_Descriptor[4] =
+// {
+// 	{(uint8_t*)USBD_StringLangID, USBD_SIZE_STRING_LANGID},
+// 	{(uint8_t*)USBD_StringVendor, USBD_SIZE_STRING_VENDOR},
+// 	{(uint8_t*)USBD_StringProduct,USBD_SIZE_STRING_PRODUCT},
+// 	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
+// };
 
 // ONE_DESCRIPTOR Report_Descriptor[2] =
 // {
@@ -98,12 +92,12 @@ ONE_DESCRIPTOR String_Descriptor[4] =
 // 	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
 // };
 
-ONE_DESCRIPTOR Hid_Descriptor[2] =
-{
-	//{(uint8_t*)&USBD_ConfigDescriptor[18], 0x09},
-  {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
-  {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
-};
+// ONE_DESCRIPTOR Hid_Descriptor[2] =
+// {
+// 	//{(uint8_t*)&USBD_ConfigDescriptor[18], 0x09},
+//   {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
+//   {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
+// };
 
 
 /*********************************************************************
@@ -223,10 +217,10 @@ void USBD_init(void)
 void USBD_Reset(void)
 {
   pInformation->Current_Configuration = 0;
-  if(new_descripter == 0)
-    pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
-  else
-    pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
+  // if(new_descripter == 0)
+  //   pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
+  // else
+  //   pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
   pInformation->Current_Interface = 0;
 
   SetBTABLE(BTABLE_ADDRESS);
