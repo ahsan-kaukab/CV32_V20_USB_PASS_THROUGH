@@ -294,12 +294,11 @@ ENUM_START:
     DUG_PRINTF("Get DevDesc: ");
     s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
 
-    //memcpy(USBD_DeviceDescriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
-
     Device_Descriptor.Descriptor = malloc(USBD_SIZE_DEVICE_DESC*sizeof(uint8_t));
 
     if (Device_Descriptor.Descriptor != NULL) {
         memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, USBD_SIZE_DEVICE_DESC);
+        //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
         Device_Descriptor.Descriptor_Size = USBD_SIZE_DEVICE_DESC;
     } else {
         // Handle memory allocation failure
@@ -357,10 +356,12 @@ ENUM_START:
     Config_Descriptor_KB.Descriptor = malloc(len*sizeof(uint8_t));
 
     if (Config_Descriptor_KB.Descriptor != NULL) {
-        memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+        //memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+        memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
         Config_Descriptor_KB.Descriptor_Size = len;
 
-        memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
+        //memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
+        memcpy(Hid_Descriptor[0].Descriptor, Com_Buf, len);
         Hid_Descriptor[0].Descriptor_Size = 0x09;
         
     } else {
@@ -745,35 +746,17 @@ GETREP_START:
             
             if( s == ERR_SUCCESS )
             {
-                /* Print HID report descriptor */
-//#if DEF_DEBUG_PRINTF
                 //if(new_descripter == 0) // keyboard
                 {
-                    //USBD_KeyRepDesc = malloc(sizeof(uint8_t) * HostCtl[ index ].Interface[ num ].HidDescLen);
-
-                    // for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
-                    // //for( i = 0; i < 62; i++ )
-                    // {
-                    //     //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
-                    //     USBD_KeyRepDesc[i] = Com_Buf[i];
-                    // }
                     Report_Descriptor[0].Descriptor = malloc(HostCtl[ index ].Interface[ num ].HidDescLen*sizeof(uint8_t));
 
-                    if (Report_Descriptor[0].Descriptor != NULL) { 
-                    //if (HostCtl[ index ].Interface[ num ].HidDescLen == 142) {    
+                    if (Report_Descriptor[0].Descriptor != NULL) {    
                         memcpy(Report_Descriptor[0].Descriptor, USBD_KeyRepDesc, HostCtl[ index ].Interface[ num ].HidDescLen);
+                        //memcpy(Report_Descriptor[0].Descriptor, Com_Buf, HostCtl[ index ].Interface[ num ].HidDescLen);
                         Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
                     } else {
                         // Handle memory allocation failure
                     }
-                    // Report_Descriptor[0].Descriptor = temp_USBD_KeyRepDesc;
-                    // Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
-                    // Report_Descriptor[1].Descriptor = temp_USBD_KeyRepDesc;
-                    // Report_Descriptor[1].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
-                    // if ( HostCtl[ index ].Interface[ num ].HidDescLen > 1000) 
-                    // {
-                    //     new_descripter = 2;
-                    // }
                 }
                 // else if (new_descripter == 1) // mouse
                 // {
@@ -852,12 +835,14 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( ep0_size, Com_Buf[ 6 ], Com_Buf );
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_LANGID
 
-        String_Descriptor[0].Descriptor = malloc(USBD_SIZE_STRING_LANGID*sizeof(uint8_t));
+        String_Descriptor[0].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[0].Descriptor != NULL) {
             memcpy(String_Descriptor[0].Descriptor, USBD_StringLangID, USBD_SIZE_STRING_LANGID);
-            String_Descriptor[0].Descriptor_Size = USBD_SIZE_STRING_LANGID;
+            //memcpy(String_Descriptor[0].Descriptor, Com_Buf, size);
+            String_Descriptor[0].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -888,12 +873,14 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc1: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 14 ], Com_Buf );
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_VENDOR
 
-        String_Descriptor[1].Descriptor = malloc(USBD_SIZE_STRING_VENDOR*sizeof(uint8_t));
+        String_Descriptor[1].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[1].Descriptor != NULL) {
             memcpy(String_Descriptor[1].Descriptor, USBD_StringVendor, USBD_SIZE_STRING_VENDOR);
-            String_Descriptor[1].Descriptor_Size = USBD_SIZE_STRING_VENDOR;
+            //memcpy(String_Descriptor[1].Descriptor, Com_Buf, size);
+            String_Descriptor[1].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -920,12 +907,14 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc2: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 15 ], Com_Buf );
-
-        String_Descriptor[2].Descriptor = malloc(USBD_SIZE_STRING_PRODUCT*sizeof(uint8_t));
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_PRODUCT
+ 
+        String_Descriptor[2].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[2].Descriptor != NULL) {
-            memcpy(String_Descriptor[2].Descriptor, USBD_StringProduct, USBD_SIZE_STRING_PRODUCT);
-            String_Descriptor[2].Descriptor_Size = USBD_SIZE_STRING_PRODUCT;
+            memcpy(String_Descriptor[2].Descriptor, USBD_StringProduct, size);
+            //memcpy(String_Descriptor[2].Descriptor, Com_Buf, size);
+            String_Descriptor[2].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -953,12 +942,14 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     {
         DUG_PRINTF("Get StringDesc3: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 16 ], Com_Buf );
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_SERIAL
 
-        String_Descriptor[3].Descriptor = malloc(USBD_SIZE_STRING_SERIAL*sizeof(uint8_t));
+        String_Descriptor[3].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[3].Descriptor != NULL) {
-            memcpy(String_Descriptor[3].Descriptor, USBD_StringSerial, USBD_SIZE_STRING_SERIAL);
-            String_Descriptor[3].Descriptor_Size = USBD_SIZE_STRING_SERIAL;
+            memcpy(String_Descriptor[3].Descriptor, USBD_StringSerial, size);
+            //memcpy(String_Descriptor[3].Descriptor, Com_Buf, size);
+            String_Descriptor[3].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -1118,12 +1109,14 @@ uint8_t USBH_EnumHubDevice( void )
     {
         DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, Com_Buf[ 6 ], Com_Buf );
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_LANGID
 
-        String_Descriptor[0].Descriptor = malloc(USBD_SIZE_STRING_LANGID*sizeof(uint8_t));
+        String_Descriptor[0].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[0].Descriptor != NULL) {
-            memcpy(String_Descriptor[0].Descriptor, USBD_StringLangID, USBD_SIZE_STRING_LANGID);
-            String_Descriptor[0].Descriptor_Size = USBD_SIZE_STRING_LANGID;
+            memcpy(String_Descriptor[0].Descriptor, USBD_StringLangID, size);
+            //memcpy(String_Descriptor[0].Descriptor, Com_Buf, size);
+            String_Descriptor[0].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -1150,12 +1143,14 @@ uint8_t USBH_EnumHubDevice( void )
     {
         DUG_PRINTF("Get StringDesc1: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 14 ], Com_Buf );
+        uint8_t size = Com_Buf[0];  // USBD_SIZE_STRING_VENDOR
 
-        String_Descriptor[1].Descriptor = malloc(USBD_SIZE_STRING_VENDOR*sizeof(uint8_t));
+        String_Descriptor[1].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[1].Descriptor != NULL) {
             memcpy(String_Descriptor[1].Descriptor, USBD_StringVendor, USBD_SIZE_STRING_VENDOR);
-            String_Descriptor[1].Descriptor_Size = USBD_SIZE_STRING_VENDOR;
+            //memcpy(String_Descriptor[1].Descriptor, Com_Buf, size);
+            String_Descriptor[1].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -1182,12 +1177,14 @@ uint8_t USBH_EnumHubDevice( void )
     {
         DUG_PRINTF("Get StringDesc2: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 15 ], Com_Buf );
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_PRODUCT
 
-        String_Descriptor[2].Descriptor = malloc(USBD_SIZE_STRING_PRODUCT*sizeof(uint8_t));
+        String_Descriptor[2].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[2].Descriptor != NULL) {
-            memcpy(String_Descriptor[2].Descriptor, USBD_StringProduct, USBD_SIZE_STRING_PRODUCT);
-            String_Descriptor[2].Descriptor_Size = USBD_SIZE_STRING_PRODUCT;
+            memcpy(String_Descriptor[2].Descriptor, USBD_StringProduct, size);
+            //memcpy(String_Descriptor[2].Descriptor, Com_Buf, size);
+            String_Descriptor[2].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -1214,12 +1211,14 @@ uint8_t USBH_EnumHubDevice( void )
     {
         DUG_PRINTF("Get StringDesc3: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 16 ], Com_Buf );
+        uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_SERIAL
 
-        String_Descriptor[3].Descriptor = malloc(USBD_SIZE_STRING_SERIAL*sizeof(uint8_t));
+        String_Descriptor[3].Descriptor = malloc(size*sizeof(uint8_t));
 
         if (String_Descriptor[3].Descriptor != NULL) {
-            memcpy(String_Descriptor[3].Descriptor, USBD_StringSerial, USBD_SIZE_STRING_SERIAL);
-            String_Descriptor[3].Descriptor_Size = USBD_SIZE_STRING_SERIAL;
+            memcpy(String_Descriptor[3].Descriptor, USBD_StringSerial, size);
+            //memcpy(String_Descriptor[3].Descriptor, Com_Buf, size);
+            String_Descriptor[3].Descriptor_Size = size;
         } else {
             // Handle memory allocation failure
         }
@@ -1495,6 +1494,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
         if (Device_Descriptor.Descriptor != NULL) {
             memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, USBD_SIZE_DEVICE_DESC);
+            //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
             Device_Descriptor.Descriptor_Size = USBD_SIZE_DEVICE_DESC;
         } else {
             // Handle memory allocation failure
@@ -1557,9 +1557,11 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
         if (Config_Descriptor_KB.Descriptor != NULL) {
             memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+            //memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
             Config_Descriptor_KB.Descriptor_Size = len;
 
             memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
+            //memcpy(Hid_Descriptor[0].Descriptor, Com_Buf, len);
             Hid_Descriptor[0].Descriptor_Size = 0x09;
             
         } else {
