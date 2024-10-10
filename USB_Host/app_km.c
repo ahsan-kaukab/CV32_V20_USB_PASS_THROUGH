@@ -55,6 +55,42 @@ uint8_t *USBD_KeyRepDesc;
 uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 ONE_DESCRIPTOR Report_Descriptor[2];
 
+
+static uint8_t temp_USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
+{
+    0x05, 0x01,                     // Usage Page (Generic Desktop)
+    0x09, 0x06,                     // Usage (Keyboard)
+    0xA1, 0x01,                     // Collection (Application)
+    0x05, 0x07,                     // Usage Page (Key Codes)
+    0x19, 0xE0,                     // Usage Minimum (224)
+    0x29, 0xE7,                     // Usage Maximum (231)
+    0x15, 0x00,                     // Logical Minimum (0)
+    0x25, 0x01,                     // Logical Maximum (1)
+    0x75, 0x01,                     // Report Size (1)
+    0x95, 0x08,                     // Report Count (8)
+    0x81, 0x02,                     // Input (Data,Variable,Absolute)
+    0x95, 0x01,                     // Report Count (1)
+    0x75, 0x08,                     // Report Size (8)
+    0x81, 0x01,                     // Input (Constant)
+    0x95, 0x03,                     // Report Count (3)
+    0x75, 0x01,                     // Report Size (1)
+    0x05, 0x08,                     // Usage Page (LEDs)
+    0x19, 0x01,                     // Usage Minimum (1)
+    0x29, 0x03,                     // Usage Maximum (3)
+    0x91, 0x02,                     // Output (Data,Variable,Absolute)
+    0x95, 0x05,                     // Report Count (5)
+    0x75, 0x01,                     // Report Size (1)
+    0x91, 0x01,                     // Output (Constant,Array,Absolute)
+    0x95, 0x06,                     // Report Count (6)
+    0x75, 0x08,                     // Report Size (8)
+    0x26, 0xFF, 0x00,               // Logical Maximum (255)
+    0x05, 0x07,                     // Usage Page (Key Codes)
+    0x19, 0x00,                     // Usage Minimum (0)
+    0x29, 0x91,                     // Usage Maximum (145)
+    0x81, 0x00,                     // Input(Data,Array,Absolute)
+    0xC0                            // End Collection
+};
+
 /*******************************************************************************/
 /* Interrupt Function Declaration */
 void TIM3_IRQHandler(void) __attribute__((naked));
@@ -802,10 +838,18 @@ GETREP_START:
                     //     //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
                     //     USBD_KeyRepDesc[i] = Com_Buf[i];
                     // }
-                    Report_Descriptor[0].Descriptor = Com_Buf;
-                    Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
-                    Report_Descriptor[1].Descriptor = Com_Buf;
-                    Report_Descriptor[1].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
+                    Report_Descriptor[0].Descriptor = malloc(HostCtl[index].Interface[num].HidDescLen);
+
+                    if (Report_Descriptor[0].Descriptor != NULL) {
+                        memcpy(Report_Descriptor[0].Descriptor, temp_USBD_KeyRepDesc, HostCtl[index].Interface[num].HidDescLen);
+                        Report_Descriptor[0].Descriptor_Size = HostCtl[index].Interface[num].HidDescLen;
+                    } else {
+                        // Handle memory allocation failure
+                    }
+                    // Report_Descriptor[0].Descriptor = temp_USBD_KeyRepDesc;
+                    // Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
+                    // Report_Descriptor[1].Descriptor = temp_USBD_KeyRepDesc;
+                    // Report_Descriptor[1].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
                     // if ( HostCtl[ index ].Interface[ num ].HidDescLen > 1000) 
                     // {
                     //     new_descripter = 2;

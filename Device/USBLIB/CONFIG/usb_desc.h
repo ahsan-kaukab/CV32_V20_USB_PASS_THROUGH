@@ -32,7 +32,7 @@
 #define USBD_SIZE_DEVICE_DESC        18
 #define USBD_SIZE_CONFIG_DESC        34
 //#define USBD_SIZE_REPORT_DESC        54 // 54
-#define USBD_SIZE_REPORT_DESC_KB     1000 // 64
+#define USBD_SIZE_REPORT_DESC_KB     64 // 64
 #define USBD_SIZE_REPORT_DESC_MS     52 // 54
 #define USBD_SIZE_STRING_LANGID      4
 #define USBD_SIZE_STRING_VENDOR      14
