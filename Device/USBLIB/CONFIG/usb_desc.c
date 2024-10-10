@@ -29,87 +29,87 @@ uint8_t USBD_DeviceDescriptor[] = {
     0x01,                            // bNumConfigurations 1
 };
 
-/* USB Configration Descriptors */
-uint8_t  USBD_ConfigDescriptor_KB[] = { 
-     /* Configuration Descriptor */
-    0x09,                           // bLength
-    0x02,                           // bDescriptorType
-    USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
-    0x01,                           // bNumInterfaces
-    0x01,                           // bConfigurationValue
-    0x00,                           // iConfiguration
-    0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
-    0x32,                           // MaxPower: 100mA
+// /* USB Configration Descriptors */
+// uint8_t  USBD_ConfigDescriptor_KB[] = { 
+//      /* Configuration Descriptor */
+//     0x09,                           // bLength
+//     0x02,                           // bDescriptorType
+//     USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
+//     0x01,                           // bNumInterfaces
+//     0x01,                           // bConfigurationValue
+//     0x00,                           // iConfiguration
+//     0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
+//     0x32,                           // MaxPower: 100mA
 
-    /* Interface Descriptor */
-    0x09,                           // bLength
-    0x04,                           // bDescriptorType
-    0x00,                           // bInterfaceNumber
-    0x00,                           // bAlternateSetting
-    0x01,                           // bNumEndpoints
-    0x03,                           // bInterfaceClass
-    0x01,                           // bInterfaceSubClass
-    0x01,                           // bInterfaceProtocol: Keyboard
-    0x00,                           // iInterface
+//     /* Interface Descriptor */
+//     0x09,                           // bLength
+//     0x04,                           // bDescriptorType
+//     0x00,                           // bInterfaceNumber
+//     0x00,                           // bAlternateSetting
+//     0x01,                           // bNumEndpoints
+//     0x03,                           // bInterfaceClass
+//     0x01,                           // bInterfaceSubClass
+//     0x01,                           // bInterfaceProtocol: Keyboard
+//     0x00,                           // iInterface
 
-    /* HID Descriptor*/
-    0x09,                           // bLength
-    0x21,                           // bDescriptorType
-    0x11, 0x01,                     // bcdHID
-    0x00,                           // bCountryCode
-    0x01,                           // bNumDescriptors
-    0x22,                           // bDescriptorType
-    USBD_SIZE_REPORT_DESC_KB & 0xFF, USBD_SIZE_REPORT_DESC_KB >> 8, // wDescriptorLength
+//     /* HID Descriptor*/
+//     0x09,                           // bLength
+//     0x21,                           // bDescriptorType
+//     0x11, 0x01,                     // bcdHID
+//     0x00,                           // bCountryCode
+//     0x01,                           // bNumDescriptors
+//     0x22,                           // bDescriptorType
+//     USBD_SIZE_REPORT_DESC_KB & 0xFF, USBD_SIZE_REPORT_DESC_KB >> 8, // wDescriptorLength
 
-    /* Endpoint Descriptor*/
-    0x07,                           // bLength
-    0x05,                           // bDescriptorType
-    0x81,                           // bEndpointAddress: IN Endpoint 1
-    0x03,                           // bmAttributes
-    DEF_ENDP_SIZE_KB & 0xFF, DEF_ENDP_SIZE_KB >> 8, // wMaxPacketSize
-    0x05                            // bInterval: 5mS
-};
+//     /* Endpoint Descriptor*/
+//     0x07,                           // bLength
+//     0x05,                           // bDescriptorType
+//     0x81,                           // bEndpointAddress: IN Endpoint 1
+//     0x03,                           // bmAttributes
+//     DEF_ENDP_SIZE_KB & 0xFF, DEF_ENDP_SIZE_KB >> 8, // wMaxPacketSize
+//     0x05                            // bInterval: 5mS
+// };
 
-/* USB Configration Descriptors */
-uint8_t  USBD_ConfigDescriptor_MS[] = { 
-     /* Configuration Descriptor */
-    0x09,                           // bLength
-    0x02,                           // bDescriptorType
-    USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
-    0x01,                           // bNumInterfaces
-    0x01,                           // bConfigurationValue
-    0x00,                           // iConfiguration
-    0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
-    0x32,                           // MaxPower: 100mA
+// /* USB Configration Descriptors */
+// uint8_t  USBD_ConfigDescriptor_MS[] = { 
+//      /* Configuration Descriptor */
+//     0x09,                           // bLength
+//     0x02,                           // bDescriptorType
+//     USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
+//     0x01,                           // bNumInterfaces
+//     0x01,                           // bConfigurationValue
+//     0x00,                           // iConfiguration
+//     0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
+//     0x32,                           // MaxPower: 100mA
 
-    /* Interface Descriptor (Keyboard) */
-    0x09,                           // bLength
-    0x04,                           // bDescriptorType
-    0x00,                           // bInterfaceNumber
-    0x00,                           // bAlternateSetting
-    0x01,                           // bNumEndpoints
-    0x03,                           // bInterfaceClass
-    0x01,                           // bInterfaceSubClass
-    0x02,                           // bInterfaceProtocol: Mouse
-    0x00,                           // iInterface
+//     /* Interface Descriptor (Keyboard) */
+//     0x09,                           // bLength
+//     0x04,                           // bDescriptorType
+//     0x00,                           // bInterfaceNumber
+//     0x00,                           // bAlternateSetting
+//     0x01,                           // bNumEndpoints
+//     0x03,                           // bInterfaceClass
+//     0x01,                           // bInterfaceSubClass
+//     0x02,                           // bInterfaceProtocol: Mouse
+//     0x00,                           // iInterface
 
-    /* HID Descriptor (Keyboard) */
-    0x09,                           // bLength
-    0x21,                           // bDescriptorType
-    0x11, 0x01,                     // bcdHID
-    0x00,                           // bCountryCode
-    0x01,                           // bNumDescriptors
-    0x22,                           // bDescriptorType
-    USBD_SIZE_REPORT_DESC_MS & 0xFF, USBD_SIZE_REPORT_DESC_MS >> 8, // wDescriptorLength
+//     /* HID Descriptor (Keyboard) */
+//     0x09,                           // bLength
+//     0x21,                           // bDescriptorType
+//     0x11, 0x01,                     // bcdHID
+//     0x00,                           // bCountryCode
+//     0x01,                           // bNumDescriptors
+//     0x22,                           // bDescriptorType
+//     USBD_SIZE_REPORT_DESC_MS & 0xFF, USBD_SIZE_REPORT_DESC_MS >> 8, // wDescriptorLength
 
-    /* Endpoint Descriptor (Keyboard) */
-    0x07,                           // bLength
-    0x05,                           // bDescriptorType
-    0x81,                           // bEndpointAddress: IN Endpoint 1
-    0x03,                           // bmAttributes
-    DEF_ENDP_SIZE_MS & 0xFF, DEF_ENDP_SIZE_MS >> 8, // wMaxPacketSize
-    0x05                            // bInterval: 5mS
-};
+//     /* Endpoint Descriptor (Keyboard) */
+//     0x07,                           // bLength
+//     0x05,                           // bDescriptorType
+//     0x81,                           // bEndpointAddress: IN Endpoint 1
+//     0x03,                           // bmAttributes
+//     DEF_ENDP_SIZE_MS & 0xFF, DEF_ENDP_SIZE_MS >> 8, // wMaxPacketSize
+//     0x05                            // bInterval: 5mS
+// };
 
 /* USB String Descriptors */
 // uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
@@ -140,77 +140,77 @@ uint8_t  USBD_ConfigDescriptor_MS[] = {
 // 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
 // };
 
-uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
-{
-    0x05, 0x01,                     // Usage Page (Generic Desktop)
-    0x09, 0x06,                     // Usage (Keyboard)
-    0xA1, 0x01,                     // Collection (Application)
-    0x05, 0x07,                     // Usage Page (Key Codes)
-    0x19, 0xE0,                     // Usage Minimum (224)
-    0x29, 0xE7,                     // Usage Maximum (231)
-    0x15, 0x00,                     // Logical Minimum (0)
-    0x25, 0x01,                     // Logical Maximum (1)
-    0x75, 0x01,                     // Report Size (1)
-    0x95, 0x08,                     // Report Count (8)
-    0x81, 0x02,                     // Input (Data,Variable,Absolute)
-    0x95, 0x01,                     // Report Count (1)
-    0x75, 0x08,                     // Report Size (8)
-    0x81, 0x01,                     // Input (Constant)
-    0x95, 0x03,                     // Report Count (3)
-    0x75, 0x01,                     // Report Size (1)
-    0x05, 0x08,                     // Usage Page (LEDs)
-    0x19, 0x01,                     // Usage Minimum (1)
-    0x29, 0x03,                     // Usage Maximum (3)
-    0x91, 0x02,                     // Output (Data,Variable,Absolute)
-    0x95, 0x05,                     // Report Count (5)
-    0x75, 0x01,                     // Report Size (1)
-    0x91, 0x01,                     // Output (Constant,Array,Absolute)
-    0x95, 0x06,                     // Report Count (6)
-    0x75, 0x08,                     // Report Size (8)
-    0x26, 0xFF, 0x00,               // Logical Maximum (255)
-    0x05, 0x07,                     // Usage Page (Key Codes)
-    0x19, 0x00,                     // Usage Minimum (0)
-    0x29, 0x91,                     // Usage Maximum (145)
-    0x81, 0x00,                     // Input(Data,Array,Absolute)
-    0xC0                            // End Collection
-};
+// uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
+// {
+//     0x05, 0x01,                     // Usage Page (Generic Desktop)
+//     0x09, 0x06,                     // Usage (Keyboard)
+//     0xA1, 0x01,                     // Collection (Application)
+//     0x05, 0x07,                     // Usage Page (Key Codes)
+//     0x19, 0xE0,                     // Usage Minimum (224)
+//     0x29, 0xE7,                     // Usage Maximum (231)
+//     0x15, 0x00,                     // Logical Minimum (0)
+//     0x25, 0x01,                     // Logical Maximum (1)
+//     0x75, 0x01,                     // Report Size (1)
+//     0x95, 0x08,                     // Report Count (8)
+//     0x81, 0x02,                     // Input (Data,Variable,Absolute)
+//     0x95, 0x01,                     // Report Count (1)
+//     0x75, 0x08,                     // Report Size (8)
+//     0x81, 0x01,                     // Input (Constant)
+//     0x95, 0x03,                     // Report Count (3)
+//     0x75, 0x01,                     // Report Size (1)
+//     0x05, 0x08,                     // Usage Page (LEDs)
+//     0x19, 0x01,                     // Usage Minimum (1)
+//     0x29, 0x03,                     // Usage Maximum (3)
+//     0x91, 0x02,                     // Output (Data,Variable,Absolute)
+//     0x95, 0x05,                     // Report Count (5)
+//     0x75, 0x01,                     // Report Size (1)
+//     0x91, 0x01,                     // Output (Constant,Array,Absolute)
+//     0x95, 0x06,                     // Report Count (6)
+//     0x75, 0x08,                     // Report Size (8)
+//     0x26, 0xFF, 0x00,               // Logical Maximum (255)
+//     0x05, 0x07,                     // Usage Page (Key Codes)
+//     0x19, 0x00,                     // Usage Minimum (0)
+//     0x29, 0x91,                     // Usage Maximum (145)
+//     0x81, 0x00,                     // Input(Data,Array,Absolute)
+//     0xC0                            // End Collection
+// };
 
-/* HID Report Descriptor */
-const uint8_t USBD_MouseRepDesc[] =
-{
-    0x05, 0x01,                     // Usage Page (Generic Desktop)
-    0x09, 0x02,                     // Usage (Mouse)
-    0xA1, 0x01,                     // Collection (Application)
+// /* HID Report Descriptor */
+// const uint8_t USBD_MouseRepDesc[] =
+// {
+//     0x05, 0x01,                     // Usage Page (Generic Desktop)
+//     0x09, 0x02,                     // Usage (Mouse)
+//     0xA1, 0x01,                     // Collection (Application)
     
-    0x09, 0x01,                     // Usage (Pointer)
-    0xA1, 0x00,                     // Collection (Physical)
+//     0x09, 0x01,                     // Usage (Pointer)
+//     0xA1, 0x00,                     // Collection (Physical)
     
-    // Button States
-    0x05, 0x09,                     // Usage Page (Button)
-    0x19, 0x01,                     // Usage Minimum (Button 1)
-    0x29, 0x05,                     // Usage Maximum (Button 5, adjust if you have more)
-    0x15, 0x00,                     // Logical Minimum (0)
-    0x25, 0x01,                     // Logical Maximum (1)
-    0x75, 0x01,                     // Report Size (1)
-    0x95, 0x05,                     // Report Count (5) - total number of buttons
-    0x81, 0x02,                     // Input (Data, Variable, Absolute)
+//     // Button States
+//     0x05, 0x09,                     // Usage Page (Button)
+//     0x19, 0x01,                     // Usage Minimum (Button 1)
+//     0x29, 0x05,                     // Usage Maximum (Button 5, adjust if you have more)
+//     0x15, 0x00,                     // Logical Minimum (0)
+//     0x25, 0x01,                     // Logical Maximum (1)
+//     0x75, 0x01,                     // Report Size (1)
+//     0x95, 0x05,                     // Report Count (5) - total number of buttons
+//     0x81, 0x02,                     // Input (Data, Variable, Absolute)
     
-    // Padding for alignment
-    0x75, 0x03,                     // Report Size (3)
-    0x95, 0x01,                     // Report Count (1)
-    0x81, 0x01,                     // Input (Constant, Array, Absolute)
+//     // Padding for alignment
+//     0x75, 0x03,                     // Report Size (3)
+//     0x95, 0x01,                     // Report Count (1)
+//     0x81, 0x01,                     // Input (Constant, Array, Absolute)
     
-    // Movement Data
-    0x05, 0x01,                     // Usage Page (Generic Desktop)
-    0x09, 0x30,                     // Usage (X)
-    0x09, 0x31,                     // Usage (Y)
-    0x09, 0x38,                     // Usage (Wheel)
-    0x15, 0x81,                     // Logical Minimum (-127)
-    0x25, 0x7F,                     // Logical Maximum (127)
-    0x75, 0x08,                     // Report Size (8)
-    0x95, 0x03,                     // Report Count (3) - X, Y, and Wheel
-    0x81, 0x06,                     // Input (Data, Variable, Relative)
+//     // Movement Data
+//     0x05, 0x01,                     // Usage Page (Generic Desktop)
+//     0x09, 0x30,                     // Usage (X)
+//     0x09, 0x31,                     // Usage (Y)
+//     0x09, 0x38,                     // Usage (Wheel)
+//     0x15, 0x81,                     // Logical Minimum (-127)
+//     0x25, 0x7F,                     // Logical Maximum (127)
+//     0x75, 0x08,                     // Report Size (8)
+//     0x95, 0x03,                     // Report Count (3) - X, Y, and Wheel
+//     0x81, 0x06,                     // Input (Data, Variable, Relative)
 
-    0xC0,                           // End Collection
-    0xC0                            // End Collection
-};
+//     0xC0,                           // End Collection
+//     0xC0                            // End Collection
+// };

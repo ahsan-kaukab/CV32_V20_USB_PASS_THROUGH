@@ -43,8 +43,8 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
 
 extern uint8_t USBD_DeviceDescriptor[];
-extern uint8_t  USBD_ConfigDescriptor_KB[];
-extern uint8_t  USBD_ConfigDescriptor_MS[];
+// extern uint8_t  USBD_ConfigDescriptor_KB[];
+// extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
@@ -300,13 +300,13 @@ ENUM_START:
 
     Device_Descriptor.Descriptor = malloc(18*sizeof(uint8_t));
 
-    if (Device_Descriptor.Descriptor != NULL) {
+    //if (Device_Descriptor.Descriptor != NULL) {
         memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, 18);
         //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, 18);
         Device_Descriptor.Descriptor_Size = 18;
-    } else {
+    //} else {
         // Handle memory allocation failure
-    }
+    //}
 
     if( s == ERR_SUCCESS )
     {
@@ -767,7 +767,7 @@ GETREP_START:
                     Report_Descriptor[1].Descriptor = malloc(size*sizeof(uint8_t));
 
                     if (Report_Descriptor[0].Descriptor != NULL) {    
-                        memcpy(Report_Descriptor[0].Descriptor, USBD_KeyRepDesc, size);
+                        memcpy(Report_Descriptor[0].Descriptor, Com_Buf, size);
                         memcpy(Report_Descriptor[1].Descriptor, Com_Buf, size);
                         //memcpy(Report_Descriptor[0].Descriptor, Com_Buf, size);
                         Report_Descriptor[0].Descriptor_Size = size;
@@ -1499,13 +1499,13 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
         Device_Descriptor.Descriptor = malloc(18*sizeof(uint8_t));
 
-        if (Device_Descriptor.Descriptor != NULL) {
-            memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, 18);
-            //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+        //if (Device_Descriptor.Descriptor != NULL) {
+            //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, 18);
+            memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
             Device_Descriptor.Descriptor_Size = 18;
-        } else {
-            // Handle memory allocation failure
-        }
+        // } else {
+        //     // Handle memory allocation failure
+        // }
 
         if( s == ERR_SUCCESS )
         {
