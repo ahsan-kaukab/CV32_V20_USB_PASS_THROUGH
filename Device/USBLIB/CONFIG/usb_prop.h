@@ -19,6 +19,7 @@
 extern ONE_DESCRIPTOR Report_Descriptor[2];
 extern ONE_DESCRIPTOR Device_Descriptor;
 extern ONE_DESCRIPTOR Config_Descriptor_KB;
+extern ONE_DESCRIPTOR Config_Descriptor_MS;
 extern ONE_DESCRIPTOR Hid_Descriptor[2];
 extern ONE_DESCRIPTOR String_Descriptor[4];
 

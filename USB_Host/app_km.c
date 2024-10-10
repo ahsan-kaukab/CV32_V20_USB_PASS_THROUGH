@@ -44,7 +44,10 @@ volatile uint32_t millis_counter = 0;
 
 extern uint8_t USBD_DeviceDescriptor[];
 extern uint8_t  USBD_ConfigDescriptor_KB[];
+extern uint8_t  USBD_ConfigDescriptor_MS[];
+
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
+extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
 // extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
 // /* USB Device String Vendor */
@@ -57,6 +60,7 @@ extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 ONE_DESCRIPTOR Report_Descriptor[2];
 ONE_DESCRIPTOR Device_Descriptor;
 ONE_DESCRIPTOR Config_Descriptor_KB;
+ONE_DESCRIPTOR Config_Descriptor_MS;
 ONE_DESCRIPTOR Hid_Descriptor[2];
 ONE_DESCRIPTOR String_Descriptor[4];
 
@@ -355,14 +359,22 @@ ENUM_START:
     Hid_Descriptor[0].Descriptor = malloc(len*sizeof(uint8_t));
     Config_Descriptor_KB.Descriptor = malloc(len*sizeof(uint8_t));
 
-    if (Config_Descriptor_KB.Descriptor != NULL) {
+    Hid_Descriptor[1].Descriptor = malloc(len*sizeof(uint8_t));
+    Config_Descriptor_MS.Descriptor = malloc(len*sizeof(uint8_t));
+
+    if (Config_Descriptor_KB.Descriptor != NULL)
+    {
         memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+        memcpy(Config_Descriptor_MS.Descriptor, USBD_ConfigDescriptor_MS, len);
         //memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
         Config_Descriptor_KB.Descriptor_Size = len;
+        Config_Descriptor_MS.Descriptor_Size = len;
 
         memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
+        memcpy(Hid_Descriptor[1].Descriptor, USBD_ConfigDescriptor_MS, len);
         //memcpy(Hid_Descriptor[0].Descriptor, Com_Buf, len);
         Hid_Descriptor[0].Descriptor_Size = 0x09;
+        Hid_Descriptor[1].Descriptor_Size = 0x09;
         
     } else {
         // Handle memory allocation failure
@@ -749,17 +761,20 @@ GETREP_START:
                 //if(new_descripter == 0) // keyboard
                 {
                     Report_Descriptor[0].Descriptor = malloc(HostCtl[ index ].Interface[ num ].HidDescLen*sizeof(uint8_t));
+                    Report_Descriptor[1].Descriptor = malloc(HostCtl[ index ].Interface[ num ].HidDescLen*sizeof(uint8_t));
 
                     if (Report_Descriptor[0].Descriptor != NULL) {    
                         memcpy(Report_Descriptor[0].Descriptor, USBD_KeyRepDesc, HostCtl[ index ].Interface[ num ].HidDescLen);
+                        memcpy(Report_Descriptor[1].Descriptor, USBD_MouseRepDesc, HostCtl[ index ].Interface[ num ].HidDescLen);
                         //memcpy(Report_Descriptor[0].Descriptor, Com_Buf, HostCtl[ index ].Interface[ num ].HidDescLen);
                         Report_Descriptor[0].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
+                        Report_Descriptor[1].Descriptor_Size = HostCtl[ index ].Interface[ num ].HidDescLen;
                     } else {
                         // Handle memory allocation failure
                     }
                 }
-                // else if (new_descripter == 1) // mouse
-                // {
+                // else if (new_descripter == 1) // mouse       
+                // {        
                 //     for( i = 0; i < HostCtl[ index ].Interface[ num ].HidDescLen; i++ )
                 //     {
                 //         //DUG_PRINTF( "%02x " , Com_Buf[ i ]);
@@ -1555,14 +1570,22 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
         Hid_Descriptor[0].Descriptor = malloc(len*sizeof(uint8_t));
         Config_Descriptor_KB.Descriptor = malloc(len*sizeof(uint8_t));
 
-        if (Config_Descriptor_KB.Descriptor != NULL) {
+        Hid_Descriptor[1].Descriptor = malloc(len*sizeof(uint8_t));
+        Config_Descriptor_MS.Descriptor = malloc(len*sizeof(uint8_t));
+
+        if (Config_Descriptor_KB.Descriptor != NULL)
+        { 
             memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+            memcpy(Config_Descriptor_MS.Descriptor, USBD_ConfigDescriptor_MS, len);
             //memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
             Config_Descriptor_KB.Descriptor_Size = len;
+            Config_Descriptor_MS.Descriptor_Size = len;
 
             memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
+            memcpy(Hid_Descriptor[1].Descriptor, USBD_ConfigDescriptor_MS, len);
             //memcpy(Hid_Descriptor[0].Descriptor, Com_Buf, len);
             Hid_Descriptor[0].Descriptor_Size = 0x09;
+            Hid_Descriptor[1].Descriptor_Size = 0x09;
             
         } else {
             // Handle memory allocation failure

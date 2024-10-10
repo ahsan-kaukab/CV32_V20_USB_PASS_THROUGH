@@ -71,11 +71,11 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 // 	USBD_SIZE_CONFIG_DESC
 // };
 
-ONE_DESCRIPTOR Config_Descriptor_MS =
-{
-	(uint8_t*)USBD_ConfigDescriptor_MS,
-	USBD_SIZE_CONFIG_DESC
-};
+// ONE_DESCRIPTOR Config_Descriptor_MS =
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_MS,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
 // ONE_DESCRIPTOR String_Descriptor[4] =
 // {
