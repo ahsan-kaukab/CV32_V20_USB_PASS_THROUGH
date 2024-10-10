@@ -94,7 +94,6 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 
 // ONE_DESCRIPTOR Hid_Descriptor[2] =
 // {
-// 	//{(uint8_t*)&USBD_ConfigDescriptor[18], 0x09},
 //   {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
 //   {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
 // };
