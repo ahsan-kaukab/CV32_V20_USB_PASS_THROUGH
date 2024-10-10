@@ -43,7 +43,7 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
 
 extern uint8_t USBD_DeviceDescriptor[];
-// extern uint8_t  USBD_ConfigDescriptor_KB[];
+extern uint8_t  USBD_ConfigDescriptor_KB[];
 // extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
@@ -364,18 +364,18 @@ ENUM_START:
 
     if (Config_Descriptor_KB.Descriptor != NULL)
     {
-        //memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+        memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
         //memcpy(Config_Descriptor_MS.Descriptor, USBD_ConfigDescriptor_MS, len);
         memcpy(Config_Descriptor_MS.Descriptor, Com_Buf, len);
-        memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
+        //memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
         Config_Descriptor_KB.Descriptor_Size = len;
         Config_Descriptor_MS.Descriptor_Size = len;
 
-        //memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&USBD_ConfigDescriptor_KB[18], 9);
+        memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
         //memcpy(Hid_Descriptor[1].Descriptor, (uint8_t*)&USBD_ConfigDescriptor_MS[43], 9);
-        memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&Com_Buf[18], 9);
+        //memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&Com_Buf[18], 9);
         memcpy(Hid_Descriptor[1].Descriptor, (uint8_t*)&Com_Buf[43], 9);
-        Hid_Descriptor[0].Descriptor_Size = 0x09;
+        Hid_Descriptor[0].Descriptor_Size = len;
         Hid_Descriptor[1].Descriptor_Size = 0x09;
         
     } else {
@@ -478,6 +478,7 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size  )
                     {
                         HostCtl[ index ].Interface[ num ].Type = DEC_KEY;
                         new_descripter = 0;
+                        HID_SetIdle( ep0_size, num, 0, 0 );
                     }
                     else if( ( (PUSB_ITF_DESCR)( &Com_Buf[ i ] ) )->bInterfaceProtocol == 0x02 ) // Mouse
                     {
@@ -766,15 +767,15 @@ GETREP_START:
                     Report_Descriptor[0].Descriptor = malloc(size*sizeof(uint8_t));
                     Report_Descriptor[1].Descriptor = malloc(size*sizeof(uint8_t));
 
-                    if (Report_Descriptor[0].Descriptor != NULL) {    
-                        memcpy(Report_Descriptor[0].Descriptor, Com_Buf, size);
+                    //if (Report_Descriptor[0].Descriptor != NULL) {    
+                        memcpy(Report_Descriptor[0].Descriptor, USBD_KeyRepDesc, 64);
                         memcpy(Report_Descriptor[1].Descriptor, Com_Buf, size);
                         //memcpy(Report_Descriptor[0].Descriptor, Com_Buf, size);
-                        Report_Descriptor[0].Descriptor_Size = size;
+                        Report_Descriptor[0].Descriptor_Size = 64;
                         Report_Descriptor[1].Descriptor_Size = size;
-                    } else {
+                    //} else {
                         // Handle memory allocation failure
-                    }
+                    //}
                 }
                 //DUG_PRINTF("\r\n");
 //#endif
@@ -1567,18 +1568,18 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
         if (Config_Descriptor_KB.Descriptor != NULL)
         {
-            //memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
+            memcpy(Config_Descriptor_KB.Descriptor, USBD_ConfigDescriptor_KB, len);
             //memcpy(Config_Descriptor_MS.Descriptor, USBD_ConfigDescriptor_MS, len);
             memcpy(Config_Descriptor_MS.Descriptor, Com_Buf, len);
-            memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
+            //memcpy(Config_Descriptor_KB.Descriptor, Com_Buf, len);
             Config_Descriptor_KB.Descriptor_Size = len;
             Config_Descriptor_MS.Descriptor_Size = len;
 
-            //memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&USBD_ConfigDescriptor_KB[18], 9);
+            memcpy(Hid_Descriptor[0].Descriptor, USBD_ConfigDescriptor_KB, len);
             //memcpy(Hid_Descriptor[1].Descriptor, (uint8_t*)&USBD_ConfigDescriptor_MS[43], 9);
-            memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&Com_Buf[18], 9);
+            //memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&Com_Buf[18], 9);
             memcpy(Hid_Descriptor[1].Descriptor, (uint8_t*)&Com_Buf[43], 9);
-            Hid_Descriptor[0].Descriptor_Size = 0x09;
+            Hid_Descriptor[0].Descriptor_Size = len;
             Hid_Descriptor[1].Descriptor_Size = 0x09;
             
         } else {
