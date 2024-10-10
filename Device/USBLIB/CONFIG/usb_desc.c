@@ -112,33 +112,33 @@ uint8_t  USBD_ConfigDescriptor_MS[] = {
 };
 
 /* USB String Descriptors */
-uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
-	USBD_SIZE_STRING_LANGID,
-	USB_STRING_DESCRIPTOR_TYPE,
-	0x09,
-	0x04 
-};
+// uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
+// 	USBD_SIZE_STRING_LANGID,
+// 	USB_STRING_DESCRIPTOR_TYPE,
+// 	0x09,
+// 	0x04 
+// };
 
-/* USB Device String Vendor */
-uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR] = {
-	USBD_SIZE_STRING_VENDOR,    
-	USB_STRING_DESCRIPTOR_TYPE,           
-	'w',0,'c',0,'h',0,'.',0,'c',0,'n',0
-};
+// /* USB Device String Vendor */
+// uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR] = {
+// 	USBD_SIZE_STRING_VENDOR,    
+// 	USB_STRING_DESCRIPTOR_TYPE,           
+// 	'w',0,'c',0,'h',0,'.',0,'c',0,'n',0
+// };
 
-/* USB Device String Product */
-uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT] = {
-	USBD_SIZE_STRING_PRODUCT,         
-	USB_STRING_DESCRIPTOR_TYPE,        
-    'C', 0, 'H', 0, '3', 0, '2', 0, 'F', 0, '2', 0 , '0', 0, 'x', 0
-};
+// /* USB Device String Product */
+// uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT] = {
+// 	USBD_SIZE_STRING_PRODUCT,         
+// 	USB_STRING_DESCRIPTOR_TYPE,        
+//     'C', 0, 'H', 0, '3', 0, '2', 0, 'F', 0, '2', 0 , '0', 0, 'x', 0
+// };
 
-/* USB Device String Serial */
-uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
-	USBD_SIZE_STRING_SERIAL,          
-	USB_STRING_DESCRIPTOR_TYPE,                   
-	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
-};
+// /* USB Device String Serial */
+// uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
+// 	USBD_SIZE_STRING_SERIAL,          
+// 	USB_STRING_DESCRIPTOR_TYPE,                   
+// 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
+// };
 
 uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
 {
