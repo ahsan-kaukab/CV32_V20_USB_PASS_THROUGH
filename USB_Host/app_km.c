@@ -1502,7 +1502,8 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
         //if (Device_Descriptor.Descriptor != NULL) {
             //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, 18);
-            memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
+            memcpy(Device_Descriptor.Descriptor, USBD_DeviceDescriptor, 18);
+            //memcpy(Device_Descriptor.Descriptor, DevDesc_Buf, USBD_SIZE_DEVICE_DESC);
             Device_Descriptor.Descriptor_Size = 18;
         // } else {
         //     // Handle memory allocation failure
@@ -1579,7 +1580,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             //memcpy(Hid_Descriptor[1].Descriptor, (uint8_t*)&USBD_ConfigDescriptor_MS[43], 9);
             //memcpy(Hid_Descriptor[0].Descriptor, (uint8_t*)&Com_Buf[18], 9);
             memcpy(Hid_Descriptor[1].Descriptor, (uint8_t*)&Com_Buf[43], 9);
-            Hid_Descriptor[0].Descriptor_Size = len;
+            Hid_Descriptor[0].Descriptor_Size = 0x09;
             Hid_Descriptor[1].Descriptor_Size = 0x09;
             
         } else {
