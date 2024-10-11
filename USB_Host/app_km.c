@@ -49,20 +49,20 @@ volatile uint32_t millis_counter = 0;
 // extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 // // extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
-// extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
-// /* USB Device String Vendor */
-// extern uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR]; 
-// /* USB Device String Product */
-// extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
-// /* USB Device String Serial */
-// extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
+extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
+/* USB Device String Vendor */
+extern uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR]; 
+/* USB Device String Product */
+extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
+/* USB Device String Serial */
+extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
 
 // ONE_DESCRIPTOR Report_Descriptor[2];
 // ONE_DESCRIPTOR Device_Descriptor;
 // ONE_DESCRIPTOR Config_Descriptor_KB;
 // ONE_DESCRIPTOR Config_Descriptor_MS;
 // ONE_DESCRIPTOR Hid_Descriptor[2];
-// ONE_DESCRIPTOR String_Descriptor[4];
+ONE_DESCRIPTOR String_Descriptor[4];
 
 /*******************************************************************************/
 /* Interrupt Function Declaration */
@@ -822,9 +822,9 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         s = USBFSH_GetStrDescr( ep0_size, Com_Buf[ 6 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_LANGID
 
-        // String_Descriptor[0].Descriptor = (uint8_t*)USBD_StringLangID;
-        // //String_Descriptor[0].Descriptor = Com_Buf;
-        // String_Descriptor[0].Descriptor_Size = USBD_SIZE_STRING_LANGID;
+        //String_Descriptor[0].Descriptor = (uint8_t*)USBD_StringLangID;
+        String_Descriptor[0].Descriptor = Com_Buf;
+        String_Descriptor[0].Descriptor_Size = USBD_SIZE_STRING_LANGID;
 
         if( s == ERR_SUCCESS )
         {
@@ -853,9 +853,9 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 14 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_VENDOR
 
-        // String_Descriptor[1].Descriptor = (uint8_t*)USBD_StringVendor;
-        // //String_Descriptor[1].Descriptor = Com_Buf;
-        // String_Descriptor[1].Descriptor_Size = USBD_SIZE_STRING_VENDOR;
+        //String_Descriptor[1].Descriptor = (uint8_t*)USBD_StringVendor;
+        String_Descriptor[1].Descriptor = Com_Buf;
+        String_Descriptor[1].Descriptor_Size = USBD_SIZE_STRING_VENDOR;
 
         if( s == ERR_SUCCESS )
         {
@@ -881,9 +881,9 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 15 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_PRODUCT
  
-        // String_Descriptor[2].Descriptor = (uint8_t*)USBD_StringProduct;
-        // //String_Descriptor[2].Descriptor = (uint8_t*)Com_Buf;
-        // String_Descriptor[2].Descriptor_Size = USBD_SIZE_STRING_PRODUCT;
+        //String_Descriptor[2].Descriptor = (uint8_t*)USBD_StringProduct;
+        String_Descriptor[2].Descriptor = (uint8_t*)Com_Buf;
+        String_Descriptor[2].Descriptor_Size = USBD_SIZE_STRING_PRODUCT;
 
         if( s == ERR_SUCCESS )
         {
@@ -909,9 +909,9 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 16 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_SERIAL
 
-        // String_Descriptor[3].Descriptor = (uint8_t*)USBD_StringSerial;
-        // //String_Descriptor[3].Descriptor = (uint8_t*)Com_Buf;
-        // String_Descriptor[3].Descriptor_Size = USBD_SIZE_STRING_SERIAL;
+        //String_Descriptor[3].Descriptor = (uint8_t*)USBD_StringSerial;
+        String_Descriptor[3].Descriptor = (uint8_t*)Com_Buf;
+        String_Descriptor[3].Descriptor_Size = USBD_SIZE_STRING_SERIAL;
         
         if( s == ERR_SUCCESS )
         {
@@ -940,7 +940,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         }
     }
 
-    if(new_descripter == 0) //|| new_descripter == 1) 
+    if(new_descripter == 0 || new_descripter == 1) 
     {
         Set_USBConfig();
         USB_Init();
@@ -1070,9 +1070,9 @@ uint8_t USBH_EnumHubDevice( void )
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, Com_Buf[ 6 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_LANGID
 
-        // String_Descriptor[0].Descriptor = (uint8_t*)USBD_StringLangID;
-        // //String_Descriptor[0].Descriptor = Com_Buf;
-        // String_Descriptor[0].Descriptor_Size = USBD_SIZE_STRING_LANGID;
+        //String_Descriptor[0].Descriptor = (uint8_t*)USBD_StringLangID;
+        String_Descriptor[0].Descriptor = Com_Buf;
+        String_Descriptor[0].Descriptor_Size = USBD_SIZE_STRING_LANGID;
 
         if( s == ERR_SUCCESS )
         {
@@ -1098,9 +1098,9 @@ uint8_t USBH_EnumHubDevice( void )
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 14 ], Com_Buf );
         uint8_t size = Com_Buf[0];  // USBD_SIZE_STRING_VENDOR
 
-        // String_Descriptor[1].Descriptor = (uint8_t*)USBD_StringVendor;
-        // //String_Descriptor[1].Descriptor = Com_Buf;
-        // String_Descriptor[1].Descriptor_Size = USBD_SIZE_STRING_VENDOR;
+        //String_Descriptor[1].Descriptor = (uint8_t*)USBD_StringVendor;
+        String_Descriptor[1].Descriptor = Com_Buf;
+        String_Descriptor[1].Descriptor_Size = USBD_SIZE_STRING_VENDOR;
 
         if( s == ERR_SUCCESS )
         {
@@ -1126,9 +1126,9 @@ uint8_t USBH_EnumHubDevice( void )
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 15 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_PRODUCT
 
-        // String_Descriptor[2].Descriptor = (uint8_t*)USBD_StringProduct;
-        // //String_Descriptor[2].Descriptor = Com_Buf;
-        // String_Descriptor[2].Descriptor_Size = USBD_SIZE_STRING_PRODUCT;
+        //String_Descriptor[2].Descriptor = (uint8_t*)USBD_StringProduct;
+        String_Descriptor[2].Descriptor = Com_Buf;
+        String_Descriptor[2].Descriptor_Size = USBD_SIZE_STRING_PRODUCT;
 
         if( s == ERR_SUCCESS )
         {
@@ -1154,9 +1154,9 @@ uint8_t USBH_EnumHubDevice( void )
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 16 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_SERIAL
 
-        // String_Descriptor[3].Descriptor = (uint8_t*)USBD_StringSerial;
-        // //String_Descriptor[3].Descriptor = Com_Buf;
-        // String_Descriptor[3].Descriptor_Size = USBD_SIZE_STRING_SERIAL;
+        //String_Descriptor[3].Descriptor = (uint8_t*)USBD_StringSerial;
+        String_Descriptor[3].Descriptor = Com_Buf;
+        String_Descriptor[3].Descriptor_Size = USBD_SIZE_STRING_SERIAL;
 
         if( s == ERR_SUCCESS )
         {

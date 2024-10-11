@@ -49,13 +49,13 @@ extern uint8_t USBD_DeviceDescriptor[18];
 
 //extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
-extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
-/* USB Device String Vendor */
-extern uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR]; 
-/* USB Device String Product */
-extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
-/* USB Device String Serial */
-extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
+// extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
+// /* USB Device String Vendor */
+// extern uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR]; 
+// /* USB Device String Product */
+// extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
+// /* USB Device String Serial */
+// extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
