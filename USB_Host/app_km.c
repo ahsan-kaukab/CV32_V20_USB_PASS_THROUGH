@@ -63,7 +63,7 @@ ONE_DESCRIPTOR Report_Descriptor[2] =
 	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
 };
 
-ONE_DESCRIPTOR Hid_Descriptor[2] = // ok 
+ONE_DESCRIPTOR Hid_Descriptor[2] = 
 { 
   {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
   {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
@@ -74,6 +74,7 @@ ONE_DESCRIPTOR Device_Descriptor = // ok (2)
 	(uint8_t*)USBD_DeviceDescriptor,
 	USBD_SIZE_DEVICE_DESC
 };
+//ONE_DESCRIPTOR Device_Descriptor;
 
 ONE_DESCRIPTOR Config_Descriptor_KB = // ok (2)
 {
@@ -325,7 +326,8 @@ ENUM_START:
     s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
     USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, t_DevDesc_Buf );
 
-    //Device_Descriptor.Descriptor = (uint8_t*)t_DevDesc_Buf;
+   //Device_Descriptor.Descriptor = (uint8_t*)t_DevDesc_Buf;
+   //Device_Descriptor.Descriptor_Size = 18;  // Explicitly assigning the size
 
     if( s == ERR_SUCCESS )
     {
@@ -378,8 +380,8 @@ ENUM_START:
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
     USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-    //Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-    //Config_Descriptor_MS.Descriptor_Size = len;
+    Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+    Config_Descriptor_MS.Descriptor_Size = len;
 
     //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
     //Config_Descriptor_KB.Descriptor_Size = len;
@@ -730,6 +732,23 @@ void KM_AnalyzeHidReportDesc( uint8_t index, uint8_t intf_num )
     }
 }
 
+uint8_t* find_hid_descriptor(uint8_t* config_desc, uint16_t length) {
+    uint16_t index = 0;
+    while (index < length) {
+        uint8_t desc_length = config_desc[index];
+        uint8_t desc_type = config_desc[index + 1];
+
+        // Check if this is the HID descriptor (Type 0x21)
+        if (desc_type == 0x21) {
+            return &config_desc[index];
+        }
+
+        // Move to the next descriptor
+        index += desc_length;
+    }
+    return NULL; // Not found
+}
+
 /*********************************************************************
  * @fn      KM_DealHidReportDesc
  *
@@ -769,11 +788,13 @@ GETREP_START:
 
             if( s == ERR_SUCCESS )
             {
-                // Hid_Descriptor[0].Descriptor = (uint8_t*)temp_Com_Buf;
-                // Hid_Descriptor[0].Descriptor_Size = size;
+                // Report_Descriptor[0].Descriptor = (uint8_t*)temp_Com_Buf;
+                // Report_Descriptor[0].Descriptor_Size = size;
 
-                // Hid_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
-                // Hid_Descriptor[1].Descriptor_Size = size;
+                Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
+                Report_Descriptor[1].Descriptor_Size = size;
+
+                //Hid_Descriptor[1].Descriptor = find_hid_descriptor(temp_Com_Buf,size);
 
                 /* Analyze Report Descriptor */
                 KM_AnalyzeHidReportDesc( index, num );
@@ -1446,6 +1467,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
         USBFSH_GetDeviceDescr( &RootHubDev.Device[ hub_port ].bEp0MaxPks, t_DevDesc_Buf );
         
         //Device_Descriptor.Descriptor = (uint8_t*)t_DevDesc_Buf;
+        //Device_Descriptor.Descriptor_Size = 18;  // Explicitly assigning the size
 
         if( s == ERR_SUCCESS )
         {
@@ -1502,8 +1524,8 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
         s = USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
         USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-        //Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-        //Config_Descriptor_MS.Descriptor_Size = len;
+        Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+        Config_Descriptor_MS.Descriptor_Size = len;
 
         //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
         //Config_Descriptor_KB.Descriptor_Size = len;
