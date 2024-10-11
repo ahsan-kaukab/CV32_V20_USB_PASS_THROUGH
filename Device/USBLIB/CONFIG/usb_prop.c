@@ -59,23 +59,23 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 	USBD_SetDeviceAddress
 };
 
-ONE_DESCRIPTOR Device_Descriptor =
-{
-	(uint8_t*)USBD_DeviceDescriptor,
-	USBD_SIZE_DEVICE_DESC
-};
+// ONE_DESCRIPTOR Device_Descriptor =
+// {
+// 	(uint8_t*)USBD_DeviceDescriptor,
+// 	USBD_SIZE_DEVICE_DESC
+// };
 
-ONE_DESCRIPTOR Config_Descriptor_KB =
-{
-	(uint8_t*)USBD_ConfigDescriptor_KB,
-	USBD_SIZE_CONFIG_DESC
-};
+// ONE_DESCRIPTOR Config_Descriptor_KB =
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_KB,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
-ONE_DESCRIPTOR Config_Descriptor_MS =
-{
-	(uint8_t*)USBD_ConfigDescriptor_MS,
-	USBD_SIZE_CONFIG_DESC
-};
+// ONE_DESCRIPTOR Config_Descriptor_MS =
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_MS,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
 // ONE_DESCRIPTOR String_Descriptor[4] =
 // {
@@ -85,18 +85,18 @@ ONE_DESCRIPTOR Config_Descriptor_MS =
 // 	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
 // };
 
-ONE_DESCRIPTOR Report_Descriptor[2] =
-{
-  //{(uint8_t*)USBD_HidRepDesc, 64},
-	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
-	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
-};
+// ONE_DESCRIPTOR Report_Descriptor[2] =
+// {
+//   //{(uint8_t*)USBD_HidRepDesc, 64},
+// 	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
+// 	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
+// };
 
-ONE_DESCRIPTOR Hid_Descriptor[2] =
-{
-  {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
-  {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
-};
+// ONE_DESCRIPTOR Hid_Descriptor[2] =
+// {
+//   {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
+//   {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
+// };
 
 
 /*********************************************************************
