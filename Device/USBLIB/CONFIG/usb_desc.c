@@ -12,7 +12,7 @@
 
 /* USB Device Descriptors */
 
-uint8_t USBD_DeviceDescriptor[] = { 
+uint8_t USBD_DeviceDescriptor[18] = { 
     USBD_SIZE_DEVICE_DESC,           // bLength
     0x01,                            // bDescriptorType (Device)
     0x10, 0x01,                      // bcdUSB 1.10
@@ -20,8 +20,8 @@ uint8_t USBD_DeviceDescriptor[] = {
     0x00,                            // bDeviceSubClass 
     0x00,                            // bDeviceProtocol 
     DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 8
-    0x34, 0x12,                      // idVendor 0x1A86
-    0x78, 0x56,                      // idProduct 0xFE07
+    0x86, 0x1A,                      // idVendor 0x1A86
+    0x07, 0xFE,                      // idProduct 0xFE07
     0x00, 0x01,                      // bcdDevice 2.00
     0x01,                            // iManufacturer (String Index)
     0x02,                            // iProduct (String Index)
@@ -30,7 +30,7 @@ uint8_t USBD_DeviceDescriptor[] = {
 };
 
 // /* USB Configration Descriptors */
-uint8_t  USBD_ConfigDescriptor_KB[] = { 
+uint8_t  USBD_ConfigDescriptor_KB[34] = { 
      /* Configuration Descriptor */
     0x09,                           // bLength
     0x02,                           // bDescriptorType
@@ -71,7 +71,7 @@ uint8_t  USBD_ConfigDescriptor_KB[] = {
 };
 
 // /* USB Configration Descriptors */
-uint8_t  USBD_ConfigDescriptor_MS[] = { 
+uint8_t  USBD_ConfigDescriptor_MS[34] = { 
      /* Configuration Descriptor */
     0x09,                           // bLength
     0x02,                           // bDescriptorType
@@ -112,33 +112,33 @@ uint8_t  USBD_ConfigDescriptor_MS[] = {
 };
 
 /* USB String Descriptors */
-// uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
-// 	USBD_SIZE_STRING_LANGID,
-// 	USB_STRING_DESCRIPTOR_TYPE,
-// 	0x09,
-// 	0x04 
-// };
+uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {
+	USBD_SIZE_STRING_LANGID,
+	USB_STRING_DESCRIPTOR_TYPE,
+	0x09,
+	0x04 
+};
 
 // /* USB Device String Vendor */
-// uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR] = {
-// 	USBD_SIZE_STRING_VENDOR,    
-// 	USB_STRING_DESCRIPTOR_TYPE,           
-// 	'w',0,'c',0,'h',0,'.',0,'c',0,'n',0
-// };
+uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR] = {
+	USBD_SIZE_STRING_VENDOR,    
+	USB_STRING_DESCRIPTOR_TYPE,           
+	'w',0,'c',0,'h',0,'.',0,'c',0,'n',0
+};
 
 // /* USB Device String Product */
-// uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT] = {
-// 	USBD_SIZE_STRING_PRODUCT,         
-// 	USB_STRING_DESCRIPTOR_TYPE,        
-//     'C', 0, 'H', 0, '3', 0, '2', 0, 'F', 0, '2', 0 , '0', 0, 'x', 0
-// };
+uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT] = {
+	USBD_SIZE_STRING_PRODUCT,         
+	USB_STRING_DESCRIPTOR_TYPE,        
+    'C', 0, 'H', 0, '3', 0, '2', 0, 'F', 0, '2', 0 , '0', 0, 'x', 0
+};
 
 // /* USB Device String Serial */
-// uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
-// 	USBD_SIZE_STRING_SERIAL,          
-// 	USB_STRING_DESCRIPTOR_TYPE,                   
-// 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
-// };
+uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL] = {
+	USBD_SIZE_STRING_SERIAL,          
+	USB_STRING_DESCRIPTOR_TYPE,                   
+	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
+};
 
 uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
 {
@@ -176,41 +176,41 @@ uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =
 };
 
 // /* HID Report Descriptor */
-// const uint8_t USBD_MouseRepDesc[] =
-// {
-//     0x05, 0x01,                     // Usage Page (Generic Desktop)
-//     0x09, 0x02,                     // Usage (Mouse)
-//     0xA1, 0x01,                     // Collection (Application)
+uint8_t USBD_MouseRepDesc[] =
+{
+    0x05, 0x01,                     // Usage Page (Generic Desktop)
+    0x09, 0x02,                     // Usage (Mouse)
+    0xA1, 0x01,                     // Collection (Application)
     
-//     0x09, 0x01,                     // Usage (Pointer)
-//     0xA1, 0x00,                     // Collection (Physical)
+    0x09, 0x01,                     // Usage (Pointer)
+    0xA1, 0x00,                     // Collection (Physical)
     
-//     // Button States
-//     0x05, 0x09,                     // Usage Page (Button)
-//     0x19, 0x01,                     // Usage Minimum (Button 1)
-//     0x29, 0x05,                     // Usage Maximum (Button 5, adjust if you have more)
-//     0x15, 0x00,                     // Logical Minimum (0)
-//     0x25, 0x01,                     // Logical Maximum (1)
-//     0x75, 0x01,                     // Report Size (1)
-//     0x95, 0x05,                     // Report Count (5) - total number of buttons
-//     0x81, 0x02,                     // Input (Data, Variable, Absolute)
+    // Button States
+    0x05, 0x09,                     // Usage Page (Button)
+    0x19, 0x01,                     // Usage Minimum (Button 1)
+    0x29, 0x05,                     // Usage Maximum (Button 5, adjust if you have more)
+    0x15, 0x00,                     // Logical Minimum (0)
+    0x25, 0x01,                     // Logical Maximum (1)
+    0x75, 0x01,                     // Report Size (1)
+    0x95, 0x05,                     // Report Count (5) - total number of buttons
+    0x81, 0x02,                     // Input (Data, Variable, Absolute)
     
-//     // Padding for alignment
-//     0x75, 0x03,                     // Report Size (3)
-//     0x95, 0x01,                     // Report Count (1)
-//     0x81, 0x01,                     // Input (Constant, Array, Absolute)
+    // Padding for alignment
+    0x75, 0x03,                     // Report Size (3)
+    0x95, 0x01,                     // Report Count (1)
+    0x81, 0x01,                     // Input (Constant, Array, Absolute)
     
-//     // Movement Data
-//     0x05, 0x01,                     // Usage Page (Generic Desktop)
-//     0x09, 0x30,                     // Usage (X)
-//     0x09, 0x31,                     // Usage (Y)
-//     0x09, 0x38,                     // Usage (Wheel)
-//     0x15, 0x81,                     // Logical Minimum (-127)
-//     0x25, 0x7F,                     // Logical Maximum (127)
-//     0x75, 0x08,                     // Report Size (8)
-//     0x95, 0x03,                     // Report Count (3) - X, Y, and Wheel
-//     0x81, 0x06,                     // Input (Data, Variable, Relative)
+    // Movement Data
+    0x05, 0x01,                     // Usage Page (Generic Desktop)
+    0x09, 0x30,                     // Usage (X)
+    0x09, 0x31,                     // Usage (Y)
+    0x09, 0x38,                     // Usage (Wheel)
+    0x15, 0x81,                     // Logical Minimum (-127)
+    0x25, 0x7F,                     // Logical Maximum (127)
+    0x75, 0x08,                     // Report Size (8)
+    0x95, 0x03,                     // Report Count (3) - X, Y, and Wheel
+    0x81, 0x06,                     // Input (Data, Variable, Relative)
 
-//     0xC0,                           // End Collection
-//     0xC0                            // End Collection
-// };
+    0xC0,                           // End Collection
+    0xC0                            // End Collection
+};
