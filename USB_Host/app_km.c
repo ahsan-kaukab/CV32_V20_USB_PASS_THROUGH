@@ -70,7 +70,7 @@ ONE_DESCRIPTOR Report_Descriptor[2] =
 
 ONE_DESCRIPTOR Device_Descriptor = // ok (2)
 {
-	(uint8_t*)USBD_DeviceDescriptor,
+	(uint8_t*)KB_USBD_DeviceDescriptor,
 	USBD_SIZE_DEVICE_DESC
 };
 
@@ -338,7 +338,11 @@ ENUM_START:
         DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
         
         // Assign the received descriptor and size to the Device_Descriptor structure
-        Device_Descriptor.Descriptor = USBD_DeviceDescriptor;
+        if(new_descripter == 0)
+            Device_Descriptor.Descriptor = KB_USBD_DeviceDescriptor;
+        else if (new_descripter == 1)
+            Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
+
         Device_Descriptor.Descriptor_Size = dev_desc_len;  // Use the actual length received
     // } else {
     //     DUG_PRINTF("Failed to get Device Descriptor, Error Code: %d\n", s);
@@ -400,8 +404,16 @@ ENUM_START:
         USBD_ConfigDescriptor_MS[i] = temp_Com_Buf[i];
     }
 
-    Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-    Config_Descriptor_MS.Descriptor_Size = len;
+    //if(new_descripter == 0)
+    {
+        Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
+        Config_Descriptor_KB.Descriptor_Size = len; 
+    }
+    //else if (new_descripter == 1)
+    {
+        Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+        Config_Descriptor_MS.Descriptor_Size = len;
+    }
 
     //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
     //Config_Descriptor_KB.Descriptor_Size = len;
@@ -808,8 +820,9 @@ GETREP_START:
 
             if( s == ERR_SUCCESS )
             {
-                // Report_Descriptor[0].Descriptor = (uint8_t*)temp_Com_Buf;
-                // Report_Descriptor[0].Descriptor_Size = size;
+                //Report_Descriptor[0].Descriptor = (uint8_t*)USBD_KeyRepDesc;
+                Report_Descriptor[0].Descriptor = (uint8_t*)USBD_KeyRepDesc;
+                Report_Descriptor[0].Descriptor_Size = size;
 
                 Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
                 Report_Descriptor[1].Descriptor_Size = size;
@@ -1499,7 +1512,11 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
             
             // Assign the received descriptor and size to the Device_Descriptor structure
-            Device_Descriptor.Descriptor = (uint8_t*)USBD_DeviceDescriptor;
+            if(new_descripter == 0)
+                Device_Descriptor.Descriptor = KB_USBD_DeviceDescriptor;
+            else if (new_descripter == 1)
+                Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
+                
             Device_Descriptor.Descriptor_Size = dev_desc_len;  // Use the actual length received
         // } else {
         //     DUG_PRINTF("Failed to get Device Descriptor, Error Code: %d\n", s);
@@ -1562,8 +1579,17 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
         s = USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
         USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-        Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-        Config_Descriptor_MS.Descriptor_Size = len;
+        //if(new_descripter == 0)
+        {
+            //Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
+            Config_Descriptor_KB.Descriptor = USBD_ConfigDescriptor_KB;
+            Config_Descriptor_KB.Descriptor_Size = len; 
+        }
+        //else if (new_descripter == 1)
+        {
+            Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+            Config_Descriptor_MS.Descriptor_Size = len;
+        }
 
         //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
         //Config_Descriptor_KB.Descriptor_Size = len;

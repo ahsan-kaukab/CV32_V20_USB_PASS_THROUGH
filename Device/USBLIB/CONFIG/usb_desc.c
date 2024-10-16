@@ -12,7 +12,27 @@
 
 /* USB Device Descriptors */
 
-uint8_t USBD_DeviceDescriptor[18] = { 
+// keyboard
+uint8_t KB_USBD_DeviceDescriptor[18] = { 
+    USBD_SIZE_DEVICE_DESC,           // bLength
+    0x01,                            // bDescriptorType (Device)
+    0x00, 0x02,                      // bcdUSB 2.0
+    0x01,                            // bDeviceClass (HID)
+    0x01,                            // bDeviceSubClass (Boot Interface Subclass)
+    0x01,                            // bDeviceProtocol (Keyboard Protocol)
+    DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 (Typically 64 for USB 2.0)
+    0x86, 0x1A,                      // idVendor (Example Vendor ID, replace as needed)
+    0x07, 0xFE,                      // idProduct (Example Product ID, replace as needed)
+    0x00, 0x01,                      // bcdDevice (Device release number)
+    0x01,                            // iManufacturer (String Index)
+    0x02,                            // iProduct (String Index)
+    0x00,                            // iSerialNumber (String Index)
+    0x01                             // bNumConfigurations (1 configuration)
+};
+
+
+// mouse
+uint8_t MS_USBD_DeviceDescriptor[18] = { 
     USBD_SIZE_DEVICE_DESC,           // bLength
     0x01,                            // bDescriptorType (Device)
     0x10, 0x01,                      // bcdUSB 1.10
