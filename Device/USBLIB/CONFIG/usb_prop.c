@@ -216,10 +216,10 @@ void USBD_init(void)
 void USBD_Reset(void)
 {
   pInformation->Current_Configuration = 0;
-  if(new_descripter == 0)
-    pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
-  else
-    pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
+  // if(new_descripter == 0)
+  //   pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
+  // else
+  //   pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
   pInformation->Current_Interface = 0;
 
   SetBTABLE(BTABLE_ADDRESS);
@@ -337,19 +337,19 @@ uint8_t *USBD_GetReportDescriptor(uint16_t Length)
  *
  * @return  The address of the device descriptor.
  */
-uint8_t *USBD_GetHidDescriptor(uint16_t Length)
-{
-  //uint8_t wIndex0 = pInformation->USBwIndexs.bw.bb0;
-  uint8_t wIndex0 = new_descripter;
-  if (wIndex0 > 2)
-  {
-    return NULL;
-  }
-  else
-  {
-    return Standard_GetDescriptorData(Length, &Hid_Descriptor[wIndex0]);
-  }
-}
+// uint8_t *USBD_GetHidDescriptor(uint16_t Length)
+// {
+//   //uint8_t wIndex0 = pInformation->USBwIndexs.bw.bb0;
+//   uint8_t wIndex0 = new_descripter;
+//   if (wIndex0 > 2)
+//   {
+//     return NULL;
+//   }
+//   else
+//   {
+//     return Standard_GetDescriptorData(Length, &Hid_Descriptor[wIndex0]);
+//   }
+// }
 
 /*********************************************************************
  * @fn      USBD_Get_Interface_Setting.
@@ -398,14 +398,14 @@ RESULT USBD_Data_Setup(uint8_t RequestNo)
   {
     uint8_t wValue1 = pInformation->USBwValue1;
 
-    if (wValue1 == HID_REPORT_DESCRIPTOR)
+    //if (wValue1 == HID_REPORT_DESCRIPTOR)
     {
       CopyRoutine = USBD_GetReportDescriptor;
     }
-    else if (wValue1 == HID_DESCRIPTOR)
-    {
-      CopyRoutine = USBD_GetHidDescriptor;
-    }
+    // else if (wValue1 == HID_DESCRIPTOR)
+    // {
+    //   CopyRoutine = USBD_GetHidDescriptor;
+    // }
     if (CopyRoutine)
     {
       pInformation->Ctrl_Info.Usb_wOffset = wOffset;

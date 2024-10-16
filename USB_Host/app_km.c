@@ -44,18 +44,18 @@ volatile uint32_t millis_counter = 0;
 
 // extern uint8_t USBD_DeviceDescriptor[18];
 // extern uint8_t  USBD_ConfigDescriptor_KB[34];
-extern uint8_t  USBD_ConfigDescriptor_MS[];
+//extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
-extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
-/* USB Device String Vendor */
-extern uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR]; 
-/* USB Device String Product */
-extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
-/* USB Device String Serial */
-extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
+// extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
+// /* USB Device String Vendor */
+// extern uint8_t USBD_StringVendor[USBD_SIZE_STRING_VENDOR]; 
+// /* USB Device String Product */
+// extern uint8_t USBD_StringProduct[USBD_SIZE_STRING_PRODUCT];
+// /* USB Device String Serial */
+// extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
 
 ONE_DESCRIPTOR Report_Descriptor[2] =
 {
@@ -63,18 +63,17 @@ ONE_DESCRIPTOR Report_Descriptor[2] =
 	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
 };
 
-ONE_DESCRIPTOR Hid_Descriptor[2] = 
-{ 
-  {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
-  {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
-};
+// ONE_DESCRIPTOR Hid_Descriptor[2] = 
+// { 
+//   {(uint8_t*)&USBD_ConfigDescriptor_KB[18], 0x09},
+//   {(uint8_t*)&USBD_ConfigDescriptor_MS[43], 0x09},
+// };
 
 ONE_DESCRIPTOR Device_Descriptor = // ok (2)
 {
 	(uint8_t*)USBD_DeviceDescriptor,
 	USBD_SIZE_DEVICE_DESC
 };
-//ONE_DESCRIPTOR Device_Descriptor;
 
 ONE_DESCRIPTOR Config_Descriptor_KB = // ok (2)
 {
@@ -82,11 +81,11 @@ ONE_DESCRIPTOR Config_Descriptor_KB = // ok (2)
 	USBD_SIZE_CONFIG_DESC
 };
 
-ONE_DESCRIPTOR Config_Descriptor_MS = // ok (2)
-{
-	(uint8_t*)USBD_ConfigDescriptor_MS,
-	USBD_SIZE_CONFIG_DESC
-};
+ONE_DESCRIPTOR Config_Descriptor_MS; // = // ok (2)
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_MS,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
 ONE_DESCRIPTOR String_Descriptor[4];
 

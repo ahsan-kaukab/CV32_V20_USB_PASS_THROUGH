@@ -42,7 +42,7 @@
 
 #define STANDARD_ENDPOINT_DESC_SIZE             0x09
 
-extern uint8_t USBD_ConfigDescriptor_MS[USBD_SIZE_CONFIG_DESC];
+//extern uint8_t USBD_ConfigDescriptor_MS[USBD_SIZE_CONFIG_DESC];
 extern uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
 
 extern uint8_t USBD_DeviceDescriptor[18];
