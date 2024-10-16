@@ -3079,7 +3079,7 @@ Disassembly of section .text:
     1df8:	b5d5                	j	1cdc <USBH_MainDeal+0x176>
     1dfa:	4605                	li	a2,1
     1dfc:	3cc69c63          	bne	a3,a2,21d4 <USBH_MainDeal+0x66e>
-    1e00:	4611                	li	a2,4
+    1e00:	4615                	li	a2,5
     1e02:	b719                	j	1d08 <USBH_MainDeal+0x1a2>
     1e04:	f00681e3          	beqz	a3,1d06 <USBH_MainDeal+0x1a0>
     1e08:	4605                	li	a2,1
@@ -3365,7 +3365,7 @@ Disassembly of section .text:
     218e:	b1c5                	j	1e6e <USBH_MainDeal+0x308>
     2190:	4605                	li	a2,1
     2192:	04c69463          	bne	a3,a2,21da <USBH_MainDeal+0x674>
-    2196:	4611                	li	a2,4
+    2196:	4615                	li	a2,5
     2198:	bfa5                	j	2110 <USBH_MainDeal+0x5aa>
     219a:	dab5                	beqz	a3,210e <USBH_MainDeal+0x5a8>
     219c:	4605                	li	a2,1

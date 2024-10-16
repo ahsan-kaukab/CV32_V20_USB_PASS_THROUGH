@@ -1984,7 +1984,7 @@ void USBH_MainDeal( void )
                                 {
                                     // = Com_Buf[1] / 2;  // X movement (signed byte)
                                     //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                 }
                             }
                             else
@@ -1995,7 +1995,7 @@ void USBH_MainDeal( void )
                                 {
                                     //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                     //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                 }
                             }
 
@@ -2261,7 +2261,7 @@ void USBH_MainDeal( void )
                                             {
                                                 //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                                 //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                             }
                                         }
                                         else
@@ -2272,7 +2272,7 @@ void USBH_MainDeal( void )
                                             {
                                                 //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                                 //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                             }
                                         }
 

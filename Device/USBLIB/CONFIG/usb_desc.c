@@ -208,11 +208,11 @@ uint8_t USBD_MouseRepDesc[] =
     // Button States
     0x05, 0x09,                     // Usage Page (Button)
     0x19, 0x01,                     // Usage Minimum (Button 1)
-    0x29, 0x05,                     // Usage Maximum (Button 5, adjust if you have more)
+    0x29, 0x06,                     // Usage Maximum (Button 5, adjust if you have more)
     0x15, 0x00,                     // Logical Minimum (0)
     0x25, 0x01,                     // Logical Maximum (1)
     0x75, 0x01,                     // Report Size (1)
-    0x95, 0x05,                     // Report Count (5) - total number of buttons
+    0x95, 0x06,                     // Report Count (5) - total number of buttons
     0x81, 0x02,                     // Input (Data, Variable, Absolute)
     
     // Padding for alignment
