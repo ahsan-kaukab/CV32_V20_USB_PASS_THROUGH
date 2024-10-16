@@ -59,7 +59,7 @@ extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 ONE_DESCRIPTOR Report_Descriptor[2] =
 {
 	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
-	{(uint8_t*)USBD_MouseRepDesc, USBD_SIZE_REPORT_DESC_MS},
+	{(uint8_t*)USBD_MouseRepDesc, sizeof(USBD_MouseRepDesc)},
 };
 
 // ONE_DESCRIPTOR Hid_Descriptor[2] = 
@@ -80,11 +80,11 @@ ONE_DESCRIPTOR Config_Descriptor_KB = // ok (2)
 	USBD_SIZE_CONFIG_DESC
 };
 
-ONE_DESCRIPTOR Config_Descriptor_MS; //= // ok (2)
-// {
-// 	(uint8_t*)USBD_ConfigDescriptor_MS,
-// 	USBD_SIZE_CONFIG_DESC
-// };
+ONE_DESCRIPTOR Config_Descriptor_MS = // ok (2)
+{
+	(uint8_t*)USBD_ConfigDescriptor_MS,
+	USBD_SIZE_CONFIG_DESC
+};
 
 ONE_DESCRIPTOR String_Descriptor[4];
 
@@ -399,21 +399,21 @@ ENUM_START:
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
     USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-    for( i = 0; i < len; i++ )
-    {
-        USBD_ConfigDescriptor_MS[i] = temp_Com_Buf[i];
-    }
+    // for( i = 0; i < len; i++ )
+    // {
+    //     USBD_ConfigDescriptor_MS[i] = temp_Com_Buf[i];
+    // }
 
-    //if(new_descripter == 0)
+    if(new_descripter == 0)
     {
         Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
         Config_Descriptor_KB.Descriptor_Size = len; 
     }
     //else if (new_descripter == 1)
-    {
-        Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-        Config_Descriptor_MS.Descriptor_Size = len;
-    }
+    // {
+    //     Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+    //     Config_Descriptor_MS.Descriptor_Size = len;
+    // }
 
     //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
     //Config_Descriptor_KB.Descriptor_Size = len;
@@ -824,8 +824,8 @@ GETREP_START:
                 Report_Descriptor[0].Descriptor = (uint8_t*)USBD_KeyRepDesc;
                 Report_Descriptor[0].Descriptor_Size = size;
 
-                Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
-                Report_Descriptor[1].Descriptor_Size = size;
+                // Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
+                // Report_Descriptor[1].Descriptor_Size = size;
 
                 //Hid_Descriptor[1].Descriptor = find_hid_descriptor(temp_Com_Buf,size);
 
@@ -1586,10 +1586,10 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             Config_Descriptor_KB.Descriptor_Size = len; 
         }
         //else if (new_descripter == 1)
-        {
-            Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-            Config_Descriptor_MS.Descriptor_Size = len;
-        }
+        // {
+        //     Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+        //     Config_Descriptor_MS.Descriptor_Size = len;
+        // }
 
         //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
         //Config_Descriptor_KB.Descriptor_Size = len;
@@ -1984,7 +1984,7 @@ void USBH_MainDeal( void )
                                 {
                                     // = Com_Buf[1] / 2;  // X movement (signed byte)
                                     //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
                                 }
                             }
                             else
@@ -1995,7 +1995,7 @@ void USBH_MainDeal( void )
                                 {
                                     //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                     //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
                                 }
                             }
 
@@ -2261,7 +2261,7 @@ void USBH_MainDeal( void )
                                             {
                                                 //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                                 //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
                                             }
                                         }
                                         else
@@ -2272,7 +2272,7 @@ void USBH_MainDeal( void )
                                             {
                                                 //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                                 //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4*sizeof(uint8_t));
                                             }
                                         }
 

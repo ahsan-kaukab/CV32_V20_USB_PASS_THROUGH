@@ -26,7 +26,7 @@
 
 #define DEF_USBD_UEP0_SIZE          64
 #define DEF_ENDP_SIZE_KB            8  // 8
-#define DEF_ENDP_SIZE_MS            4  // 4  
+#define DEF_ENDP_SIZE_MS            5  // 4  
 #define DEF_USBD_MAX_PACK_SIZE      64
        
 #define USBD_SIZE_DEVICE_DESC        18

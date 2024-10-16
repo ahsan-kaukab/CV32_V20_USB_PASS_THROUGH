@@ -83,7 +83,7 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 // 	{(uint8_t*)USBD_StringVendor, USBD_SIZE_STRING_VENDOR},
 // 	{(uint8_t*)USBD_StringProduct,USBD_SIZE_STRING_PRODUCT},
 // 	{(uint8_t*)USBD_StringSerial, USBD_SIZE_STRING_SERIAL}
-// };
+//  }; 
 
 // ONE_DESCRIPTOR Report_Descriptor[2] =
 // {
