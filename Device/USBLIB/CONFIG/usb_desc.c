@@ -25,7 +25,7 @@ uint8_t USBD_DeviceDescriptor[18] = {
     0x00, 0x01,                      // bcdDevice 2.00
     0x01,                            // iManufacturer (String Index)
     0x02,                            // iProduct (String Index)
-    0x00,                            // iSerialNumber (String Index)
+    0x00,                            //  iSerialNumber (String Index)
     0x01,                            // bNumConfigurations 1
 };
 
@@ -71,45 +71,7 @@ uint8_t  USBD_ConfigDescriptor_KB[34] = {
 };
 
 // /* USB Configration Descriptors */
-// uint8_t  USBD_ConfigDescriptor_MS[34] = { 
-//      /* Configuration Descriptor */
-//     0x09,                           // bLength
-//     0x02,                           // bDescriptorType
-//     USBD_SIZE_CONFIG_DESC & 0xFF, USBD_SIZE_CONFIG_DESC >> 8, // wTotalLength
-//     0x01,                           // bNumInterfaces
-//     0x01,                           // bConfigurationValue
-//     0x00,                           // iConfiguration
-//     0xA0,                           // bmAttributes: Bus Powered; Remote Wakeup
-//     0x32,                           // MaxPower: 100mA
-
-//     /* Interface Descriptor (Keyboard) */
-//     0x09,                           // bLength
-//     0x04,                           // bDescriptorType
-//     0x00,                           // bInterfaceNumber
-//     0x00,                           // bAlternateSetting
-//     0x01,                           // bNumEndpoints
-//     0x03,                           // bInterfaceClass
-//     0x01,                           // bInterfaceSubClass
-//     0x02,                           // bInterfaceProtocol: Mouse
-//     0x00,                           // iInterface
-
-//     /* HID Descriptor (Keyboard) */
-//     0x09,                           // bLength
-//     0x21,                           // bDescriptorType
-//     0x11, 0x01,                     // bcdHID
-//     0x00,                           // bCountryCode
-//     0x01,                           // bNumDescriptors
-//     0x22,                           // bDescriptorType
-//     USBD_SIZE_REPORT_DESC_MS & 0xFF, USBD_SIZE_REPORT_DESC_MS >> 8, // wDescriptorLength
-
-//     /* Endpoint Descriptor (Keyboard) */
-//     0x07,                           // bLength
-//     0x05,                           // bDescriptorType
-//     0x81,                           // bEndpointAddress: IN Endpoint 1
-//     0x03,                           // bmAttributes
-//     DEF_ENDP_SIZE_MS & 0xFF, DEF_ENDP_SIZE_MS >> 8, // wMaxPacketSize
-//     0x05                            // bInterval: 5mS
-// };
+uint8_t  USBD_ConfigDescriptor_MS[];
 
 // /* USB String Descriptors */
 // uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID] = {

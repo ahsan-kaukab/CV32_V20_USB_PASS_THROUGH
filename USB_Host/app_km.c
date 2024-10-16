@@ -43,7 +43,7 @@ volatile uint32_t millis_counter = 0;
 
 // extern uint8_t USBD_DeviceDescriptor[18];
 // extern uint8_t  USBD_ConfigDescriptor_KB[34];
-//extern uint8_t  USBD_ConfigDescriptor_MS[];
+extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
@@ -394,6 +394,11 @@ ENUM_START:
     uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ];
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
     USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
+
+    for( i = 0; i < len; i++ )
+    {
+        USBD_ConfigDescriptor_MS[i] = temp_Com_Buf[i];
+    }
 
     Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
     Config_Descriptor_MS.Descriptor_Size = len;
