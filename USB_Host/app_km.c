@@ -323,11 +323,28 @@ ENUM_START:
     /* Get USB device device descriptor */
     DUG_PRINTF("Get DevDesc: ");
     uint8_t  t_DevDesc_Buf[ 18 ]; 
-    s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
-    USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, t_DevDesc_Buf );
 
-   //Device_Descriptor.Descriptor = (uint8_t*)t_DevDesc_Buf;
-   //Device_Descriptor.Descriptor_Size = 18;  // Explicitly assigning the size
+    // Declare variables
+    uint16_t dev_desc_len = 0;            // Variable to hold the actual length of the device descriptor
+
+    s = USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, DevDesc_Buf, sizeof(DevDesc_Buf), &dev_desc_len);
+    //s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
+
+    // Call USBFSH_GetDeviceDescr with proper arguments
+    DUG_PRINTF("Get DevDesc: ");
+    USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, t_DevDesc_Buf, sizeof(t_DevDesc_Buf), &dev_desc_len);
+
+    // Check if the call was successful
+    //if (s == ERR_SUCCESS) 
+    //{
+        DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
+        
+        // Assign the received descriptor and size to the Device_Descriptor structure
+        Device_Descriptor.Descriptor = USBD_DeviceDescriptor;
+        Device_Descriptor.Descriptor_Size = dev_desc_len;  // Use the actual length received
+    // } else {
+    //     DUG_PRINTF("Failed to get Device Descriptor, Error Code: %d\n", s);
+    // }
 
     if( s == ERR_SUCCESS )
     {
@@ -1462,10 +1479,28 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     do
     {
         enum_cnt++;
-        uint8_t  t_DevDesc_Buf[ 18 ];
-        s = USBFSH_GetDeviceDescr( &RootHubDev.Device[ hub_port ].bEp0MaxPks, DevDesc_Buf );
-        USBFSH_GetDeviceDescr( &RootHubDev.Device[ hub_port ].bEp0MaxPks, t_DevDesc_Buf );
-        
+        DUG_PRINTF("Get DevDesc: ");
+        uint8_t  t_DevDesc_Buf[ 18 ]; 
+        // Declare variables
+        uint16_t dev_desc_len = 0;            // Variable to hold the actual length of the device descriptor
+
+        s = USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, DevDesc_Buf, sizeof(DevDesc_Buf), &dev_desc_len);
+
+        // Call USBFSH_GetDeviceDescr with proper arguments
+        DUG_PRINTF("Get DevDesc: ");
+        USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, t_DevDesc_Buf, sizeof(t_DevDesc_Buf), &dev_desc_len);
+
+        // Check if the call was successful
+        //if (s == ERR_SUCCESS) 
+        //{
+            DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
+            
+            // Assign the received descriptor and size to the Device_Descriptor structure
+            Device_Descriptor.Descriptor = (uint8_t*)USBD_DeviceDescriptor;
+            Device_Descriptor.Descriptor_Size = dev_desc_len;  // Use the actual length received
+        // } else {
+        //     DUG_PRINTF("Failed to get Device Descriptor, Error Code: %d\n", s);
+        // }
         //Device_Descriptor.Descriptor = (uint8_t*)t_DevDesc_Buf;
         //Device_Descriptor.Descriptor_Size = 18;  // Explicitly assigning the size
 

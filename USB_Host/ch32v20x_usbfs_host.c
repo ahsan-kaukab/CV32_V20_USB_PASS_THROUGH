@@ -460,25 +460,40 @@ uint8_t USBFSH_CtrlTransfer( uint8_t ep0_size, uint8_t *pbuf, uint16_t *plen )
  *
  * @return  The result of getting the device descriptor.
  */
-uint8_t USBFSH_GetDeviceDescr( uint8_t *pep0_size, uint8_t *pbuf )
+uint8_t USBFSH_GetDeviceDescr(uint8_t *pep0_size, uint8_t *pbuf, uint16_t buf_len, uint16_t *pdev_desc_len)
 {
-    uint8_t  s;
-    uint16_t len;
+     uint8_t  s;
+    uint16_t len = 0;
 
+    // Check if buffer length is sufficient for the descriptor
+    if (buf_len < sizeof(USB_DEV_DESCR)) {
+        return ERR_USB_BUF_OVER; // Error: buffer is too small
+    }
+
+    // Set the endpoint size to the default control endpoint size
     *pep0_size = DEFAULT_ENDP0_SIZE;
-    memcpy( pUSBFS_SetupRequest, SetupGetDevDesc, sizeof( USB_SETUP_REQ ) );
-    s = USBFSH_CtrlTransfer( *pep0_size, pbuf, &len );
-    if( s != ERR_SUCCESS )
-    {
-        return s;
+    
+    // Prepare the setup packet for getting device descriptor
+    memcpy(pUSBFS_SetupRequest, SetupGetDevDesc, sizeof(USB_SETUP_REQ));
+
+    // Perform the control transfer
+    s = USBFSH_CtrlTransfer(*pep0_size, pbuf, &len);
+    if (s != ERR_SUCCESS) {
+        return s; // Error occurred in control transfer
     }
 
-    *pep0_size = ( (PUSB_DEV_DESCR)pbuf )->bMaxPacketSize0;
-    if( len < ( (PUSB_SETUP_REQ)SetupGetDevDesc )->wLength )
-    {
-        return ERR_USB_BUF_OVER;
+    // Check if we received enough data for a valid device descriptor
+    if (len < sizeof(USB_DEV_DESCR)) {
+        return ERR_USB_BUF_OVER; // Error: incomplete device descriptor
     }
-    return ERR_SUCCESS;
+
+    // Update the endpoint 0 size from the received descriptor
+    *pep0_size = ((PUSB_DEV_DESCR)pbuf)->bMaxPacketSize0;
+
+    // Return the actual length of the descriptor received
+    *pdev_desc_len = len;
+    
+    return ERR_SUCCESS; // Success
 }
 
 /*********************************************************************
