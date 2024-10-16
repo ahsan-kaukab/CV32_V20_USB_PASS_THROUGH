@@ -30,8 +30,7 @@ uint8_t  KB_Data_Pack[ 8 ] = { 0x00 };                                          
 uint8_t  KB_Data_Buffer[ 8 ] = { 0x00 };                                        // Secondary HID buffer
 //uint8_t  MS_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
 //uint8_t  MS_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
-//uint8_t  *KB_Data_Pack;
-//uint8_t  *KB_Data_Buffer;
+
 uint8_t  KB_Data_Pack_Full = 0;                                                 // Primary HID buffer state
 uint8_t  KB_Data_Buffer_Full = 0;                                               // Secondary HID buffer state
 uint8_t  KB_Data_State = 0;                                                     // Current HID buffer
@@ -81,7 +80,7 @@ ONE_DESCRIPTOR Config_Descriptor_KB = // ok (2)
 	USBD_SIZE_CONFIG_DESC
 };
 
-ONE_DESCRIPTOR Config_Descriptor_MS; // = // ok (2)
+ONE_DESCRIPTOR Config_Descriptor_MS; //= // ok (2)
 // {
 // 	(uint8_t*)USBD_ConfigDescriptor_MS,
 // 	USBD_SIZE_CONFIG_DESC
@@ -1865,7 +1864,7 @@ void USBH_MainDeal( void )
 #if DEF_DEBUG_PRINTF
                                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
 #endif
-                                //if( len >= 8 )
+                                if( len >= 5 )
                                 //if( len >= kb_ms )
                                 {
                                     if(KB_Data_State)
@@ -1954,7 +1953,7 @@ void USBH_MainDeal( void )
                                 {
                                     // = Com_Buf[1] / 2;  // X movement (signed byte)
                                     //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4);
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                 }
                             }
                             else
@@ -1965,7 +1964,7 @@ void USBH_MainDeal( void )
                                 {
                                     //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                     //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4);
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                 }
                             }
 
@@ -2183,7 +2182,7 @@ void USBH_MainDeal( void )
                                             }
 
                                             // lets see if its needed or not
-                                            //if( len >= 8 )
+                                            if( len >= 5 )
                                             //if( len >= kb_ms )
                                             {
                                                 if(KB_Data_State)
@@ -2231,7 +2230,7 @@ void USBH_MainDeal( void )
                                             {
                                                 //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                                 //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4);
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                             }
                                         }
                                         else
@@ -2242,7 +2241,7 @@ void USBH_MainDeal( void )
                                             {
                                                 //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
                                                 //Com_Buf[2] = Com_Buf[2] / 2;  // Y movement (signed byte)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 4);
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                             }
                                         }
 
