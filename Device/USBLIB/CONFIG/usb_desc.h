@@ -42,7 +42,7 @@
 
 #define STANDARD_ENDPOINT_DESC_SIZE             0x09
 
-extern uint8_t USBD_ConfigDescriptor_MS[USBD_SIZE_CONFIG_DESC];
+// extern uint8_t USBD_ConfigDescriptor_MS[USBD_SIZE_CONFIG_DESC];
 extern uint8_t USBD_ConfigDescriptor_KB[USBD_SIZE_CONFIG_DESC];
 
 extern uint8_t KB_USBD_DeviceDescriptor[18];
@@ -58,8 +58,8 @@ extern uint8_t MS_USBD_DeviceDescriptor[18];
 // /* USB Device String Serial */
 // extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
 
-extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
-extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
+// extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
+// extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
 extern uint8_t new_descripter;
 

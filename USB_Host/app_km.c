@@ -43,11 +43,11 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
 
 // extern uint8_t USBD_DeviceDescriptor[18];
-// extern uint8_t  USBD_ConfigDescriptor_KB[34];
-extern uint8_t  USBD_ConfigDescriptor_MS[];
+extern uint8_t  USBD_ConfigDescriptor_KB[34];
+//extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
-extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
+// extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
 // extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
 // /* USB Device String Vendor */
@@ -57,11 +57,11 @@ extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 // /* USB Device String Serial */
 // extern uint8_t USBD_StringSerial[USBD_SIZE_STRING_SERIAL];
 
-ONE_DESCRIPTOR Report_Descriptor[2] =
-{
-	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
-	{(uint8_t*)USBD_MouseRepDesc, sizeof(USBD_MouseRepDesc)},
-};
+ONE_DESCRIPTOR Report_Descriptor;  //[2] =
+// {
+// 	{(uint8_t*)USBD_KeyRepDesc, USBD_SIZE_REPORT_DESC_KB},
+// 	{(uint8_t*)USBD_MouseRepDesc, sizeof(USBD_MouseRepDesc)},
+// };
 
 // ONE_DESCRIPTOR Hid_Descriptor[2] = 
 // { 
@@ -75,17 +75,17 @@ ONE_DESCRIPTOR Device_Descriptor = // ok (2)
 	USBD_SIZE_DEVICE_DESC
 };
 
-ONE_DESCRIPTOR Config_Descriptor_KB = // ok (2)
-{
-	(uint8_t*)USBD_ConfigDescriptor_KB,
-	USBD_SIZE_CONFIG_DESC
-};
+ONE_DESCRIPTOR Config_Descriptor_KB; // ok (2)
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_KB,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
-ONE_DESCRIPTOR Config_Descriptor_MS = // ok (2)
-{
-	(uint8_t*)USBD_ConfigDescriptor_MS,
-	USBD_SIZE_CONFIG_DESC
-};
+//ONE_DESCRIPTOR Config_Descriptor_MS; //= // ok (2)
+// {
+// 	(uint8_t*)USBD_ConfigDescriptor_MS,
+// 	USBD_SIZE_CONFIG_DESC
+// };
 
 ONE_DESCRIPTOR String_Descriptor[4];
 
@@ -411,8 +411,8 @@ ENUM_START:
         Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
         Config_Descriptor_KB.Descriptor_Size = len; 
         
-        Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-        Config_Descriptor_MS.Descriptor_Size = len; 
+        // Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+        // Config_Descriptor_MS.Descriptor_Size = len; 
     }
     //else if (new_descripter == 1)
     // {
@@ -842,12 +842,12 @@ GETREP_START:
 
             if( s == ERR_SUCCESS )
             {
-                //Report_Descriptor[0].Descriptor = (uint8_t*)USBD_KeyRepDesc;
-                Report_Descriptor[0].Descriptor = (uint8_t*)temp_Com_Buf;
-                Report_Descriptor[0].Descriptor_Size = size;
+                //eport_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
+                Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
+                Report_Descriptor.Descriptor_Size = size;
 
-                Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
-                Report_Descriptor[1].Descriptor_Size = size;
+                // Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
+                // Report_Descriptor[1].Descriptor_Size = size;
 
                 report_byte = calculate_report_size(temp_Com_Buf, size);
 
@@ -1612,8 +1612,8 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
             Config_Descriptor_KB.Descriptor_Size = len; 
             
-            Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-            Config_Descriptor_MS.Descriptor_Size = len; 
+            // Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
+            // Config_Descriptor_MS.Descriptor_Size = len; 
         }
         //else if (new_descripter == 1)
         // {
@@ -2009,7 +2009,7 @@ void USBH_MainDeal( void )
                             if(KB_Data_State)
                             {
                                 //if(new_descripter == 0)
-                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, report_byte);
+                                    s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer,report_byte);
                                 // else if (new_descripter == 1)
                                 // {
                                 //     // = Com_Buf[1] / 2;  // X movement (signed byte)
@@ -2286,7 +2286,7 @@ void USBH_MainDeal( void )
                                         if(KB_Data_State)
                                         {
                                             //if(new_descripter == 0)
-                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, report_byte);
+                                                s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer,report_byte);
                                             // else if (new_descripter == 1)
                                             // {
                                             //     //Com_Buf[1] = Com_Buf[1] / 2;  // X movement (signed byte)
