@@ -216,10 +216,10 @@ void USBD_init(void)
 void USBD_Reset(void)
 {
   pInformation->Current_Configuration = 0;
-  if(new_descripter == 0)
-    pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
-  else
-    pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
+  // if(new_descripter == 0)
+  //   pInformation->Current_Feature = USBD_ConfigDescriptor_KB[7];
+  // else
+  //   pInformation->Current_Feature = USBD_ConfigDescriptor_MS[7];
   pInformation->Current_Interface = 0;
 
   SetBTABLE(BTABLE_ADDRESS);
@@ -276,10 +276,10 @@ uint8_t *USBD_GetDeviceDescriptor(uint16_t Length)
  */
 uint8_t *USBD_GetConfigDescriptor(uint16_t Length)
 {
-  if(new_descripter == 0)
+  //if(new_descripter == 0)
     return Standard_GetDescriptorData(Length, &Config_Descriptor_KB);
-  else 
-    return Standard_GetDescriptorData(Length, &Config_Descriptor_MS);
+  // else 
+  //   return Standard_GetDescriptorData(Length, &Config_Descriptor_MS);
 }
 
 /*******************************************************************************
@@ -316,8 +316,8 @@ uint8_t *USBD_GetStringDescriptor(uint16_t Length)
  */
 uint8_t *USBD_GetReportDescriptor(uint16_t Length)
 {
-  //uint8_t wIndex0 = pInformation->USBwIndexs.bw.bb0;
-  uint8_t wIndex0 = new_descripter;
+  uint8_t wIndex0 = pInformation->USBwIndexs.bw.bb0;
+  //uint8_t wIndex0 = new_descripter;
   if (wIndex0 > 2)
   {
     return NULL;
