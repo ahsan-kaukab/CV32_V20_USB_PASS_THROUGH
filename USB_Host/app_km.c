@@ -425,15 +425,15 @@ ENUM_START:
 
     USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-    for( i = 0; i < 18; i++ )
-    {
-        USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
-    }
+    // for( i = 0; i < 18; i++ )
+    // {
+    //     USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
+    // }
 
     //if(temp_Com_Buf != NULL)
     {
-        // Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
-        Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
+        Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
+        //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
         Config_Descriptor_KB.Descriptor_Size = 34; 
     }
 
@@ -857,10 +857,10 @@ GETREP_START:
 
             if(Report_Descriptor.Descriptor == NULL)
             {
-                //Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
-                Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
-                //Report_Descriptor.Descriptor_Size = (sizeof(USBD_KeyRepDesc) / sizeof(USBD_KeyRepDesc[0]));
-                Report_Descriptor.Descriptor_Size =  size;
+                Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
+                //Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
+                Report_Descriptor.Descriptor_Size = (sizeof(USBD_KeyRepDesc) / sizeof(USBD_KeyRepDesc[0]));
+                //Report_Descriptor.Descriptor_Size =  size;
 
                 report_byte = calculate_report_size(Report_Descriptor.Descriptor, size);
 
