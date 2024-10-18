@@ -394,16 +394,6 @@ ENUM_START:
     {
         /* Print USB device device descriptor */
     }
-    // else
-    // {
-    //     /* Determine whether the maximum number of retries has been reached, and retry if not reached */
-    //     DUG_PRINTF( "Err(%02x)\r\n", s );
-    //     if( enum_cnt <= 5 )
-    //     {
-    //         goto ENUM_START;
-    //     }
-    //     return DEF_DEV_DESCR_GETFAIL;
-    // }
 
     /* Set the USB device address */
     DUG_PRINTF("Set DevAddr: ");
@@ -863,9 +853,9 @@ GETREP_START:
 
             int size = HostCtl[ index ].Interface[ num ].HidDescLen;
 
-            //if( s == ERR_SUCCESS )
+            if(Report_Descriptor.Descriptor == NULL)
             {
-                //eport_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
+                //Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
                 Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
                 Report_Descriptor.Descriptor_Size = size;
 
@@ -874,9 +864,18 @@ GETREP_START:
                 /* Analyze Report Descriptor */
                 KM_AnalyzeHidReportDesc( index, num );
 
-                num_tmp--;
-
                 int i =0;
+
+                for(i=0;i<size;i++)
+                {
+                    if(Report_Descriptor.Descriptor[i] == 0xc0 && Report_Descriptor.Descriptor[i+1] == 0xc0)
+                    {
+                        i = i + 2;
+                        break;
+                    }
+                }
+                Report_Descriptor.Descriptor_Size = i;
+
                 #if DEF_DEBUG_PRINTF_IMP
                         DUG_PRINTF("HID REPORT DESCRIPTER ..........  \r\n");
                         for( i = 0; i < Report_Descriptor.Descriptor_Size; i++ )
@@ -886,16 +885,7 @@ GETREP_START:
                         DUG_PRINTF("\r\n");
                 #endif
             }
-            // else
-            // {
-            //     DUG_PRINTF( "Err(%02x)\r\n", s );
-            //     if( getrep_cnt <= 5 )
-            //     {
-            //         goto GETREP_START;
-            //     }
-
-            //     return DEF_REP_DESCR_GETFAIL;
-            // }
+            num_tmp--;
         }
         else
         {
@@ -2012,14 +2002,14 @@ void USBH_MainDeal( void )
                                 // }
                             }
                             int i =0;
-                            #if DEF_DEBUG_PRINTF_IMP
-                                    DUG_PRINTF("DATAAAAAAAAA 2 ..........  \r\n");
-                                    for( i = 0; i < report_byte; i++ )
-                                    {
-                                        DUG_PRINTF( "%02x ", KB_Data_Buffer[ i ] );
-                                    }
-                                    DUG_PRINTF("\r\n");
-                            #endif
+                            // #if DEF_DEBUG_PRINTF_IMP
+                            //         DUG_PRINTF("DATAAAAAAAAA 2 ..........  \r\n");
+                            //         for( i = 0; i < report_byte; i++ )
+                            //         {
+                            //             DUG_PRINTF( "%02x ", KB_Data_Buffer[ i ] );
+                            //         }
+                            //         DUG_PRINTF("\r\n");
+                            // #endif
 
                             if(s == NoREADY)
                             {
@@ -2298,14 +2288,14 @@ void USBH_MainDeal( void )
                                             }
                                         }
                                         int i =0;
-                                        #if DEF_DEBUG_PRINTF_IMP
-                                                DUG_PRINTF("DATAAAAAAAAA ..........  \r\n");
-                                                for( i = 0; i < report_byte; i++ )
-                                                {
-                                                    DUG_PRINTF( "%02x ", KB_Data_Buffer[ i ] );
-                                                }
-                                                DUG_PRINTF("\r\n");
-                                        #endif
+                                        // #if DEF_DEBUG_PRINTF_IMP
+                                        //         DUG_PRINTF("DATAAAAAAAAA ..........  \r\n");
+                                        //         for( i = 0; i < report_byte; i++ )
+                                        //         {
+                                        //             DUG_PRINTF( "%02x ", KB_Data_Buffer[ i ] );
+                                        //         }
+                                        //         DUG_PRINTF("\r\n");
+                                        // #endif
 
                                         if(s == NoREADY)
                                         {
