@@ -15,23 +15,40 @@
 // keyboard 
 // 12 01 10 01 00 00 00 08 3c 41 11 20 00 59 01 02 00 01 
 // 1811610008606517320891201
+// new one
+// uint8_t KB_USBD_DeviceDescriptor[18] = { 
+//     USBD_SIZE_DEVICE_DESC,           // bLength
+//     0x01,                            // bDescriptorType (Device)
+//     0x10, 0x01,                      // bcdUSB 2.0
+//     0x01,                            // bDeviceClass (HID)
+//     0x00,                            // bDeviceSubClass (Boot Interface Subclass)
+//     0x00,                            // bDeviceProtocol (Keyboard Protocol)
+//     DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 (Typically 64 for USB 2.0)
+//     0x3c, 0x41,                      // idVendor (Example Vendor ID, replace as needed)
+//     0x05, 10,                      // idProduct (Example Product ID, replace as needed)
+//     0x00, 0x59,                      // bcdDevice (Device release number)
+//     0x01,                            // iManufacturer (String Index)
+//     0x02,                            // iProduct (String Index)
+//     0x00,                            // iSerialNumber (String Index)
+//     0x01                             // bNumConfigurations (1 configuration)
+// };
 
-uint8_t KB_USBD_DeviceDescriptor[18] = { 
-    USBD_SIZE_DEVICE_DESC,           // bLength
-    0x01,                            // bDescriptorType (Device)
-    0x00, 0x02,                      // bcdUSB 2.0
-    0x01,                            // bDeviceClass (HID)
-    0x01,                            // bDeviceSubClass (Boot Interface Subclass)
-    0x01,                            // bDeviceProtocol (Keyboard Protocol)
-    DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 (Typically 64 for USB 2.0)
-    0x86, 0x1A,                      // idVendor (Example Vendor ID, replace as needed)
-    0x07, 0xFE,                      // idProduct (Example Product ID, replace as needed)
-    0x00, 0x01,                      // bcdDevice (Device release number)
-    0x01,                            // iManufacturer (String Index)
-    0x02,                            // iProduct (String Index)
-    0x00,                            // iSerialNumber (String Index)
-    0x01                             // bNumConfigurations (1 configuration)
-};
+// uint8_t KB_USBD_DeviceDescriptor[18] = { 
+//     USBD_SIZE_DEVICE_DESC,           // bLength
+//     0x01,                            // bDescriptorType (Device)
+//     0x00, 0x02,                      // bcdUSB 2.0
+//     0x01,                            // bDeviceClass (HID)
+//     0x01,                            // bDeviceSubClass (Boot Interface Subclass)
+//     0x01,                            // bDeviceProtocol (Keyboard Protocol)
+//     DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 (Typically 64 for USB 2.0)
+//     0x86, 0x1A,                      // idVendor (Example Vendor ID, replace as needed)
+//     0x07, 0xFE,                      // idProduct (Example Product ID, replace as needed)
+//     0x00, 0x01,                      // bcdDevice (Device release number)
+//     0x01,                            // iManufacturer (String Index)
+//     0x02,                            // iProduct (String Index)
+//     0x00,                            // iSerialNumber (String Index)
+//     0x01                             // bNumConfigurations (1 configuration)
+// };
 
 
 // mouse
@@ -79,7 +96,13 @@ uint8_t MS_USBD_DeviceDescriptor[18]; //=
 //     0x01,                            // bNumConfigurations 1
 // };
 
-// // /* USB Configration Descriptors */
+// uint8_t USBD_ConfigDescriptor_KB[] = {
+//     0x09, 0x02, 0x19, 0x00, 0x01, 0x01, 0x02, 0xA0, 0x32, // Configuration Descriptor
+//     0x09, 0x04, 0x00, 0x00, 0x01, 0x03, 0x01, 0x01, 0x00, // Interface Descriptor
+//     0x09, 0x21, 0x11, 0x01, 0x00, 0x01, 0x22, 0x02, 0x00, // HID Descriptor
+//     0x07, 0x05, 0x81, 0x03, 0x01, 0x00, 0x18               // Endpoint Descriptor
+// };
+// /* USB Configration Descriptors */
 uint8_t  USBD_ConfigDescriptor_KB[34] = { 
      /* Configuration Descriptor */
     0x09,                           // bLength
@@ -188,6 +211,43 @@ uint8_t  USBD_ConfigDescriptor_KB[34] = {
 // 	USBD_SIZE_STRING_SERIAL,          
 // 	USB_STRING_DESCRIPTOR_TYPE,                   
 // 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
+// };
+
+// new
+// uint8_t USBD_KeyRepDesc[] =
+// {
+//     0x05, 0x01,                     // Usage Page (Generic Desktop)
+//     0x09, 0x06,                     // Usage (Keyboard)
+//     0xA1, 0x01,                     // Collection (Application)
+//     0x05, 0x07,                     // Usage Page (Key Codes)
+//     0x19, 0xE0,                     // Usage Minimum (224)
+//     0x29, 0xE7,                     // Usage Maximum (231)
+//     0x15, 0x00,                     // Logical Minimum (0)
+//     0x25, 0x01,                     // Logical Maximum (1)
+//     0x75, 0x01,                     // Report Size (1)
+//     0x95, 0x08,                     // Report Count (8)
+//     0x81, 0x02,                     // Input (Data,Variable,Absolute)
+//     0x95, 0x01,                     // Report Count (1)
+//     0x75, 0x08,                     // Report Size (8)
+//     0x81, 0x01,                     // Input (Constant)
+//     0x95, 0x05,                     // Report Count (5)
+//     0x75, 0x01,                     // Report Size (1)
+//     0x05, 0x08,                     // Usage Page (LEDs)
+//     0x19, 0x01,                     // Usage Minimum (1)
+//     0x29, 0x05,                     // Usage Maximum (5)
+//     0x91, 0x02,                     // Output (Data,Variable,Absolute)
+//     0x95, 0x01,                     // Report Count (1)
+//     0x75, 0x03,                     // Report Size (3)
+//     0x91, 0x01,                     // Output (Constant,Array,Absolute)
+//     0x95, 0x06,                     // Report Count (6)
+//     0x75, 0x08,                     // Report Size (8)
+//     0x15, 0x00,                     // Logical Minimum (0)
+//     0x26, 0xff, 0x00,               // Logical Maximum (255)
+//     0x05, 0x07,                     // Usage Page (Key Codes)
+//     0x19, 0x00,                     // Usage Minimum (0)
+//     0x2a, 0xff, 0x00,               // Usage Maximum (255)
+//     0x81, 0x00,                     // Input (Data,Array,Absolute)
+//     0xC0 
 // };
 
 uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB] =

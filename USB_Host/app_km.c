@@ -28,8 +28,8 @@ uint8_t report_byte = 0;
 /* Variable Definition */
 static uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
 static uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            // General Buffer
-uint8_t  KB_Data_Pack[ 64 ] = { 0x00 };                                          // Primary HID buffer
-uint8_t  KB_Data_Buffer[ 64 ] = { 0x00 };                                        // Secondary HID buffer
+uint8_t  KB_Data_Pack[ 8 ] = { 0x00 };                                          // Primary HID buffer
+uint8_t  KB_Data_Buffer[ 8 ] = { 0x00 };                                        // Secondary HID buffer
 //uint8_t  MS_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
 //uint8_t  MS_Data_Buffer[ 4 ] = { 0x00 };                                        // Secondary HID buffer
 
@@ -44,7 +44,7 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
 
 // extern uint8_t USBD_DeviceDescriptor[18];
-extern uint8_t  USBD_ConfigDescriptor_KB[34];
+extern uint8_t  USBD_ConfigDescriptor_KB[];
 //extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
@@ -373,6 +373,7 @@ ENUM_START:
         {
             MS_USBD_DeviceDescriptor[i] = DevDesc_Buf[i];
         }
+        MS_USBD_DeviceDescriptor[4] = 0x01;
         Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
 
         #if DEF_DEBUG_PRINTF_IMP
@@ -424,15 +425,16 @@ ENUM_START:
 
     USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-    for( i = 0; i < len; i++ )
+    for( i = 0; i < 18; i++ )
     {
         USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
     }
 
-    if(temp_Com_Buf != NULL)
+    //if(temp_Com_Buf != NULL)
     {
+        // Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
         Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
-        Config_Descriptor_KB.Descriptor_Size = len; 
+        Config_Descriptor_KB.Descriptor_Size = 34; 
     }
 
     if( s == ERR_SUCCESS )
@@ -441,7 +443,7 @@ ENUM_START:
         #if DEF_DEBUG_PRINTF_IMP
             
             DUG_PRINTF("CHECK CONFIG DESCRIPTER 1 ..........  \r\n");
-            for( i = 0; i < len; i++ )
+            for( i = 0; i < 34; i++ )
             {
                 DUG_PRINTF( "%02x ", Config_Descriptor_KB.Descriptor[ i ] );
             }
@@ -857,9 +859,10 @@ GETREP_START:
             {
                 //Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
                 Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
-                Report_Descriptor.Descriptor_Size = size;
+                //Report_Descriptor.Descriptor_Size = (sizeof(USBD_KeyRepDesc) / sizeof(USBD_KeyRepDesc[0]));
+                Report_Descriptor.Descriptor_Size =  size;
 
-                report_byte = calculate_report_size(temp_Com_Buf, size);
+                report_byte = calculate_report_size(Report_Descriptor.Descriptor, size);
 
                 /* Analyze Report Descriptor */
                 KM_AnalyzeHidReportDesc( index, num );
@@ -1602,7 +1605,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     {
         enum_cnt++;
 
-        uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ]; 
+        //uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ]; 
         s = USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
         
         if( s == ERR_SUCCESS )
