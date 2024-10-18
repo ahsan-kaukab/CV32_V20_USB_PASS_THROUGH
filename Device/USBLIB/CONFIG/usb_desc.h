@@ -24,7 +24,7 @@
 #define USB_INTERFACE_DESCRIPTOR_TYPE           0x04
 #define USB_ENDPOINT_DESCRIPTOR_TYPE            0x05
 
-#define DEF_USBD_UEP0_SIZE          64
+#define DEF_USBD_UEP0_SIZE          8
 #define DEF_ENDP_SIZE_KB            8  // 8
 #define DEF_ENDP_SIZE_MS            5  // 4  
 #define DEF_USBD_MAX_PACK_SIZE      64

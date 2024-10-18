@@ -42,23 +42,42 @@ uint8_t KB_USBD_DeviceDescriptor[18] = {
 // 12 01 10 01 00 00 00 08 6d 04 42 c5 03 03 01 02 00 01  // HEX
 // 1811610008109466197331201    // DECIMAL
 
+// updated device descripter
 
-uint8_t MS_USBD_DeviceDescriptor[18] = { 
-    USBD_SIZE_DEVICE_DESC,           // bLength
-    0x01,                            // bDescriptorType (Device)
-    0x10, 0x01,                      // bcdUSB 1.10
-    0x00,                            // bDeviceClass (Use class information in the Interface Descriptors)
-    0x00,                            // bDeviceSubClass 
-    0x00,                            // bDeviceProtocol 
-    DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 8
-    0x86, 0x1A,                      // idVendor 0x1A86
-    0x07, 0xFE,                      // idProduct 0xFE07
-    0x00, 0x01,                      // bcdDevice 2.00
-    0x01,                            // iManufacturer (String Index)
-    0x02,                            // iProduct (String Index)
-    0x00,                            //  iSerialNumber (String Index)
-    0x01,                            // bNumConfigurations 1
-};
+uint8_t MS_USBD_DeviceDescriptor[18]; //= 
+// { 
+//     0x12,           // bLength
+//     0x01,                            // bDescriptorType (Device)
+//     0x00, 0x02,                      // bcdUSB 1.10
+//     0x00,                            // bDeviceClass (Use class information in the Interface Descriptors)
+//     0x00,                            // bDeviceSubClass 
+//     0x00,                            // bDeviceProtocol 
+//     0x08,              // bMaxPacketSize0 8
+//     0x61, 0x04,                      // idVendor 0x1A86
+//     0x51, 0x4d,                      // idProduct 0xFE07
+//     0x17, 0x07,                      // bcdDevice 2.00
+//     0x00,                            // iManufacturer (String Index)
+//     0x02,                            // iProduct (String Index)
+//     0x00,                            //  iSerialNumber (String Index)
+//     0x01,                            // bNumConfigurations 1
+// };
+
+// uint8_t MS_USBD_DeviceDescriptor[18] = { 
+//     USBD_SIZE_DEVICE_DESC,           // bLength
+//     0x01,                            // bDescriptorType (Device)
+//     0x10, 0x01,                      // bcdUSB 1.10
+//     0x00,                            // bDeviceClass (Use class information in the Interface Descriptors)
+//     0x00,                            // bDeviceSubClass 
+//     0x00,                            // bDeviceProtocol 
+//     DEF_USBD_UEP0_SIZE,              // bMaxPacketSize0 8
+//     0x86, 0x1A,                      // idVendor 0x1A86
+//     0x07, 0xFE,                      // idProduct 0xFE07
+//     0x00, 0x01,                      // bcdDevice 2.00
+//     0x01,                            // iManufacturer (String Index)
+//     0x02,                            // iProduct (String Index)
+//     0x00,                            //  iSerialNumber (String Index)
+//     0x01,                            // bNumConfigurations 1
+// };
 
 // // /* USB Configration Descriptors */
 uint8_t  USBD_ConfigDescriptor_KB[34] = { 

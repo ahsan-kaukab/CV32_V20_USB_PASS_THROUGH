@@ -366,9 +366,14 @@ ENUM_START:
     {
         DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
         DUG_PRINTF("\r\n");
-
+        
         Device_Descriptor.Descriptor_Size = 18;
-        //Device_Descriptor.Descriptor = DevDesc_Buf;
+        
+        for( i = 0; i < dev_desc_len; i++ )
+        {
+            MS_USBD_DeviceDescriptor[i] = DevDesc_Buf[i];
+        }
+        Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
 
         #if DEF_DEBUG_PRINTF_IMP
 
@@ -376,7 +381,7 @@ ENUM_START:
 
             for( i = 0; i < dev_desc_len; i++ )
             {
-                DUG_PRINTF( "%02x ", DevDesc_Buf[ i ] );
+                DUG_PRINTF( "%02x ", Device_Descriptor.Descriptor[ i ] );
             }
             DUG_PRINTF("\r\n");
 
@@ -442,6 +447,17 @@ ENUM_START:
 
     if( s == ERR_SUCCESS )
     {
+
+        #if DEF_DEBUG_PRINTF_IMP
+            
+            DUG_PRINTF("CHECK CONFIG DESCRIPTER 1 ..........  \r\n");
+            for( i = 0; i < len; i++ )
+            {
+                DUG_PRINTF( "%02x ", Config_Descriptor_KB.Descriptor[ i ] );
+            }
+            DUG_PRINTF("\r\n");
+        #endif
+
         cfg_val = ( (PUSB_CFG_DESCR)Com_Buf )->bConfigurationValue;
         
         /* Simply analyze USB device type  */
@@ -853,15 +869,7 @@ GETREP_START:
                 Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
                 Report_Descriptor.Descriptor_Size = size;
 
-                // Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
-                // Report_Descriptor[1].Descriptor_Size = size;
-
                 report_byte = calculate_report_size(temp_Com_Buf, size);
-
-                // Report_Descriptor[1].Descriptor = (uint8_t*)temp_Com_Buf;
-                // Report_Descriptor[1].Descriptor_Size = size;
-
-                //Hid_Descriptor[1].Descriptor = find_hid_descriptor(temp_Com_Buf,size);
 
                 /* Analyze Report Descriptor */
                 KM_AnalyzeHidReportDesc( index, num );
@@ -1549,21 +1557,6 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
         {
             DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
             DUG_PRINTF("\r\n");
-            
-            Device_Descriptor.Descriptor_Size = 18;
-            //Device_Descriptor.Descriptor = DevDesc_Buf;
-
-            #if DEF_DEBUG_PRINTF_IMP
-                int i = 0;
-                DUG_PRINTF("DEVICE DESCRIPTER 2 ..........  \r\n");
-
-                for( i = 0; i < dev_desc_len; i++ )
-                {
-                    DUG_PRINTF( "%02x ", DevDesc_Buf[ i ] );
-                }
-                DUG_PRINTF("\r\n");
-
-            #endif
 
         } else {
         }
@@ -1621,39 +1614,9 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
         uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ]; 
         s = USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
-        USBFSH_GetConfigDescr( RootHubDev.Device[ hub_port ].bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
-
-        int i =0;
-        for( i = 0; i < len; i++ )
-        {
-            USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
-        }
-
-        if(temp_Com_Buf != NULL)
-        {
-            Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
-            Config_Descriptor_KB.Descriptor_Size = len; 
-        }
-
         
         if( s == ERR_SUCCESS )
         {
-#if DEF_DEBUG_PRINTF_IMP
-            DUG_PRINTF("CHECK CONFIG DESCRIPTER  1 ..........  \r\n");
-            for( i = 0; i < len; i++ )
-            {
-                DUG_PRINTF( "%02x ", Com_Buf[ i ] );
-            }
-            DUG_PRINTF("\r\n");
-            
-            DUG_PRINTF("CHECK USED CONFIG DESCRIPTER 1 ..........  \r\n");
-            for( i = 0; i < len; i++ )
-            {
-                DUG_PRINTF( "%02x ", Config_Descriptor_KB.Descriptor[ i ] );
-            }
-            DUG_PRINTF("\r\n");
-#endif
-
             /* Save configuration value */
             cfg_val = ( (PUSB_CFG_DESCR)Com_Buf )->bConfigurationValue;
 
