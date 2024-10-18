@@ -30,7 +30,8 @@ extern "C" {
 /******************************************************************************/
 /* Debug Macro Definition */
 #define DEF_DEBUG_PRINTF            0
-#if ( DEF_DEBUG_PRINTF == 1 )
+#define DEF_DEBUG_PRINTF_IMP            0
+#if ( DEF_DEBUG_PRINTF == 1 ||  DEF_DEBUG_PRINTF_IMP == 1)
 #define DUG_PRINTF( format, arg... )    printf( format, ##arg )
 #else
 #define DUG_PRINTF( format, arg... )    do{ if( 0 )printf( format, ##arg ); }while( 0 );

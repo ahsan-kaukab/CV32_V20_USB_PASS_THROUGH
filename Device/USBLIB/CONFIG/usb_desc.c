@@ -12,7 +12,10 @@
 
 /* USB Device Descriptors */
 
-// keyboard
+// keyboard 
+// 12 01 10 01 00 00 00 08 3c 41 11 20 00 59 01 02 00 01 
+// 1811610008606517320891201
+
 uint8_t KB_USBD_DeviceDescriptor[18] = { 
     USBD_SIZE_DEVICE_DESC,           // bLength
     0x01,                            // bDescriptorType (Device)
@@ -32,6 +35,14 @@ uint8_t KB_USBD_DeviceDescriptor[18] = {
 
 
 // mouse
+// 12 01 00 02 00 00 00 08 61 04 51 4d 17 07 00 02 00 01  // HEX
+// 18 01 00 02 00 00 00 08 97 04 81 77 23 07 00 02 00 01  // DECIMAL
+
+// WIRELESS MOUSE
+// 12 01 10 01 00 00 00 08 6d 04 42 c5 03 03 01 02 00 01  // HEX
+// 1811610008109466197331201    // DECIMAL
+
+
 uint8_t MS_USBD_DeviceDescriptor[18] = { 
     USBD_SIZE_DEVICE_DESC,           // bLength
     0x01,                            // bDescriptorType (Device)

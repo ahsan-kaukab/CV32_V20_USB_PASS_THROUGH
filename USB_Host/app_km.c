@@ -16,6 +16,7 @@
 #include "usbd_composite_km.h"
 #include "usb_desc.h"
 #include <math.h>
+#include "ch32v20x_usb.h"
 //#include <stdlib.h> // For malloc and free
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
@@ -25,8 +26,8 @@ uint8_t kb_ms;
 uint8_t report_byte = 0;
 /*******************************************************************************/
 /* Variable Definition */
-uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
-uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            // General Buffer
+static uint8_t  DevDesc_Buf[ 18 ];                                                     // Device Descriptor Buffer
+static uint8_t  Com_Buf[ DEF_COM_BUF_LEN ];                                            // General Buffer
 uint8_t  KB_Data_Pack[ 64 ] = { 0x00 };                                          // Primary HID buffer
 uint8_t  KB_Data_Buffer[ 64 ] = { 0x00 };                                        // Secondary HID buffer
 //uint8_t  MS_Data_Pack[ 4 ] = { 0x00 };                                          // Primary HID buffer
@@ -71,9 +72,10 @@ ONE_DESCRIPTOR Report_Descriptor;  //[2] =
 
 ONE_DESCRIPTOR Device_Descriptor = // ok (2)
 {
-	(uint8_t*)KB_USBD_DeviceDescriptor,
+	(uint8_t*)MS_USBD_DeviceDescriptor,
 	USBD_SIZE_DEVICE_DESC
 };
+
 
 ONE_DESCRIPTOR Config_Descriptor_KB; // ok (2)
 // {
@@ -240,6 +242,37 @@ void TIM3_IRQHandler_Real( void )
  *
  * @return  none
  */
+uint8_t temp_USBH_AnalyseType( uint8_t *pdev_buf)
+{
+    uint8_t  dv_cls;
+
+    dv_cls = ( (PUSB_DEV_DESCR)pdev_buf )->bDeviceClass;
+
+    //return dv_cls;
+
+    if( ( dv_cls == USB_DEV_CLASS_HID ) )
+    {
+        return 1;
+    }
+    else if( ( dv_cls == USB_DEV_CLASS_HUB ) )
+    {
+        return 2;
+    }
+    return 0;
+
+}
+
+/*********************************************************************
+ * @fn      USBH_AnalyseType
+ *
+ * @brief   Simply analyze USB device type.
+ *
+* @para     pdev_buf: Device descriptor buffer
+ *          pcfg_buf: Configuration descriptor buffer
+ *          ptype: Device type.
+ *
+ * @return  none
+ */
 void USBH_AnalyseType( uint8_t *pdev_buf, uint8_t *pcfg_buf, uint8_t *ptype )
 {
     uint8_t  dv_cls, if_cls;
@@ -320,57 +353,52 @@ ENUM_START:
     }
 
     /* Get USB device device descriptor */
-    DUG_PRINTF("Get DevDesc: ");
+    //DUG_PRINTF("Get DevDesc: ");
     uint8_t  t_DevDesc_Buf[ 18 ]; 
 
     // Declare variables
     uint16_t dev_desc_len = 0;            // Variable to hold the actual length of the device descriptor
 
     s = USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, DevDesc_Buf, sizeof(DevDesc_Buf), &dev_desc_len);
-    //s = USBFSH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, DevDesc_Buf );
-
-    // Call USBFSH_GetDeviceDescr with proper arguments
-    DUG_PRINTF("Get DevDesc: ");
-    //USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, t_DevDesc_Buf, sizeof(t_DevDesc_Buf), &dev_desc_len);
 
     // Check if the call was successful
-    //if (s == ERR_SUCCESS) 
-    //{
+    if (s == ERR_SUCCESS) 
+    {
         DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
-        
-        // Assign the received descriptor and size to the Device_Descriptor structure
-        //if(new_descripter == 0)
-        if(t_DevDesc_Buf != NULL)
-            Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
-        // else if (new_descripter == 1)
-        //     Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
+        DUG_PRINTF("\r\n");
 
-        Device_Descriptor.Descriptor_Size = dev_desc_len;  // Use the actual length received
-    // } else {
-    //     DUG_PRINTF("Failed to get Device Descriptor, Error Code: %d\n", s);
-    // }
+        Device_Descriptor.Descriptor_Size = 18;
+        //Device_Descriptor.Descriptor = DevDesc_Buf;
+
+        #if DEF_DEBUG_PRINTF_IMP
+
+            DUG_PRINTF("DEVICE DESCRIPTER 1 ..........  \r\n");
+
+            for( i = 0; i < dev_desc_len; i++ )
+            {
+                DUG_PRINTF( "%02x ", DevDesc_Buf[ i ] );
+            }
+            DUG_PRINTF("\r\n");
+
+        #endif
+           
+    } else {
+    }
 
     if( s == ERR_SUCCESS )
     {
         /* Print USB device device descriptor */
-#if DEF_DEBUG_PRINTF
-        for( i = 0; i < 18; i++ )
-        {
-            DUG_PRINTF( "%02x ", DevDesc_Buf[ i ] );
-        }
-        DUG_PRINTF("\r\n"); 
-#endif
     }
-    else
-    {
-        /* Determine whether the maximum number of retries has been reached, and retry if not reached */
-        DUG_PRINTF( "Err(%02x)\r\n", s );
-        if( enum_cnt <= 5 )
-        {
-            goto ENUM_START;
-        }
-        return DEF_DEV_DESCR_GETFAIL;
-    }
+    // else
+    // {
+    //     /* Determine whether the maximum number of retries has been reached, and retry if not reached */
+    //     DUG_PRINTF( "Err(%02x)\r\n", s );
+    //     if( enum_cnt <= 5 )
+    //     {
+    //         goto ENUM_START;
+    //     }
+    //     return DEF_DEV_DESCR_GETFAIL;
+    // }
 
     /* Set the USB device address */
     DUG_PRINTF("Set DevAddr: ");
@@ -396,9 +424,9 @@ ENUM_START:
 
     /* Get the USB device configuration descriptor */
 
-    DUG_PRINTF("Get CfgDesc: ");
     uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ];
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
+
     USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
     for( i = 0; i < len; i++ )
@@ -406,42 +434,16 @@ ENUM_START:
         USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
     }
 
-    //if(new_descripter == 0)
+    if(temp_Com_Buf != NULL)
     {
-        //Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
-
-        if(temp_Com_Buf != NULL)
-        {
-            Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
-            Config_Descriptor_KB.Descriptor_Size = len; 
-        }
-        
-        // Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-        // Config_Descriptor_MS.Descriptor_Size = len; 
+        Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
+        Config_Descriptor_KB.Descriptor_Size = len; 
     }
-    //else if (new_descripter == 1)
-    // {
-    //     Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-    //     Config_Descriptor_MS.Descriptor_Size = len;
-    // }
-
-    //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
-    //Config_Descriptor_KB.Descriptor_Size = len;
-        
 
     if( s == ERR_SUCCESS )
     {
         cfg_val = ( (PUSB_CFG_DESCR)Com_Buf )->bConfigurationValue;
         
-        /* Print USB device configuration descriptor  */
-#if DEF_DEBUG_PRINTF
-        for( i = 0; i < len; i++ )
-        {
-            DUG_PRINTF( "%02x ", Com_Buf[ i ] );
-        }
-        DUG_PRINTF("\r\n");
-#endif
-
         /* Simply analyze USB device type  */
         USBH_AnalyseType( DevDesc_Buf, Com_Buf, &RootHubDev.bType );
         DUG_PRINTF( "DevType: %02x\r\n", RootHubDev.bType );
@@ -837,7 +839,7 @@ GETREP_START:
             getrep_cnt++;
             
             /* Get HID report descriptor */
-            DUG_PRINTF("Get Interface%x RepDesc: ", num );
+            //DUG_PRINTF("Get Interface%x RepDesc: ", num );
             uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ];
 
             s = HID_GetHidDesr( ep0_size, num, Com_Buf, &HostCtl[ index ].Interface[ num ].HidDescLen );
@@ -865,6 +867,16 @@ GETREP_START:
                 KM_AnalyzeHidReportDesc( index, num );
 
                 num_tmp--;
+
+                int i =0;
+                #if DEF_DEBUG_PRINTF_IMP
+                        DUG_PRINTF("HID REPORT DESCRIPTER ..........  \r\n");
+                        for( i = 0; i < Report_Descriptor.Descriptor_Size; i++ )
+                        {
+                            DUG_PRINTF( "%02x ", Report_Descriptor.Descriptor[ i ] );
+                        }
+                        DUG_PRINTF("\r\n");
+                #endif
             }
             // else
             // {
@@ -922,7 +934,6 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     /* Get the string descriptor contained in the configuration descriptor if it exists */
     if( Com_Buf[ 6 ] )
     {
-        DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( ep0_size, Com_Buf[ 6 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_LANGID
 
@@ -934,6 +945,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         {
             /* Print the string descriptor contained in the configuration descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc4: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
@@ -953,7 +965,6 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     /* Get USB vendor string descriptor  */
     if( DevDesc_Buf[ 14 ] )
     {
-        DUG_PRINTF("Get StringDesc1: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 14 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_VENDOR
 
@@ -965,6 +976,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         {
             /* Print USB vendor string descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc1: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ]);
@@ -981,7 +993,6 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     /* Get USB product string descriptor */
     if( DevDesc_Buf[ 15 ] )
     {
-        DUG_PRINTF("Get StringDesc2: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 15 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_PRODUCT
  
@@ -993,6 +1004,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         {
             /* Print USB product string descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc2: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
@@ -1009,7 +1021,6 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
     /* Get USB serial number string descriptor */
     if( DevDesc_Buf[ 16 ] )
     {
-        DUG_PRINTF("Get StringDesc3: ");
         s = USBFSH_GetStrDescr( ep0_size, DevDesc_Buf[ 16 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_SERIAL
 
@@ -1021,6 +1032,7 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
         {
             /* Print USB serial number string descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc3: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
@@ -1033,7 +1045,6 @@ uint8_t USBH_EnumHidDevice( uint8_t index, uint8_t ep0_size )
             DUG_PRINTF( "Err(%02x)\r\n", s );
         }
     }
-
     /* Get USB serial number string descriptor */
     for( intf_num = 0; intf_num < HostCtl[ index ].InterfaceNum; intf_num++ )
     {
@@ -1170,7 +1181,6 @@ uint8_t USBH_EnumHubDevice( void )
     /* Get the string descriptor contained in the configuration descriptor if it exists */
     if( Com_Buf[ 6 ] )
     {
-        DUG_PRINTF("Get StringDesc4: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, Com_Buf[ 6 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_LANGID
 
@@ -1182,6 +1192,7 @@ uint8_t USBH_EnumHubDevice( void )
         {
             /* Print the string descriptor contained in the configuration descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc4: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
@@ -1194,11 +1205,10 @@ uint8_t USBH_EnumHubDevice( void )
             DUG_PRINTF( "Err(%02x)\r\n", s );
         }
     }
-
+    
     /* Get USB vendor string descriptor  */
     if( DevDesc_Buf[ 14 ] )
     {
-        DUG_PRINTF("Get StringDesc1: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 14 ], Com_Buf );
         uint8_t size = Com_Buf[0];  // USBD_SIZE_STRING_VENDOR
 
@@ -1210,6 +1220,7 @@ uint8_t USBH_EnumHubDevice( void )
         {
             /* Print USB vendor string descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc1: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ]);
@@ -1226,7 +1237,6 @@ uint8_t USBH_EnumHubDevice( void )
     /* Get USB product string descriptor */
     if( DevDesc_Buf[ 15 ] )
     {
-        DUG_PRINTF("Get StringDesc2: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 15 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_PRODUCT
 
@@ -1238,6 +1248,7 @@ uint8_t USBH_EnumHubDevice( void )
         {
             /* Print USB product string descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc2: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
@@ -1254,7 +1265,6 @@ uint8_t USBH_EnumHubDevice( void )
     /* Get USB serial number string descriptor */
     if( DevDesc_Buf[ 16 ] )
     {
-        DUG_PRINTF("Get StringDesc3: ");
         s = USBFSH_GetStrDescr( RootHubDev.bEp0MaxPks, DevDesc_Buf[ 16 ], Com_Buf );
         uint8_t size = Com_Buf[0]; // USBD_SIZE_STRING_SERIAL
 
@@ -1266,6 +1276,7 @@ uint8_t USBH_EnumHubDevice( void )
         {
             /* Print USB serial number string descriptor */
 #if DEF_DEBUG_PRINTF
+            DUG_PRINTF("Get StringDesc3: ");
             for( i = 0; i < Com_Buf[ 0 ]; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
@@ -1278,7 +1289,6 @@ uint8_t USBH_EnumHubDevice( void )
             DUG_PRINTF( "Err(%02x)\r\n", s );
         }
     }
-
     /* Get hub descriptor */
     DUG_PRINTF("Get Hub Desc: ");
     for( retry = 0; retry < 5; retry++ )
@@ -1522,40 +1532,41 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 #endif
 
     /* Get USB device descriptor */
-    DUG_PRINTF("(S1)Get DevDesc: \r\n");
+    //DUG_PRINTF("(S1)Get DevDesc: \r\n");
     enum_cnt = 0;
     do
     {
         enum_cnt++;
-        DUG_PRINTF("Get DevDesc: ");
-        uint8_t  t_DevDesc_Buf[ 18 ]; 
+        //DUG_PRINTF("Get DevDesc: ");
+        uint8_t  t_DevDesc_Buf[ 48 ]; 
         // Declare variables
         uint16_t dev_desc_len = 0;            // Variable to hold the actual length of the device descriptor
 
         s = USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, DevDesc_Buf, sizeof(DevDesc_Buf), &dev_desc_len);
 
-        // Call USBFSH_GetDeviceDescr with proper arguments
-        DUG_PRINTF("Get DevDesc: ");
-        //USBFSH_GetDeviceDescr(&RootHubDev.bEp0MaxPks, t_DevDesc_Buf, sizeof(t_DevDesc_Buf), &dev_desc_len);
-
         // Check if the call was successful
-        //if (s == ERR_SUCCESS) 
-        //{
+        if (s == ERR_SUCCESS) 
+        {
             DUG_PRINTF("Device Descriptor received successfully, Length: %d\n", dev_desc_len);
+            DUG_PRINTF("\r\n");
             
-            // Assign the received descriptor and size to the Device_Descriptor structure
-            //if(new_descripter == 0)
-            if(t_DevDesc_Buf != NULL)
-                Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
-            // else if (new_descripter == 1)
-            //     Device_Descriptor.Descriptor = MS_USBD_DeviceDescriptor;
-                
-            Device_Descriptor.Descriptor_Size = dev_desc_len;  // Use the actual length received
-        // } else {
-        //     DUG_PRINTF("Failed to get Device Descriptor, Error Code: %d\n", s);
-        // }
-        //Device_Descriptor.Descriptor = (uint8_t*)t_DevDesc_Buf;
-        //Device_Descriptor.Descriptor_Size = 18;  // Explicitly assigning the size
+            Device_Descriptor.Descriptor_Size = 18;
+            //Device_Descriptor.Descriptor = DevDesc_Buf;
+
+            #if DEF_DEBUG_PRINTF_IMP
+                int i = 0;
+                DUG_PRINTF("DEVICE DESCRIPTER 2 ..........  \r\n");
+
+                for( i = 0; i < dev_desc_len; i++ )
+                {
+                    DUG_PRINTF( "%02x ", DevDesc_Buf[ i ] );
+                }
+                DUG_PRINTF("\r\n");
+
+            #endif
+
+        } else {
+        }
 
         if( s == ERR_SUCCESS )
         {
@@ -1578,7 +1589,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     }while( ( s != ERR_SUCCESS ) && ( enum_cnt < 10 ) );
 
     /* Set the USB device address */
-    DUG_PRINTF( "Set DevAddr: \r\n" );
+    //DUG_PRINTF( "Set DevAddr: \r\n" );
     enum_cnt = 0;
     do
     {
@@ -1602,7 +1613,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     Delay_Ms( 5 );
 
     /* Get USB configuration descriptor */
-    DUG_PRINTF( "Get DevCfgDesc: \r\n" );
+    //DUG_PRINTF( "Get DevCfgDesc: \r\n" );
     enum_cnt = 0;
     do
     {
@@ -1618,36 +1629,29 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
             USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
         }
 
-        //if(new_descripter == 0)
+        if(temp_Com_Buf != NULL)
         {
-            //Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
-            if(temp_Com_Buf != NULL)
-            {
-                Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
-                Config_Descriptor_KB.Descriptor_Size = len; 
-            }
-            
-            // Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-            // Config_Descriptor_MS.Descriptor_Size = len; 
+            Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
+            Config_Descriptor_KB.Descriptor_Size = len; 
         }
-        //else if (new_descripter == 1)
-        // {
-        //     Config_Descriptor_MS.Descriptor = (uint8_t*)temp_Com_Buf;
-        //     Config_Descriptor_MS.Descriptor_Size = len;
-        // }
 
-        //Config_Descriptor_KB.Descriptor = (uint8_t*)temp_Com_Buf;
-        //Config_Descriptor_KB.Descriptor_Size = len;
         
-            
         if( s == ERR_SUCCESS )
         {
-#if DEF_DEBUG_PRINTF
+#if DEF_DEBUG_PRINTF_IMP
+            DUG_PRINTF("CHECK CONFIG DESCRIPTER  1 ..........  \r\n");
             for( i = 0; i < len; i++ )
             {
                 DUG_PRINTF( "%02x ", Com_Buf[ i ] );
             }
-            DUG_PRINTF( "\r\n" );
+            DUG_PRINTF("\r\n");
+            
+            DUG_PRINTF("CHECK USED CONFIG DESCRIPTER 1 ..........  \r\n");
+            for( i = 0; i < len; i++ )
+            {
+                DUG_PRINTF( "%02x ", Config_Descriptor_KB.Descriptor[ i ] );
+            }
+            DUG_PRINTF("\r\n");
 #endif
 
             /* Save configuration value */
@@ -1655,6 +1659,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
 
             /* Analyze USB device type */
             USBH_AnalyseType( DevDesc_Buf, Com_Buf, ptype );
+
             DUG_PRINTF( "DevType: %02x\r\n", *ptype );
         }
         else
@@ -1668,7 +1673,7 @@ uint8_t USBH_EnumHubPortDevice( uint8_t hub_port, uint8_t *paddr, uint8_t *ptype
     }while( ( s != ERR_SUCCESS ) && ( enum_cnt < 10 ) );
 
     /* Set USB device configuration value */
-    DUG_PRINTF( "Set CfgValue: \r\n" );
+    //DUG_PRINTF( "Set CfgValue: \r\n" );
     enum_cnt = 0;
     do
     {
@@ -2043,6 +2048,15 @@ void USBH_MainDeal( void )
                                 //     s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                 // }
                             }
+                            int i =0;
+                            #if DEF_DEBUG_PRINTF_IMP
+                                    DUG_PRINTF("DATAAAAAAAAA 2 ..........  \r\n");
+                                    for( i = 0; i < report_byte; i++ )
+                                    {
+                                        DUG_PRINTF( "%02x ", KB_Data_Buffer[ i ] );
+                                    }
+                                    DUG_PRINTF("\r\n");
+                            #endif
 
                             if(s == NoREADY)
                             {
@@ -2133,7 +2147,7 @@ void USBH_MainDeal( void )
                        /* Enumerate HUB Device */
                        if( RootHubDev.Device[ hub_port ].bStatus == ROOT_DEV_CONNECTED )
                        {
-                           /* Check device speed */
+                        //    /* Check device speed */
                            RootHubDev.Device[ hub_port ].bSpeed = HUB_CheckPortSpeed( ( hub_port + 1 ), Com_Buf );
                            DUG_PRINTF( "Dev Speed:%x\r\n", RootHubDev.Device[ hub_port ].bSpeed );
 
@@ -2320,6 +2334,15 @@ void USBH_MainDeal( void )
                                                 //s = USBD_ENDPx_DataUp(ENDP1, KB_Data_Buffer, 5*sizeof(uint8_t));
                                             }
                                         }
+                                        int i =0;
+                                        #if DEF_DEBUG_PRINTF_IMP
+                                                DUG_PRINTF("DATAAAAAAAAA ..........  \r\n");
+                                                for( i = 0; i < report_byte; i++ )
+                                                {
+                                                    DUG_PRINTF( "%02x ", KB_Data_Buffer[ i ] );
+                                                }
+                                                DUG_PRINTF("\r\n");
+                                        #endif
 
                                         if(s == NoREADY)
                                         {

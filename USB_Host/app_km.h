@@ -40,8 +40,8 @@ extern "C" {
 
 /*******************************************************************************/
 /* Variable Declaration */
-extern uint8_t  DevDesc_Buf[ ];                                         
-extern uint8_t  Com_Buf[ ];  
+// extern uint8_t  DevDesc_Buf[];                                         
+// extern uint8_t  Com_Buf[];  
 //extern volatile uint32_t millis_counter;
 // extern uint32_t current_time; 
                                          
