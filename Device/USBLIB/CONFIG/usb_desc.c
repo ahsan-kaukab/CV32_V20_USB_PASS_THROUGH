@@ -213,6 +213,9 @@ uint8_t  USBD_ConfigDescriptor_KB[34] = {
 // 	'0', 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0 , '6', 0, '7', 0, '8', 0, '9', 0
 // };
 
+// 05 01 09 06 a1 01 05 07 19 e0 29 e7 15 00 25 01 75 01 95 08 81 02 95 01 
+// 75 08 81 01 95 05 75 01 05 08 19 01 29 05 91 02 95 01 75 03 91 01 95 06 75 08 26 ff 00 05 07 19 00 29 91 81 00 c0 
+
 // new
 uint8_t USBD_KeyRepDesc[] =
 {
@@ -230,20 +233,16 @@ uint8_t USBD_KeyRepDesc[] =
     0x95, 0x01,                     // Report Count (1)
     0x75, 0x08,                     // Report Size (8)
     0x81, 0x01,                     // Input (Constant)
-    0x95, 0x03,
-    //0x95, 0x05,                     // Report Count (5)
+    0x95, 0x05,                     // Report Count (5)
     0x75, 0x01,                     // Report Size (1)
     0x05, 0x08,                     // Usage Page (LEDs)
     0x19, 0x01,                     // Usage Minimum (1)
-    0x29, 0x03,
-    //0x29, 0x05,                     // Usage Maximum (5)
+    0x29, 0x05,                     // Usage Maximum (5)
     0x91, 0x02,                     // Output (Data,Variable,Absolute)
-    0x95, 0x05,
-    //0x95, 0x01,                     // Report Count (1)
-    0x75, 0x03,
-    //0x75, 0x03,                     // Report Size (3)
+    0x95, 0x01, // 0x03                    // Report Count (1)
+    0x75, 0x03,                     // Report Size (3)
     0x91, 0x01,                     // Output (Constant,Array,Absolute)
-    0x95, 0x06,                     // Report Count (6)
+    0x95, 0x06,                    // Report Count (6)
     0x75, 0x08,                     // Report Size (8)
     //0x15, 0x00,                     // Logical Minimum (0)
     0x26, 0xff, 0x00,               // Logical Maximum (255)

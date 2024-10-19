@@ -818,6 +818,35 @@ int calculate_report_size(const uint8_t *report_descriptor, int length) {
     return 0;  // If no valid report size/count found
 }
 
+void processArray(uint8_t* arr, size_t* size) {
+    size_t i = 0;
+    while (i < *size) {
+        // Check for condition at arr[50]
+        if (i == 50 && arr[i] == 0x15) {
+            // Remove arr[50] and arr[51]
+            for (size_t j = i; j < *size - 2; j++) {
+                arr[j] = arr[j + 2]; // Shift elements left by 2
+            }
+            *size -= 2; // Decrease the size by 2
+            continue; // Restart loop
+        }
+
+        // Check for condition at arr[61]
+        if (arr[i] == 0x2A) {
+            arr[i] = 0x29;    // Set arr[61] to 0x29
+            arr[i + 1] = 0x91; // Set arr[62] to 0x91
+            // Remove arr[63] by shifting elements left by 1
+            for (size_t j = i + 2; j < *size - 1; j++) {
+                arr[j] = arr[j + 1]; // Shift elements left by 1
+            }
+            *size -= 1; // Decrease the size by 1
+            continue; // Restart loop
+        }
+        i++; // Move to the next index
+    }
+    //size++;
+}
+
 /*********************************************************************
  * @fn      KM_DealHidReportDesc
  *
@@ -857,19 +886,18 @@ GETREP_START:
 
             if(Report_Descriptor.Descriptor == NULL)
             {
-                Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
-                //Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
-                Report_Descriptor.Descriptor_Size = (sizeof(USBD_KeyRepDesc) / sizeof(USBD_KeyRepDesc[0]));
+                //Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
+                //Report_Descriptor.Descriptor_Size = (sizeof(USBD_KeyRepDesc) / sizeof(USBD_KeyRepDesc[0]));
+                
+                Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
+                processArray(Report_Descriptor.Descriptor,&size);
                 //Report_Descriptor.Descriptor_Size =  size;
 
                 report_byte = calculate_report_size(Report_Descriptor.Descriptor, size);
 
-                /* Analyze Report Descriptor */
-                KM_AnalyzeHidReportDesc( index, num );
-
                 int i =0;
 
-                for(i=0;i<size;i++)
+                for(i=0;i<size-1;i++)
                 {
                     if(Report_Descriptor.Descriptor[i] == 0xc0 && Report_Descriptor.Descriptor[i+1] == 0xc0)
                     {
@@ -877,7 +905,10 @@ GETREP_START:
                         break;
                     }
                 }
-                Report_Descriptor.Descriptor_Size = i;
+                Report_Descriptor.Descriptor_Size = i+1;
+
+                /* Analyze Report Descriptor */
+                KM_AnalyzeHidReportDesc( index, num );
 
                 #if DEF_DEBUG_PRINTF_IMP
                         DUG_PRINTF("HID REPORT DESCRIPTER ..........  \r\n");
@@ -2196,7 +2227,7 @@ void USBH_MainDeal( void )
                                                            &HostCtl[ index ].Interface[ intf_num ].InEndpTog[ in_num ], Com_Buf, &len );
                                    if( s == ERR_SUCCESS )
                                    {
-                                        DUG_PRINTF("Working Test len is %d \r\n",len);
+                                        //DUG_PRINTF("Working Test len is %d \r\n",len);
 
                                         //current_time = millis(); 
                                         for( i = 0; i < len; i++ )
