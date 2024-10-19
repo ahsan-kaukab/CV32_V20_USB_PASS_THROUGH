@@ -30,7 +30,7 @@
 #define DEF_USBD_MAX_PACK_SIZE      64
        
 #define USBD_SIZE_DEVICE_DESC        18
-#define USBD_SIZE_CONFIG_DESC        34
+#define USBD_SIZE_CONFIG_DESC        40
 //#define USBD_SIZE_REPORT_DESC        54 // 54
 #define USBD_SIZE_REPORT_DESC_KB     62 // 64
 #define USBD_SIZE_REPORT_DESC_MS     52 // 54

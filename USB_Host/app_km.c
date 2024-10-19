@@ -44,7 +44,7 @@ struct   __HOST_CTL HostCtl[ DEF_TOTAL_ROOT_HUB * DEF_ONE_USB_SUP_DEV_TOTAL ];
 volatile uint32_t millis_counter = 0;
 
 // extern uint8_t USBD_DeviceDescriptor[18];
-extern uint8_t  USBD_ConfigDescriptor_KB[];
+//extern uint8_t  USBD_ConfigDescriptor_KB[40];
 //extern uint8_t  USBD_ConfigDescriptor_MS[];
 
 // extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
@@ -422,13 +422,15 @@ ENUM_START:
     uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ];
     s = USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, Com_Buf, DEF_COM_BUF_LEN, &len );
 
-    USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
+    //USBFSH_GetConfigDescr( RootHubDev.bEp0MaxPks, temp_Com_Buf, DEF_COM_BUF_LEN, &len );
 
-    // for( i = 0; i < 18; i++ )
-    // {
-    //     USBD_ConfigDescriptor_KB[i] = temp_Com_Buf[i];
-    // }
-
+    for( i = 0; i < 18; i++ )
+    {
+        USBD_ConfigDescriptor_KB[i] = Com_Buf[i];
+    }
+    USBD_ConfigDescriptor_KB[2] = 0x54;
+    USBD_ConfigDescriptor_KB[6] = 0x00;
+    USBD_ConfigDescriptor_KB[14] = 0x03;
     //if(temp_Com_Buf != NULL)
     {
         Config_Descriptor_KB.Descriptor = (uint8_t*)USBD_ConfigDescriptor_KB;
