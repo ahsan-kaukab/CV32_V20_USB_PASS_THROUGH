@@ -47,7 +47,6 @@ volatile uint32_t millis_counter = 0;
 extern uint8_t  USBD_ConfigDescriptor_KB[];
 //extern uint8_t  USBD_ConfigDescriptor_MS[];
 
-extern uint8_t USBD_KeyRepDesc[USBD_SIZE_REPORT_DESC_KB];
 // extern uint8_t USBD_MouseRepDesc[USBD_SIZE_REPORT_DESC_MS];
 
 // extern uint8_t USBD_StringLangID[USBD_SIZE_STRING_LANGID];
@@ -880,22 +879,28 @@ GETREP_START:
             uint8_t  temp_Com_Buf[ DEF_COM_BUF_LEN ];
 
             s = HID_GetHidDesr( ep0_size, num, Com_Buf, &HostCtl[ index ].Interface[ num ].HidDescLen );
-            HID_GetHidDesr( ep0_size, num, temp_Com_Buf, &HostCtl[ index ].Interface[ num ].HidDescLen );
+            //HID_GetHidDesr( ep0_size, num, temp_Com_Buf, &HostCtl[ index ].Interface[ num ].HidDescLen );
 
             int size = HostCtl[ index ].Interface[ num ].HidDescLen;
 
             if(Report_Descriptor.Descriptor == NULL)
             {
+                int i =0;
+
+                // for( i = 0; i < size; i++ )
+                // {
+                //     USBD_KeyRepDesc[i] = Com_Buf[i];
+                // }
+                Report_Descriptor.Descriptor = USBD_KeyRepDesc;
+
                 //Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
                 //Report_Descriptor.Descriptor_Size = (sizeof(USBD_KeyRepDesc) / sizeof(USBD_KeyRepDesc[0]));
                 
-                Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
+                //Report_Descriptor.Descriptor = (uint8_t*)temp_Com_Buf;
+
                 processArray(Report_Descriptor.Descriptor,&size);
+
                 //Report_Descriptor.Descriptor_Size =  size;
-
-                report_byte = calculate_report_size(Report_Descriptor.Descriptor, size);
-
-                int i =0;
 
                 for(i=0;i<size-1;i++)
                 {
@@ -905,7 +910,10 @@ GETREP_START:
                         break;
                     }
                 }
+                
                 Report_Descriptor.Descriptor_Size = i+1;
+
+                report_byte = calculate_report_size(Report_Descriptor.Descriptor, size);
 
                 /* Analyze Report Descriptor */
                 KM_AnalyzeHidReportDesc( index, num );
