@@ -217,7 +217,7 @@ uint8_t  USBD_ConfigDescriptor_KB[34] = {
 // 75 08 81 01 95 05 75 01 05 08 19 01 29 05 91 02 95 01 75 03 91 01 95 06 75 08 26 ff 00 05 07 19 00 29 91 81 00 c0 
 
 // new
-uint8_t USBD_KeyRepDesc[] =
+uint8_t USBD_KeyRepDesc[68] =
 {
     0x05, 0x01,                     // Usage Page (Generic Desktop)
     0x09, 0x06,                     // Usage (Keyboard)

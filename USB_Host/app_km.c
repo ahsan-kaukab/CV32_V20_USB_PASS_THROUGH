@@ -887,10 +887,10 @@ GETREP_START:
             {
                 int i =0;
 
-                // for( i = 0; i < size; i++ )
-                // {
-                //     USBD_KeyRepDesc[i] = Com_Buf[i];
-                // }
+                for( i = 0; i < size; i++ )
+                {
+                    USBD_KeyRepDesc[i] = Com_Buf[i];
+                }
                 Report_Descriptor.Descriptor = USBD_KeyRepDesc;
 
                 //Report_Descriptor.Descriptor = (uint8_t*)USBD_KeyRepDesc;
@@ -910,7 +910,7 @@ GETREP_START:
                         break;
                     }
                 }
-                
+
                 Report_Descriptor.Descriptor_Size = i+1;
 
                 report_byte = calculate_report_size(Report_Descriptor.Descriptor, size);
